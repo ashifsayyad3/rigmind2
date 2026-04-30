@@ -1,0 +1,173 @@
+---
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rigmind
+  labels:
+    name: rigmind
+    environment: production
+---
+# Web App Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: rigmind
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: rigmindprodacr.azurecr.io/rigmind/web:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              value: "https://api.rigmind.aquila-engineer.com/api"
+            - name: NEXTAUTH_URL
+              value: "https://rigmind.aquila-engineer.com"
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: rigmind-secrets
+                  key: NEXTAUTH_SECRET
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  namespace: rigmind
+spec:
+  selector:
+    app: web
+  ports:
+    - port: 3000
+      targetPort: 3000
+  type: ClusterIP
+---
+# AI Prediction Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-prediction
+  namespace: rigmind
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ai-prediction
+  template:
+    metadata:
+      labels:
+        app: ai-prediction
+    spec:
+      containers:
+        - name: ai-prediction
+          image: rigmindprodacr.azurecr.io/rigmind/ai-prediction:latest
+          ports:
+            - containerPort: 8001
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rigmind-secrets
+                  key: DATABASE_URL
+            - name: MLFLOW_TRACKING_URI
+              value: "http://mlflow-service:5000"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "2000m"
+              memory: "4Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-prediction-service
+  namespace: rigmind
+spec:
+  selector:
+    app: ai-prediction
+  ports:
+    - port: 8001
+      targetPort: 8001
+  type: ClusterIP
+---
+# Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rigmind-ingress
+  namespace: rigmind
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - rigmind.aquila-engineer.com
+        - api.rigmind.aquila-engineer.com
+      secretName: rigmind-tls
+  rules:
+    - host: rigmind.aquila-engineer.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-service
+                port:
+                  number: 3000
+    - host: api.rigmind.aquila-engineer.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway-service
+                port:
+                  number: 4000
+---
+# Secrets (values injected by CI/CD from Key Vault)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rigmind-secrets
+  namespace: rigmind
+type: Opaque
+# Values are base64-encoded and injected during deployment
+# DO NOT commit real values here
+stringData:
+  DATABASE_URL: "REPLACE_IN_CI"
+  JWT_SECRET: "REPLACE_IN_CI"
+  ANTHROPIC_API_KEY: "REPLACE_IN_CI"
+  NEXTAUTH_SECRET: "REPLACE_IN_CI"

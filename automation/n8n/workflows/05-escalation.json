@@ -1,0 +1,133 @@
+{
+  "name": "RigMind - Escalation Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "minutes", "minutesInterval": 30 }] }
+      },
+      "id": "trigger",
+      "name": "Every 30 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT f.id, f.title, f.severity, f.description, f.rigId, f.createdAt, r.name as rigName, f.status, DATEDIFF(MINUTE, f.createdAt, GETDATE()) as minutesSinceCreated, (SELECT COUNT(*) FROM notifications WHERE eventId IS NULL AND title LIKE '%' + CAST(f.id AS NVARCHAR) + '%') as notificationsSent FROM failures f JOIN rigs r ON r.id = f.rigId WHERE f.isRemoved = 0 AND f.severity IN ('critical', 'high') AND f.status NOT IN ('closed', 'in_progress') AND f.createdAt >= DATEADD(HOUR, -48, GETDATE()) ORDER BY f.severity ASC, f.createdAt ASC"
+      },
+      "id": "query-unacknowledged",
+      "name": "Query Unacknowledged Critical Failures",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "credentials": { "microsoftSql": { "id": "1", "name": "Azure SQL" } }
+    },
+    {
+      "parameters": {
+        "jsCode": "const failures = $input.all().map(i => i.json);\nconst toEscalate = failures.filter(f => {\n  if (f.severity === 'critical' && f.minutesSinceCreated >= 120 && f.notificationsSent < 2) return true;\n  if (f.severity === 'high' && f.minutesSinceCreated >= 240 && f.notificationsSent < 1) return true;\n  return false;\n});\nreturn toEscalate.map(f => ({ json: f }));"
+      },
+      "id": "filter-escalate",
+      "name": "Filter: Needs Escalation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [{ "value1": "={{ $input.all().length }}", "operation": "larger", "value2": 0 }]
+        }
+      },
+      "id": "if-any",
+      "name": "Any to Escalate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst criticalItems = items.filter(i => i.json.severity === 'critical');\nconst highItems = items.filter(i => i.json.severity === 'high');\n\nlet html = '<h2>⚠️ Escalation Alert — Unacknowledged Failures</h2>';\nhtml += '<p>The following failures have not been acknowledged within the required time window:</p>';\n\nif (criticalItems.length > 0) {\n  html += '<h3 style=\"color:red\">🔴 Critical (>2 hours unacknowledged)</h3><ul>';\n  criticalItems.forEach(i => {\n    const f = i.json;\n    html += `<li><b>${f.rigName}</b> — ${f.title || f.description?.slice(0,80)} (${f.minutesSinceCreated} min ago)<br><a href=\"https://rigmind.aquila-engineer.com/failures/${f.id}\">View & Acknowledge →</a></li>`;\n  });\n  html += '</ul>';\n}\n\nif (highItems.length > 0) {\n  html += '<h3 style=\"color:orange\">🟠 High (>4 hours unacknowledged)</h3><ul>';\n  highItems.forEach(i => {\n    const f = i.json;\n    html += `<li><b>${f.rigName}</b> — ${f.title || f.description?.slice(0,80)} (${f.minutesSinceCreated} min ago)<br><a href=\"https://rigmind.aquila-engineer.com/failures/${f.id}\">View & Acknowledge →</a></li>`;\n  });\n  html += '</ul>';\n}\n\nreturn [{ json: {\n  emailBody: html,\n  subject: `🚨 ESCALATION: ${criticalItems.length} Critical, ${highItems.length} High failures unacknowledged — ACTION REQUIRED`,\n  criticalCount: criticalItems.length,\n  highCount: highItems.length,\n  totalCount: items.length\n}}];"
+      },
+      "id": "build-escalation",
+      "name": "Build Escalation Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.emailBody }}",
+        "toRecipients": "={{ $vars.ESCALATION_EMAILS }}",
+        "options": { "isHtml": true, "importance": "high" }
+      },
+      "id": "send-escalation-email",
+      "name": "Send Escalation Email",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [1340, 100],
+      "credentials": { "microsoftOutlookOAuth2Api": { "id": "2", "name": "Outlook" } }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "message",
+        "operation": "send",
+        "chatId": "={{ $vars.TEAMS_ESCALATION_CHANNEL }}",
+        "message": "=🚨 **ESCALATION REQUIRED**\n\n{{ $json.criticalCount }} critical and {{ $json.highCount }} high-severity failures on RigMind have not been acknowledged.\n\nImmediate action required by on-call engineer.\n\n👉 [Open RigMind Failures](https://rigmind.aquila-engineer.com/dashboard/failures)"
+      },
+      "id": "teams-escalation",
+      "name": "Post to Teams Escalation Channel",
+      "type": "n8n-nodes-base.microsoftTeams",
+      "typeVersion": 2,
+      "position": [1340, 280],
+      "credentials": { "microsoftTeamsOAuth2Api": { "id": "3", "name": "Teams" } }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=UPDATE failures SET status = 'escalated', updatedAt = GETDATE() WHERE id IN ({{ $node['Filter: Needs Escalation'].json.map(i => i.json.id).join(',') }}) AND status = 'open'"
+      },
+      "id": "mark-escalated",
+      "name": "Mark as Escalated in DB",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [1560, 200],
+      "credentials": { "microsoftSql": { "id": "1", "name": "Azure SQL" } }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO notifications (title, message, status, assignedAs, createdAt, updatedAt) VALUES {{ $node['Filter: Needs Escalation'].json.map(f => `('Escalated: ${f.json.title?.replace(\"'\",\"''\") || 'Failure #' + f.json.id}', 'Failure ${f.json.id} on ${f.json.rigName} escalated after ${f.json.minutesSinceCreated} minutes unacknowledged', 'unread', 'escalation', GETDATE(), GETDATE())`).join(',') }}"
+      },
+      "id": "create-notifications",
+      "name": "Create Escalation Notifications",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [1560, 360],
+      "credentials": { "microsoftSql": { "id": "1", "name": "Azure SQL" } }
+    }
+  ],
+  "connections": {
+    "Every 30 Minutes": { "main": [[{ "node": "Query Unacknowledged Critical Failures", "type": "main", "index": 0 }]] },
+    "Query Unacknowledged Critical Failures": { "main": [[{ "node": "Filter: Needs Escalation", "type": "main", "index": 0 }]] },
+    "Filter: Needs Escalation": { "main": [[{ "node": "Any to Escalate?", "type": "main", "index": 0 }]] },
+    "Any to Escalate?": {
+      "main": [
+        [{ "node": "Build Escalation Email", "type": "main", "index": 0 }],
+        []
+      ]
+    },
+    "Build Escalation Email": {
+      "main": [[
+        { "node": "Send Escalation Email", "type": "main", "index": 0 },
+        { "node": "Post to Teams Escalation Channel", "type": "main", "index": 0 }
+      ]]
+    },
+    "Send Escalation Email": { "main": [[{ "node": "Mark as Escalated in DB", "type": "main", "index": 0 }]] },
+    "Post to Teams Escalation Channel": { "main": [[{ "node": "Create Escalation Notifications", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "rigmind" }, { "name": "escalation" }]
+}

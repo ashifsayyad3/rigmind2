@@ -1,0 +1,199 @@
+name: RigMind AI™ — Build, Test & Deploy
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  ACR_REGISTRY: rigmindprodacr.azurecr.io
+  AKS_CLUSTER: rigmind-production-aks
+  AKS_RESOURCE_GROUP: rigmind-production-rg
+  NAMESPACE: rigmind
+
+jobs:
+  # ── Lint & Type-check ────────────────────────────────────────────────────
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run type-check
+
+  # ── Unit Tests ───────────────────────────────────────────────────────────
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Run tests with coverage
+        run: npm run test -- --coverage --coverageThreshold='{"global":{"branches":80,"functions":85,"lines":85}}'
+        env:
+          NODE_ENV: test
+          JWT_SECRET: test-secret-for-ci
+          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          REDIS_HOST: localhost
+      - uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  # ── Python AI Tests ─────────────────────────────────────────────────────
+  test-ai:
+    name: AI Service Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r ai-services/failure-prediction/requirements.txt
+      - run: python -m pytest ai-services/ -v --tb=short
+        env:
+          DATABASE_URL: "sqlite:///:memory:"
+
+  # ── Build Docker Images ──────────────────────────────────────────────────
+  build:
+    name: Build & Push Images
+    runs-on: ubuntu-latest
+    needs: [test, test-ai]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    outputs:
+      image-tag: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.ACR_REGISTRY }}/rigmind/api-gateway
+          tags: |
+            type=sha,prefix=,suffix=,format=short
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build & push API Gateway
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: infrastructure/docker/Dockerfile.api
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build & push Web
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: infrastructure/docker/Dockerfile.web
+          push: true
+          tags: ${{ env.ACR_REGISTRY }}/rigmind/web:${{ steps.meta.outputs.version }},${{ env.ACR_REGISTRY }}/rigmind/web:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build & push AI service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: infrastructure/docker/Dockerfile.ai
+          push: true
+          tags: ${{ env.ACR_REGISTRY }}/rigmind/ai-prediction:${{ steps.meta.outputs.version }},${{ env.ACR_REGISTRY }}/rigmind/ai-prediction:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ── Deploy to AKS ─────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to AKS
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get AKS credentials
+        run: az aks get-credentials --resource-group ${{ env.AKS_RESOURCE_GROUP }} --name ${{ env.AKS_CLUSTER }}
+
+      - name: Inject secrets from Key Vault
+        run: |
+          DATABASE_URL=$(az keyvault secret show --vault-name rigmind-production-kv --name database-url --query value -o tsv)
+          JWT_SECRET=$(az keyvault secret show --vault-name rigmind-production-kv --name jwt-secret --query value -o tsv)
+          ANTHROPIC_API_KEY=$(az keyvault secret show --vault-name rigmind-production-kv --name anthropic-api-key --query value -o tsv)
+          
+          kubectl create secret generic rigmind-secrets -n ${{ env.NAMESPACE }} \
+            --from-literal=DATABASE_URL="$DATABASE_URL" \
+            --from-literal=JWT_SECRET="$JWT_SECRET" \
+            --from-literal=ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Run database migrations
+        run: |
+          kubectl run db-migrate --image=${{ env.ACR_REGISTRY }}/rigmind/api-gateway:${{ needs.build.outputs.image-tag }} \
+            --restart=Never --rm -i -n ${{ env.NAMESPACE }} \
+            --env DATABASE_URL=$(az keyvault secret show --vault-name rigmind-production-kv --name database-url --query value -o tsv) \
+            -- npx prisma migrate deploy
+
+      - name: Deploy to AKS
+        run: |
+          IMAGE_TAG=${{ needs.build.outputs.image-tag }}
+          kubectl set image deployment/api-gateway api-gateway=${{ env.ACR_REGISTRY }}/rigmind/api-gateway:$IMAGE_TAG -n ${{ env.NAMESPACE }}
+          kubectl set image deployment/web web=${{ env.ACR_REGISTRY }}/rigmind/web:$IMAGE_TAG -n ${{ env.NAMESPACE }}
+          kubectl set image deployment/ai-prediction ai-prediction=${{ env.ACR_REGISTRY }}/rigmind/ai-prediction:$IMAGE_TAG -n ${{ env.NAMESPACE }}
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/api-gateway -n ${{ env.NAMESPACE }} --timeout=300s
+          kubectl rollout status deployment/web -n ${{ env.NAMESPACE }} --timeout=300s
+
+      - name: Smoke test
+        run: |
+          EXTERNAL_IP=$(kubectl get ingress rigmind-ingress -n ${{ env.NAMESPACE }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+          curl -f https://api.rigmind.aquila-engineer.com/api/health || exit 1
+
+      - name: Notify Teams on success
+        if: success()
+        run: |
+          curl -X POST "${{ secrets.TEAMS_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "{\"text\": \"✅ RigMind AI™ deployed successfully — tag: ${{ needs.build.outputs.image-tag }}\"}"
+
+      - name: Notify Teams on failure
+        if: failure()
+        run: |
+          curl -X POST "${{ secrets.TEAMS_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "{\"text\": \"❌ RigMind AI™ deployment FAILED — branch: ${{ github.ref }}\"}"

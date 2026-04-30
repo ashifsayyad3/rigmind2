@@ -1,0 +1,152 @@
+{
+  "name": "RigMind - Failure Incident Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "minutes", "minutesInterval": 5 }] }
+      },
+      "id": "cron-trigger",
+      "name": "Poll New Failures",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT f.id, f.title, f.severity, f.description, f.rigId, f.componentId, f.dateOfFailure, r.name as rigName, c.name as componentName FROM failures f JOIN rigs r ON r.id = f.rigId LEFT JOIN components c ON c.id = f.componentId WHERE f.isRemoved = 0 AND f.createdAt >= DATEADD(MINUTE, -6, GETDATE()) AND f.status = 'open' ORDER BY f.createdAt DESC"
+      },
+      "id": "query-new-failures",
+      "name": "Query New Failures",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "credentials": { "microsoftSql": { "id": "1", "name": "Azure SQL" } }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [{ "value1": "={{ $json.length }}", "operation": "larger", "value2": 0 }]
+        }
+      },
+      "id": "if-has-failures",
+      "name": "Has New Failures?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "split-failures",
+      "name": "Process Each Failure",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [{ "value1": "={{ $json.severity }}", "operation": "equal", "value2": "critical" }]
+        }
+      },
+      "id": "if-critical",
+      "name": "Is Critical?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "subject": "🚨 CRITICAL FAILURE — {{ $json.rigName }}: {{ $json.title }}",
+        "message": "=<h2>⚠️ Critical Failure Alert</h2><p><strong>Rig:</strong> {{ $json.rigName }}</p><p><strong>Component:</strong> {{ $json.componentName }}</p><p><strong>Description:</strong> {{ $json.description }}</p><p><strong>Date of Failure:</strong> {{ $json.dateOfFailure }}</p><p><a href=\"https://rigmind.aquila-engineer.com/failures/{{ $json.id }}\">View in RigMind →</a></p>",
+        "toRecipients": "={{ $vars.CRITICAL_ALERT_EMAILS }}",
+        "options": { "replyTo": "rigmind@aquila-engineer.com" }
+      },
+      "id": "email-critical",
+      "name": "Send Critical Email",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [1340, 100],
+      "credentials": { "microsoftOutlookOAuth2Api": { "id": "2", "name": "Outlook" } }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "message",
+        "operation": "send",
+        "chatId": "={{ $vars.TEAMS_CHANNEL_ID }}",
+        "messageType": "text",
+        "message": "=🔴 **CRITICAL FAILURE** on **{{ $json.rigName }}**\n\nComponent: {{ $json.componentName }}\nDescription: {{ $json.description }}\n\n👉 [View in RigMind](https://rigmind.aquila-engineer.com/failures/{{ $json.id }})"
+      },
+      "id": "teams-critical",
+      "name": "Post to Teams",
+      "type": "n8n-nodes-base.microsoftTeams",
+      "typeVersion": 2,
+      "position": [1340, 250],
+      "credentials": { "microsoftTeamsOAuth2Api": { "id": "3", "name": "Teams" } }
+    },
+    {
+      "parameters": {
+        "url": "={{ $vars.RIGMIND_API }}/api/v1/notifications",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpBearerAuth",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "title", "value": "New {{ $json.severity }} failure on {{ $json.rigName }}" },
+            { "name": "message", "value": "{{ $json.title }} — {{ $json.componentName }}" },
+            { "name": "eventType", "value": "failure.new" },
+            { "name": "severity", "value": "={{ $json.severity }}" },
+            { "name": "rigId", "value": "={{ $json.rigId }}" },
+            { "name": "sourceId", "value": "={{ $json.id }}" }
+          ]
+        }
+      },
+      "id": "push-notification",
+      "name": "Push In-App Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1340, 400]
+    },
+    {
+      "parameters": {
+        "url": "={{ $vars.AI_SERVICE_URL }}/predict",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "component_features.rig_id", "value": "={{ $json.rigId }}" },
+            { "name": "component_features.component_id", "value": "={{ $json.componentId }}" }
+          ]
+        }
+      },
+      "id": "ai-predict",
+      "name": "Get AI Risk Prediction",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1560, 300]
+    }
+  ],
+  "connections": {
+    "Poll New Failures": { "main": [[{ "node": "Query New Failures", "type": "main", "index": 0 }]] },
+    "Query New Failures": { "main": [[{ "node": "Has New Failures?", "type": "main", "index": 0 }]] },
+    "Has New Failures?": { "main": [[{ "node": "Process Each Failure", "type": "main", "index": 0 }], []] },
+    "Process Each Failure": { "main": [[{ "node": "Is Critical?", "type": "main", "index": 0 }]] },
+    "Is Critical?": {
+      "main": [
+        [
+          { "node": "Send Critical Email", "type": "main", "index": 0 },
+          { "node": "Post to Teams", "type": "main", "index": 0 }
+        ],
+        [{ "node": "Push In-App Notification", "type": "main", "index": 0 }]
+      ]
+    },
+    "Push In-App Notification": { "main": [[{ "node": "Get AI Risk Prediction", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "rigmind" }, { "name": "failures" }]
+}

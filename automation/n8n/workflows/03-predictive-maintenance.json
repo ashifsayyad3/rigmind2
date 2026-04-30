@@ -1,0 +1,103 @@
+{
+  "name": "RigMind - Predictive Maintenance Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "hours", "hoursInterval": 6 }] }
+      },
+      "id": "trigger",
+      "name": "Every 6 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $vars.AI_SERVICE_URL }}/predict/fleet",
+        "method": "POST",
+        "sendBody": true,
+        "bodyParameters": { "parameters": [{ "name": "rig_ids", "value": "" }] }
+      },
+      "id": "fleet-predict",
+      "name": "Get Fleet Predictions",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const predictions = $input.first().json.predictions || [];\nconst critical = predictions.filter(p => p.riskLevel === 'critical');\nconst high = predictions.filter(p => p.riskLevel === 'high');\nreturn critical.concat(high).map(p => ({ json: p }));"
+      },
+      "id": "filter-high-risk",
+      "name": "Filter Critical & High Risk",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [{ "value1": "={{ $input.all().length }}", "operation": "larger", "value2": 0 }]
+        }
+      },
+      "id": "if-high-risk",
+      "name": "Any High Risk?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst grouped = {};\nfor (const item of items) {\n  const rig = item.json.rigName;\n  if (!grouped[rig]) grouped[rig] = [];\n  grouped[rig].push(item.json);\n}\nlet html = '<h2>⚠️ Predictive Maintenance Alert</h2>';\nfor (const [rig, components] of Object.entries(grouped)) {\n  html += `<h3>${rig}</h3><ul>`;\n  for (const c of components) {\n    const emoji = c.riskLevel === 'critical' ? '🔴' : '🟠';\n    html += `<li>${emoji} <b>${c.componentName}</b> — ${Math.round(c.failureProbability30d * 100)}% failure probability in 30 days<br><small>Risk factors: ${c.riskFactors?.join(', ') || 'N/A'}</small></li>`;\n  }\n  html += '</ul>';\n}\nreturn [{ json: { emailBody: html, count: items.length } }];"
+      },
+      "id": "build-alert",
+      "name": "Build Alert Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "subject": "=🔧 Predictive Maintenance Alert — {{ $json.count }} Components at Risk",
+        "message": "={{ $json.emailBody }}<p><a href='https://rigmind.aquila-engineer.com/dashboard'>View Full Dashboard →</a></p>",
+        "toRecipients": "={{ $vars.MAINTENANCE_ALERT_EMAILS }}",
+        "options": {}
+      },
+      "id": "send-email",
+      "name": "Send Maintenance Alert",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [1340, 200],
+      "credentials": { "microsoftOutlookOAuth2Api": { "id": "2", "name": "Outlook" } }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT f.id, f.rigId, f.title, f.status, f.severity, r.name as rigName FROM failures f JOIN rigs r ON r.id = f.rigId WHERE f.isRemoved = 0 AND f.status NOT IN ('closed') AND f.dueDate < DATEADD(DAY, 7, GETDATE()) AND f.dueDate >= GETDATE() ORDER BY f.severity ASC, f.dueDate ASC"
+      },
+      "id": "query-due-actions",
+      "name": "Query Due Corrective Actions",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [1120, 400],
+      "credentials": { "microsoftSql": { "id": "1", "name": "Azure SQL" } }
+    }
+  ],
+  "connections": {
+    "Every 6 Hours": { "main": [[{ "node": "Get Fleet Predictions", "type": "main", "index": 0 }]] },
+    "Get Fleet Predictions": { "main": [[{ "node": "Filter Critical & High Risk", "type": "main", "index": 0 }]] },
+    "Filter Critical & High Risk": { "main": [[{ "node": "Any High Risk?", "type": "main", "index": 0 }]] },
+    "Any High Risk?": {
+      "main": [
+        [
+          { "node": "Build Alert Email", "type": "main", "index": 0 },
+          { "node": "Query Due Corrective Actions", "type": "main", "index": 0 }
+        ],
+        []
+      ]
+    },
+    "Build Alert Email": { "main": [[{ "node": "Send Maintenance Alert", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "rigmind" }, { "name": "maintenance" }]
+}

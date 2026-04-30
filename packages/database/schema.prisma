@@ -1,0 +1,2176 @@
+// RigMind AI™ — Prisma Schema
+// Derived 1:1 from prod.sql (Azure SQL, 155 tables)
+// datetimeoffset → DateTime @db.DateTimeOffset
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+// ─── CORE ─────────────────────────────────────────────────────────────────────
+
+model Rig {
+  id                   Int       @id @default(autoincrement())
+  name                 String    @db.NVarChar(255)
+  status               String?   @db.NVarChar(50)
+  onContract           Boolean   @default(false) @map("onContract")
+  offContractDate      DateTime? @db.DateTimeOffset
+  operationStart       DateTime? @db.DateTimeOffset
+  projectedUnLatchDate DateTime? @db.DateTimeOffset
+  bop1Id               Int?
+  bop2Id               Int?
+  visible              Boolean   @default(true)
+  isRTM                Boolean   @default(false)
+  rtmRigId             String?   @db.NVarChar(50)
+  operatorId           Int?
+  category             String?   @db.NVarChar(100)
+  updatedById          Int?
+  createdAt            DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt            DateTime  @updatedAt @db.DateTimeOffset
+
+  bops_rigs_bop1IdTobops Bop? @relation("rigs_bop1IdTobops", fields: [bop1Id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  bops_rigs_bop2IdTobops Bop? @relation("rigs_bop2IdTobops", fields: [bop2Id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  wells                    Well[]
+  failures                 Failure[]
+  nonProductionTimes       NonProductionTime[]
+  maintenanceNotifications MaintenanceNotification[]
+  rigComponents            RigComponent[]
+  rigWellChanges           RigWellChange[]
+  rigStatusChanges         RigStatusChange[]
+  rigTests                 RigTest[]
+  activeBOPAssignments     ActiveBOPAssignment[]
+  moas                     Moa[]
+  communications           Communication[]
+  certificates             Certificate[]
+  rcmReports               RcmReport[]
+  observations             Observation[]
+  calendarEvents           CalendarEvent[]
+  rigLandings              RigLanding[]
+  userRigs                 UserRig[]
+  deferredMaintenanceTasks DeferredMaintenanceTask[]
+  nonProdTimeCalcs         NonProdTimeCalculation[]
+  prodTimeCalcs            ProdTimeCalculation[]
+  availabilityDrilldowns   AvailabilityDrilldown[]
+  rigAttachments           RigAttachment[]
+  operatorMappings         RigOperatorMapping[]
+  rtmAlarmConfigs          RtmAlarmConfiguration[]
+  rtmEventData             RtmEventData[]
+  barsequences             Barsequence[]
+  wellSessions             WellSession[]
+  tracks                   Track[]
+  dhw                      Dhw[]
+  mpd                      Mpd[]
+  rigFeatures              RigFeature[]
+  brvUploadHistory         BrvUploadHistory[]
+  dbaSetTrendsLimits       DbaSetTrendsLimit[]
+  rigCertificateComponents RigCertificateComponent[]
+  internalFailures         InternalFailure[]
+  internalObservations     InternalObservation[]
+  issueEquipments          IssueEquipment[]
+  watchlistItems           WatchlistItem[]
+  rigOperatorEventLogs     RigOperatorEventLog[]
+  rigContactUpdates        RigContactUpdate[]
+  surveyorStatusChanges    SurveyorStatusChange[]
+  rigItems                 RigItem[]
+  rigStack                 RigStack[]
+  drillingCasings          DrillingCasing[]
+  dhwWells                 DhwWell[]
+  rtmCasingDatas           RtmCasingData[]
+  trendingReadbackMinMax   TrendingReadbackMinMax[]
+  availabilityComponent    AvailabilityComponent[]
+  kpis                     Kpi[]
+
+  @@map("rigs")
+}
+
+model Well {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.NVarChar(255)
+  depth       Float?
+  region      String?   @db.NVarChar(100)
+  field       String?   @db.NVarChar(100)
+  availability String?  @db.NVarChar(50)
+  isRemoved   Boolean   @default(false)
+  createdById Int?
+  rigId       Int?
+  createdAt   DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime  @updatedAt @db.DateTimeOffset
+
+  rig              Rig?              @relation(fields: [rigId], references: [id])
+  observations     Observation[]
+  rigWellChanges   RigWellChange[]
+  wellSessions     WellSession[]
+  nonProductionTimes NonProductionTime[]
+  drillingCasings  DrillingCasing[]
+  rtmCasingDatas   RtmCasingData[]
+
+  @@map("wells")
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  firstName         String    @db.NVarChar(100)
+  lastName          String    @db.NVarChar(100)
+  email             String    @unique @db.NVarChar(255)
+  phoneNumber       String?   @db.NVarChar(50)
+  roleId            Int?
+  canAccessAllRigs  Boolean   @default(false)
+  lastActive        DateTime? @db.DateTimeOffset
+  deleted           Boolean   @default(false)
+  enabled           Boolean   @default(true)
+  createdAt         DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt         DateTime  @updatedAt @db.DateTimeOffset
+
+  role          Role?         @relation(fields: [roleId], references: [id])
+  userRigs      UserRig[]
+  notifications Notification[]
+  comments      Comment[]
+  tasks         Task[]
+  notes         Note[]
+  digest        UserDigest?
+  surveyorStatusChanges SurveyorStatusChange[]
+
+  @@map("users")
+}
+
+model Role {
+  id                 Int      @id @default(autoincrement())
+  name               String   @db.VarChar(100)
+  title              String?  @db.VarChar(100)
+  access             String?  @db.VarChar(50)
+  log                String?  @db.VarChar(50)
+  position           Int      @default(0)
+  enabled            Boolean  @default(true)
+  canAccessAdminPanel Boolean @default(false)
+  createdAt          DateTime @default(now()) @db.DateTimeOffset
+  updatedAt          DateTime @updatedAt @db.DateTimeOffset
+
+  users           User[]
+  rolePermissions RolePermission[]
+  roleFeatures    RoleFeature[]
+
+  @@map("roles")
+}
+
+model UserRig {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  rigId     Int
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  user User @relation(fields: [userId], references: [id])
+  rig  Rig  @relation(fields: [rigId], references: [id])
+
+  @@unique([userId, rigId])
+  @@map("userRigs")
+}
+
+// ─── FAILURES ─────────────────────────────────────────────────────────────────
+
+model Failure {
+  id                  Int       @id @default(autoincrement())
+  rigId               Int?
+  cause               String?   @db.NVarChar(Max)
+  cycleCounts         Int?
+  dateOfFailure       DateTime? @db.DateTimeOffset
+  description         String?   @db.NVarChar(Max)
+  failureType         String?   @db.NVarChar(100)
+  impactedFunctions   String?   @db.NVarChar(Max)
+  indicationsSymptoms String?   @db.NVarChar(Max)
+  mechanism           String?   @db.NVarChar(255)
+  moc                 Boolean?
+  severity            String?   @db.NVarChar(50)
+  status              String?   @db.NVarChar(50)
+  bopId               Int?
+  failureModeId       Int?
+  nptHours            Float?
+  componentId         Int?
+  equipmentType       String?   @db.NVarChar(100)
+  isRemoved           Boolean   @default(false)
+  createdById         Int?
+  updatedById         Int?
+  createdAt           DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt           DateTime  @updatedAt @db.DateTimeOffset
+
+  rig                   Rig?                  @relation(fields: [rigId], references: [id])
+  failureMode           FailureMode?          @relation(fields: [failureModeId], references: [id])
+  correctiveActions     CorrectiveAction[]
+  failureObservations   FailureObservation[]
+  failureCommunications FailureCommunication[]
+  comments              Comment[]
+  lessonsLearned        LessonsLearned[]
+  linkedFailures1       LinkedFailure[]       @relation("failure1")
+  linkedFailures2       LinkedFailure[]       @relation("failure2")
+  failureAttachments    FailureAttachment[]
+  nptFailures           NptFailure[]
+  rcmRecommendationFailureLink RcmRecommendationFailureLink[]
+  moaDelays             MoaDelay[]
+
+  @@map("failures")
+}
+
+model FailureMode {
+  id             Int      @id @default(autoincrement())
+  failureMode    String   @db.NVarChar(255)
+  failureModeTag String?  @db.NVarChar(100)
+  createdAt      DateTime @default(now()) @db.DateTimeOffset
+  updatedAt      DateTime @updatedAt @db.DateTimeOffset
+
+  failures              Failure[]
+  componentFailureModes ComponentFailureMode[]
+
+  @@map("failureModes")
+}
+
+model CorrectiveAction {
+  id           Int       @id @default(autoincrement())
+  failureId    Int
+  serialNumber String?   @db.NVarChar(100)
+  partNumber   String?   @db.NVarChar(100)
+  vendorOEM    String?   @db.NVarChar(255)
+  dateOfRepair DateTime? @db.DateTimeOffset
+  description  String?   @db.VarChar(Max)
+  actionTaken  String?   @db.NVarChar(Max)
+  createdAt    DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime  @updatedAt @db.DateTimeOffset
+
+  failure Failure @relation(fields: [failureId], references: [id])
+
+  @@map("correctiveActions")
+}
+
+model FailureObservation {
+  id            Int      @id @default(autoincrement())
+  failureId     Int
+  observationId Int
+  createdAt     DateTime @default(now()) @db.DateTimeOffset
+  updatedAt     DateTime @updatedAt @db.DateTimeOffset
+
+  failure     Failure     @relation(fields: [failureId], references: [id])
+  observation Observation @relation(fields: [observationId], references: [id])
+
+  @@map("failureObservations")
+}
+
+model LessonsLearned {
+  id                   Int      @id @default(autoincrement())
+  failureId            Int
+  investigationResults String?  @db.VarChar(Max)
+  learningsImplemented String?  @db.VarChar(Max)
+  createdById          Int?
+  updatedById          Int?
+  createdAt            DateTime @default(now()) @db.DateTimeOffset
+  updatedAt            DateTime @updatedAt @db.DateTimeOffset
+
+  failure     Failure                    @relation(fields: [failureId], references: [id])
+  attachments LessonsLearnedAttachment[]
+
+  @@map("lessonsLearned")
+}
+
+model LinkedFailure {
+  id         Int @id @default(autoincrement())
+  failure1Id Int
+  failure2Id Int
+
+  failure1 Failure @relation("failure1", fields: [failure1Id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  failure2 Failure @relation("failure2", fields: [failure2Id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("linkedFailures")
+}
+
+model FailureCause {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  tooltip   String?  @db.NVarChar(Max)
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("failureCause")
+}
+
+model FailureMajorDiscovery {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  tooltip   String?  @db.NVarChar(Max)
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("failureMajorDiscovery")
+}
+
+// ─── OBSERVATIONS ─────────────────────────────────────────────────────────────
+
+model Observation {
+  id                  Int       @id @default(autoincrement())
+  dateOfObservation   DateTime? @db.DateTimeOffset
+  title               String?   @db.NVarChar(255)
+  description         String?   @db.NVarChar(Max)
+  status              String?   @db.NVarChar(50)
+  severity            String?   @db.NVarChar(50)
+  bopId               Int?
+  componentId         Int?
+  wellId              Int?
+  interventionStackId Int?
+  surfaceEquipmentId  Int?
+  rigId               Int?
+  type                String?   @db.NVarChar(100)
+  correctionDescription String? @db.NVarChar(Max)
+  updatedById         Int?
+  isRemoved           Boolean   @default(false)
+  createdById         Int?
+  createdAt           DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt           DateTime  @updatedAt @db.DateTimeOffset
+
+  rig                       Rig?                               @relation(fields: [rigId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  bops                      Bop?                               @relation(fields: [bopId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  wells                     Well?                              @relation(fields: [wellId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  components                Component?                         @relation(fields: [componentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  failureObservations       FailureObservation[]
+  observationCommunications ObservationCommunication[]
+  observationAttachments    ObservationAttachment[]
+  sensorReadings            SensorReading[]
+  rcmRecommendationObservationLink RcmRecommendationObservationLink[]
+  comments                  Comment[]
+
+  @@map("observations")
+}
+
+model ObservationAttachment {
+  id             Int       @id @default(autoincrement())
+  observationId  Int?
+  attachmentId   Int?
+  sensorType     String?   @db.NVarChar(100)
+  attachmentType String?   @db.NVarChar(100)
+  startDate      DateTime? @db.DateTimeOffset
+  endDate        DateTime? @db.DateTimeOffset
+  createdAt      DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt      DateTime  @updatedAt @db.DateTimeOffset
+
+  observation Observation? @relation(fields: [observationId], references: [id])
+  attachment  Attachment?  @relation(fields: [attachmentId], references: [id])
+
+  @@map("observationAttachments")
+}
+
+model SensorReading {
+  id            Int       @id @default(autoincrement())
+  observationId Int?
+  rigId         Int?
+  sensorTag     String?   @db.NVarChar(100)
+  timestamp     DateTime? @db.DateTimeOffset
+  value         Float?
+  startDate     DateTime? @db.DateTimeOffset
+  endDate       DateTime? @db.DateTimeOffset
+  createdAt     DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt     DateTime  @updatedAt @db.DateTimeOffset
+
+  observation Observation? @relation(fields: [observationId], references: [id])
+
+  @@map("sensorReadings")
+}
+
+// ─── MAINTENANCE ──────────────────────────────────────────────────────────────
+
+model DeferredMaintenanceTask {
+  id                    Int       @id @default(autoincrement())
+  rigId                 Int?
+  equipmentId           Int?
+  equipmentType         String?   @db.NVarChar(100)
+  title                 String?   @db.NVarChar(255)
+  description           String?   @db.NVarChar(Max)
+  componentName         String?   @db.NVarChar(255)
+  defermentDate         DateTime? @db.DateTimeOffset
+  plannedCompletionDate DateTime? @db.DateTimeOffset
+  priority              String?   @db.NVarChar(50)
+  status                String?   @db.NVarChar(50)
+  isRemoved             Boolean   @default(false)
+  createdById           Int?
+  updatedById           Int?
+  createdAt             DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt             DateTime  @updatedAt @db.DateTimeOffset
+
+  rig         Rig?           @relation(fields: [rigId], references: [id])
+  attachments DmtAttachment[]
+
+  @@map("deferredMaintenanceTasks")
+}
+
+model MaintenanceNotification {
+  id            Int      @id @default(autoincrement())
+  title         String?  @db.NVarChar(255)
+  message       String?  @db.NVarChar(Max)
+  rigId         Int?
+  assignedAs    String?  @db.NVarChar(100)
+  equipmentId   Int?
+  equipmentType String?  @db.NVarChar(100)
+  type          String?  @db.NVarChar(100)
+  createdAt     DateTime @default(now()) @db.DateTimeOffset
+  updatedAt     DateTime @updatedAt @db.DateTimeOffset
+
+  rig               Rig?                          @relation(fields: [rigId], references: [id])
+  userNotifications UserMaintenanceNotification[]
+
+  @@map("maintenanceNotifications")
+}
+
+model MaintenanceTask {
+  id            Int      @id @default(autoincrement())
+  componentName String?  @db.NVarChar(255)
+  issueId       Int?
+  issueType     String?  @db.NVarChar(100)
+  createdAt     DateTime @default(now()) @db.DateTimeOffset
+  updatedAt     DateTime @updatedAt @db.DateTimeOffset
+
+  issueTasks IssueTask[]
+
+  @@map("maintenanceTasks")
+}
+
+model ComponentMaintainanceHistory {
+  id                   Int       @id @default(autoincrement())
+  name                 String?   @db.NVarChar(255)
+  rigId                Int?
+  uniqueComponentNameId Int?
+  componentId          Int?
+  maintenanceDate      DateTime? @db.DateTimeOffset
+  partNo               String?   @db.NVarChar(100)
+  sn                   String?   @db.NVarChar(100)
+  pressureRating       Float?
+  bop                  Int?
+  maintainencePeriod   String?   @db.NVarChar(100)
+  lastMaintainenceDate DateTime? @db.DateTimeOffset
+  createdAt            DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt            DateTime  @updatedAt @db.DateTimeOffset
+
+  @@map("componentMaintainanceHistory")
+}
+
+// ─── CERTIFICATES ─────────────────────────────────────────────────────────────
+
+model Certificate {
+  id           Int       @id @default(autoincrement())
+  rigId        Int?
+  equipment    String?   @db.NVarChar(255)
+  typeCodeId   Int?
+  serialNumber String?   @db.NVarChar(100)
+  tag          String?   @db.NVarChar(100)
+  manufacturer String?   @db.NVarChar(255)
+  partNumber   String?   @db.NVarChar(100)
+  expiryDate   DateTime? @db.DateTimeOffset
+  issuedDate   DateTime? @db.DateTimeOffset
+  status       String?   @db.NVarChar(50)
+  isDeleted    Boolean   @default(false)
+  createdAt    DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime  @updatedAt @db.DateTimeOffset
+
+  rig         Rig?                    @relation(fields: [rigId], references: [id])
+  typeCode    TypeCode?               @relation(fields: [typeCodeId], references: [id])
+  attachments CertificateAttachment[]
+
+  @@map("certificates")
+}
+
+model CertificateAttachment {
+  id              Int       @id @default(autoincrement())
+  certificateId   Int?
+  certificateType String?   @db.NVarChar(100)
+  attachmentId    Int?
+  expirationDate  DateTime? @db.DateTimeOffset
+  isDeleted       Boolean   @default(false)
+  createdById     Int?
+  updatedById     Int?
+  createdAt       DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt       DateTime  @updatedAt @db.DateTimeOffset
+
+  certificate Certificate? @relation(fields: [certificateId], references: [id])
+  attachment  Attachment?  @relation(fields: [attachmentId], references: [id])
+
+  @@map("certificateAttachments")
+}
+
+model TypeCode {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  subType   String?  @db.NVarChar(100)
+  bopType   String?  @db.NVarChar(100)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  certificates Certificate[]
+
+  @@map("typeCodes")
+}
+
+model RigCertificateComponent {
+  id        Int      @id @default(autoincrement())
+  rigId     Int?
+  system    String?  @db.NVarChar(255)
+  subSystem String?  @db.NVarChar(255)
+  equipment String?  @db.NVarChar(255)
+  component String?  @db.NVarChar(255)
+  fleet     String?  @db.NVarChar(255)
+  included  Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("rigCertificateComponents")
+}
+
+model CertificateComponentMaster {
+  id        Int      @id @default(autoincrement())
+  system    String?  @db.NVarChar(255)
+  subSystem String?  @db.NVarChar(255)
+  equipment String?  @db.NVarChar(255)
+  component String?  @db.NVarChar(255)
+  fleet     String?  @db.NVarChar(255)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("certificateComponentMasters")
+}
+
+// ─── NPT ──────────────────────────────────────────────────────────────────────
+
+model NonProductionTime {
+  id            Int       @id @default(autoincrement())
+  rigId         Int?
+  wellId        Int?
+  bopType       String?   @db.NVarChar(100)
+  delayCategory String?   @db.NVarChar(100)
+  operation     String?   @db.NVarChar(255)
+  nptHours      String?   @db.NVarChar(50)
+  comment       String?   @db.NVarChar(Max)
+  nptType       String?   @db.NVarChar(100)
+  sourceType    String?   @db.NVarChar(100)
+  sourceId      Int?
+  dateOfNPT     DateTime? @db.DateTimeOffset
+  isRemoved     Boolean   @default(false)
+  startTime     DateTime? @db.DateTimeOffset
+  endTime       DateTime? @db.DateTimeOffset
+  createdAt     DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt     DateTime  @updatedAt @db.DateTimeOffset
+
+  rig  Rig?  @relation(fields: [rigId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  well Well? @relation(fields: [wellId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("nonProductionTimes")
+}
+
+model NonProdTimeCalculation {
+  id           Int       @id @default(autoincrement())
+  rigId        Int?
+  bopType      String?   @db.NVarChar(100)
+  startComment String?   @db.NVarChar(Max)
+  stopComment  String?   @db.NVarChar(Max)
+  startTime    DateTime? @db.DateTimeOffset
+  endTime      DateTime? @db.DateTimeOffset
+  createdById  Int?
+  createdAt    DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime  @updatedAt @db.DateTimeOffset
+
+  rig         Rig?         @relation(fields: [rigId], references: [id])
+  nptFailures NptFailure[]
+
+  @@map("nonProdTimeCalculations")
+}
+
+model ProdTimeCalculation {
+  id        Int       @id @default(autoincrement())
+  rigId     Int?
+  bopType   String?   @db.NVarChar(100)
+  startTime DateTime? @db.DateTimeOffset
+  endTime   DateTime? @db.DateTimeOffset
+  status    Boolean?
+  createdAt DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt DateTime  @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("prodTimeCalculations")
+}
+
+model NptFailure {
+  id                       Int      @id @default(autoincrement())
+  nonProdTimeCalculationId Int?
+  failureId                Int?
+  createdAt                DateTime @default(now()) @db.DateTimeOffset
+  updatedAt                DateTime @updatedAt @db.DateTimeOffset
+
+  nonProdTimeCalc NonProdTimeCalculation? @relation(fields: [nonProdTimeCalculationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  failure         Failure?                @relation(fields: [failureId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("nptFailures")
+}
+
+// ─── BOP ──────────────────────────────────────────────────────────────────────
+
+model Bop {
+  id               Int       @id @default(autoincrement())
+  name             String?   @db.NVarChar(255)
+  type             String?   @db.NVarChar(100)
+  location         String?   @db.VarChar(100)
+  onDeckDate       DateTime? @db.DateTimeOffset
+  splashDate       DateTime? @db.DateTimeOffset
+  latchTestStartDate DateTime? @db.DateTimeOffset
+  latchUpCompleteDate DateTime? @db.DateTimeOffset
+  installationDate DateTime? @db.DateTimeOffset
+  vendorOEM        String?   @db.NVarChar(255)
+  state            String?   @db.NVarChar(50)
+  serialNumber     String?   @db.NVarChar(100)
+  createdAt        DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt        DateTime  @updatedAt @db.DateTimeOffset
+
+  bopChanges                BopChange[]
+  bopEvents                 BopEvent[]
+  rigTests                  RigTest[]
+  activeBOPAssignments      ActiveBOPAssignment[]
+  observations              Observation[]
+  rigs_rigs_bop1IdTobops    Rig[]                 @relation("rigs_bop1IdTobops")
+  rigs_rigs_bop2IdTobops    Rig[]                 @relation("rigs_bop2IdTobops")
+
+  @@map("bops")
+}
+
+model ActiveBOPAssignment {
+  id          Int       @id @default(autoincrement())
+  name        String?   @db.NVarChar(255)
+  rigId       Int?
+  bopId       Int?
+  rtmRigId    String?   @db.NVarChar(50)
+  isActive    Boolean   @default(true)
+  startDate   DateTime? @db.DateTimeOffset
+  endDate     DateTime? @db.DateTimeOffset
+  createdById Int?
+  updatedById Int?
+  createdAt   DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime  @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+  bop Bop? @relation(fields: [bopId], references: [id])
+
+  @@map("activeBOPAssignments")
+}
+
+model BopChange {
+  id                    Int       @id @default(autoincrement())
+  bopId                 Int?
+  location              String?   @db.NVarChar(100)
+  state                 String?   @db.NVarChar(50)
+  splashDate            DateTime? @db.DateTimeOffset
+  latchTestStartDate    DateTime? @db.DateTimeOffset
+  latchUpCompleteDate   DateTime? @db.DateTimeOffset
+  onDeckDate            DateTime? @db.DateTimeOffset
+  maintenanceStartDate  DateTime? @db.DateTimeOffset
+  plannedReadyDate      DateTime? @db.DateTimeOffset
+  actualReadyDate       DateTime? @db.DateTimeOffset
+  createdAt             DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt             DateTime  @updatedAt @db.DateTimeOffset
+
+  bop Bop? @relation(fields: [bopId], references: [id])
+
+  @@map("bopChanges")
+}
+
+model BopEvent {
+  id                              Int       @id @default(autoincrement())
+  bopId                           Int?
+  equipment                       String?   @db.NVarChar(255)
+  bopStatus                       String?   @db.NVarChar(100)
+  projectedOnDeckDate             DateTime? @db.DateTimeOffset
+  actualOnDeckDate                DateTime? @db.DateTimeOffset
+  projectedMaintenanceStartDate   DateTime? @db.DateTimeOffset
+  actualMaintenanceStartDate      DateTime? @db.DateTimeOffset
+  projectedMaintenanceCompleteDate DateTime? @db.DateTimeOffset
+  actualMaintenanceCompleteDate   DateTime? @db.DateTimeOffset
+  createdAt                       DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt                       DateTime  @updatedAt @db.DateTimeOffset
+
+  bop Bop? @relation(fields: [bopId], references: [id])
+
+  @@map("bopEvents")
+}
+
+model BopEventChange {
+  id            Int       @id @default(autoincrement())
+  wellSessionId Int?
+  bopId         Int?
+  equipment     String?   @db.NVarChar(255)
+  location      String?   @db.NVarChar(100)
+  eventSource   String?   @db.NVarChar(100)
+  eventType     String?   @db.NVarChar(100)
+  eventDate     DateTime? @db.DateTimeOffset
+  isUpdated     Boolean   @default(false)
+  bopTripReason String?   @db.NVarChar(Max)
+  createdAt     DateTime  @default(now()) @db.DateTimeOffset
+
+  @@map("bopEventChanges")
+}
+
+// ─── COMPONENTS ───────────────────────────────────────────────────────────────
+
+model Component {
+  id                  Int      @id @default(autoincrement())
+  subUnit             String?  @db.NVarChar(255)
+  item                String?  @db.NVarChar(255)
+  component           String?  @db.NVarChar(255)
+  componentTag        String?  @db.NVarChar(100)
+  uniqueComponentName String?  @db.NVarChar(255)
+  createdAt           DateTime @default(now()) @db.DateTimeOffset
+  updatedAt           DateTime @updatedAt @db.DateTimeOffset
+
+  rigComponents         RigComponent[]
+  componentFailureModes ComponentFailureMode[]
+  observations          Observation[]
+
+  @@map("components")
+}
+
+model RigComponent {
+  id                    Int      @id @default(autoincrement())
+  rigId                 Int?
+  uniqueComponentNameId Int?
+  IsIcicle              Boolean  @default(false)
+  isBOP                 Int?
+  isMPD                 Int?
+  createdAt             DateTime @default(now()) @db.DateTimeOffset
+  updatedAt             DateTime @updatedAt @db.DateTimeOffset
+
+  rig       Rig?       @relation(fields: [rigId], references: [id])
+  component Component? @relation(fields: [uniqueComponentNameId], references: [id])
+
+  @@map("rigComponents")
+}
+
+model UniqueComponentName {
+  id          Int      @id @default(autoincrement())
+  name        String?  @db.NVarChar(255)
+  itemId      Int?
+  partId      Int?
+  subUnitId   Int?
+  unitId      Int?
+  tag         String?  @db.NVarChar(100)
+  description String?  @db.NVarChar(Max)
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("uniqueComponentNames")
+}
+
+model ComponentFailureMode {
+  id            Int      @id @default(autoincrement())
+  componentId   Int?
+  failureModeId Int?
+  createdAt     DateTime @default(now()) @db.DateTimeOffset
+  updatedAt     DateTime @updatedAt @db.DateTimeOffset
+
+  component   Component?   @relation(fields: [componentId], references: [id])
+  failureMode FailureMode? @relation(fields: [failureModeId], references: [id])
+
+  @@map("componentFailureModes")
+}
+
+model SubUnit {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  isMPD     Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("subUnits")
+}
+
+model Item {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  IsIcicle  Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("items")
+}
+
+model Part {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  IsIcicle  Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("parts")
+}
+
+model Unit {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("units")
+}
+
+// ─── RCM ──────────────────────────────────────────────────────────────────────
+
+model RcmReport {
+  id                   Int       @id @default(autoincrement())
+  title                String?   @db.NVarChar(255)
+  rigId                Int?
+  equipmentId          Int?
+  equipmentType        String?   @db.NVarChar(100)
+  operationalStartDate DateTime? @db.DateTimeOffset
+  operationalEndDate   DateTime? @db.DateTimeOffset
+  availability         String?   @db.NVarChar(50)
+  isDeleted            Boolean   @default(false)
+  createdAt            DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt            DateTime  @updatedAt @db.DateTimeOffset
+
+  rig             Rig?              @relation(fields: [rigId], references: [id])
+  recommendations RcmRecommendation[]
+
+  @@map("rcmReports")
+}
+
+model RcmRecommendation {
+  id                      Int       @id @default(autoincrement())
+  rcmReportId             Int?
+  eventName               String?   @db.VarChar(255)
+  issueType               String?   @db.NVarChar(100)
+  description             String?   @db.VarChar(Max)
+  recommendation          String?   @db.NVarChar(Max)
+  availability            String?   @db.NVarChar(50)
+  priority                String?   @db.NVarChar(50)
+  status                  String?   @db.NVarChar(50)
+  dueDate                 DateTime? @db.DateTimeOffset
+  isCommunicated          Boolean   @default(false)
+  reasonOfNoCommunication String?   @db.NVarChar(Max)
+  closeReason             String?   @db.NVarChar(Max)
+  createdAt               DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt               DateTime  @updatedAt @db.DateTimeOffset
+
+  rcmReport                        RcmReport?                        @relation(fields: [rcmReportId], references: [id])
+  rcmRecommendationFailureLink     RcmRecommendationFailureLink[]
+  rcmRecommendationObservationLink RcmRecommendationObservationLink[]
+  attachments                      RecommendationAttachment[]
+
+  @@map("rcmRecommendations")
+}
+
+model RcmRecommendationFailureLink {
+  id                   Int      @id @default(autoincrement())
+  rcmRecommendationsId Int?
+  failureId            Int?
+  createdAt            DateTime @default(now()) @db.DateTimeOffset
+  updatedAt            DateTime @updatedAt @db.DateTimeOffset
+
+  rcmRecommendations RcmRecommendation? @relation(fields: [rcmRecommendationsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  failures           Failure?            @relation(fields: [failureId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("rcmRecommendationFailureLink")
+}
+
+model RcmRecommendationObservationLink {
+  id                   Int      @id @default(autoincrement())
+  rcmRecommendationsId Int?
+  observationId        Int?
+  createdAt            DateTime @default(now()) @db.DateTimeOffset
+  updatedAt            DateTime @updatedAt @db.DateTimeOffset
+
+  rcmRecommendations RcmRecommendation? @relation(fields: [rcmRecommendationsId], references: [id])
+  observations       Observation?        @relation(fields: [observationId], references: [id])
+
+  @@map("rcmRecommendationObservationLink")
+}
+
+// ─── RTM / SENSORS ────────────────────────────────────────────────────────────
+
+model RtmAlarmConfiguration {
+  id                 Int      @id @default(autoincrement())
+  rigId              Int?
+  sensorId           String?  @db.NVarChar(100)
+  parameterName      String?  @db.NVarChar(255)
+  alarmType          String?  @db.NVarChar(100)
+  alarmName          String?  @db.NVarChar(255)
+  timeThresholdType  String?  @db.NVarChar(100)
+  timeThresholdValue Int?
+  threshold          Float?
+  lowerBound_W       Float?
+  lowerBound_C       Float?
+  upperBound_W       Float?
+  upperBound_C       Float?
+  enabled            Boolean  @default(true)
+  createdAt          DateTime @default(now()) @db.DateTimeOffset
+  updatedAt          DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("rtm_AlarmConfiguration")
+}
+
+model RtmEventData {
+  id            Int       @id @default(autoincrement())
+  rigId         Int?
+  rtmRigId      String?   @db.NVarChar(50)
+  sensorId      String?   @db.NVarChar(100)
+  parameterName String?   @db.NVarChar(255)
+  alarmType     String?   @db.NVarChar(100)
+  eventId       String?   @db.NVarChar(255)
+  eventName     String?   @db.NVarChar(255)
+  priority      String?   @db.NVarChar(50)
+  status        String?   @db.NVarChar(50)
+  value         Float?
+  timestamp     DateTime? @db.DateTimeOffset
+  isAcknowledge Boolean   @default(false)
+  startTime     DateTime? @db.DateTimeOffset
+  endTime       DateTime? @db.DateTimeOffset
+  createdAt     DateTime  @default(now()) @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("rtm_EventData")
+}
+
+model RtmEventDataHistory {
+  id            Int       @id @default(autoincrement())
+  rigId         Int?
+  rtmRigId      String?   @db.NVarChar(50)
+  parameterName String?   @db.NVarChar(255)
+  alarmType     String?   @db.NVarChar(100)
+  eventId       String?   @db.NVarChar(255)
+  eventName     String?   @db.NVarChar(255)
+  priority      String?   @db.NVarChar(50)
+  status        String?   @db.NVarChar(50)
+  timestamp     DateTime? @db.DateTimeOffset
+  isAcknowledge Boolean   @default(false)
+  startTime     DateTime? @db.DateTimeOffset
+  endTime       DateTime? @db.DateTimeOffset
+  createdAt     DateTime  @default(now()) @db.DateTimeOffset
+
+  @@map("rtm_EventData_History")
+}
+
+model RtmCasingData {
+  id                       Int      @id @default(autoincrement())
+  rigId                    Int?
+  wellId                   Int?
+  size                     Float?
+  plannedMeasureDepth      Float?
+  actualMeasureDepth       Float?
+  plannedTrueVerticalDepth Float?
+  actualTrueVerticalDepth  Float?
+  plannedLeakOffTest       Float?
+  actualLeakOffTest        Float?
+  createdAt                DateTime @default(now()) @db.DateTimeOffset
+  updatedAt                DateTime @updatedAt @db.DateTimeOffset
+
+  rig  Rig?  @relation(fields: [rigId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  well Well? @relation(fields: [wellId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("rtm_CasingDatas")
+}
+
+model Readback {
+  id           Int    @id @map("ReadbackId")
+  name         String @db.NVarChar(255) @map("ReadbackName")
+  nomenclature String? @db.NChar(10) @map("Nomenclature")
+  path         String? @db.NVarChar(Max) @map("Path")
+  bluePodPath  String? @db.NVarChar(Max) @map("BluePodPath")
+  yellowPodPath String? @db.NVarChar(Max) @map("YellowPodPath")
+  displayOrder Int?    @map("DisplayOrder")
+  displayColor String? @db.NVarChar(50) @map("DisplayColor")
+
+  stackConfigMappings ReadbackStackConfigMapping[]
+  trendingMinMax      TrendingReadbackMinMax[]
+
+  @@map("Readback")
+}
+
+model ReadbackStackConfigMapping {
+  id                    Int    @id @map("ReadbackStackConfigMappingId")
+  readbackId            Int    @map("ReadbackId")
+  stackConfig           String @db.NVarChar(100) @map("StackConfig")
+  overrideReadbackName  String? @db.NVarChar(255) @map("OverrideReadbackName")
+  overridePath          String? @db.NVarChar(Max) @map("OverridePath")
+  overrideBluePodPath   String? @db.NVarChar(Max) @map("OverrideBluePodPath")
+  overrideYellowPodPath String? @db.NVarChar(Max) @map("OverrideYellowPodPath")
+
+  readback Readback @relation(fields: [readbackId], references: [id])
+
+  @@map("ReadbackStackConfigMapping")
+}
+
+model SchematicMapping {
+  id                          Int      @id @map("SchematicMappingId")
+  faultTreeComponentTagPrefix String?  @db.NVarChar(100) @map("FaultTreeComponentTagPrefix")
+  schematicTagPrefix          String?  @db.NVarChar(100) @map("SchematicTagPrefix")
+  afPath                      String?  @db.NVarChar(Max) @map("AfPath")
+  readbackPressureAfPath      String?  @db.NVarChar(Max) @map("ReadbackPressureAfPath")
+  blockedAfPath               String?  @db.NVarChar(Max) @map("BlockedAfPath")
+  inRealTimeDashboard         Boolean? @map("InRealTimeDashboard")
+  inLmrpDashboard             Boolean? @map("InLmrpDashboard")
+  inHpuDashboard              Boolean? @map("InHpuDashboard")
+  cycleCountAfPath            String?  @db.NVarChar(Max) @map("CycleCountAfPath")
+
+  stackConfigMappings SchematicStackConfigMapping[]
+
+  @@map("SchematicMapping")
+}
+
+model SchematicStackConfigMapping {
+  id                              Int    @id @map("SchematicStackConfigMappingId")
+  schematicMappingId              Int    @map("SchematicMappingId")
+  stackConfig                     String @db.NVarChar(100) @map("StackConfig")
+  overrideFaultTreeComponentTagPrefix String? @db.NVarChar(100) @map("OverrideFaultTreeComponentTagPrefix")
+  overrideSchematicTagPrefix      String? @db.NVarChar(100) @map("OverrideSchematicTagPrefix")
+  overrideAfPath                  String? @db.NVarChar(Max) @map("OverrideAfPath")
+  overrideReadbackPressureAfPath  String? @db.NVarChar(Max) @map("OverrideReadbackPressureAfPath")
+
+  schematicMapping SchematicMapping @relation(fields: [schematicMappingId], references: [id])
+
+  @@map("SchematicStackConfigMapping")
+}
+
+model RigStack {
+  id          Int    @id @map("RigStackId")
+  rigId       Int?   @map("RigId")
+  stackName   String? @db.NVarChar(255) @map("StackName")
+  stackConfig String? @db.NVarChar(100) @map("StackConfig")
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("RigStack")
+}
+
+// ─── COMMUNICATIONS ───────────────────────────────────────────────────────────
+
+model Communication {
+  id                Int       @id @default(autoincrement())
+  type              String?   @db.NVarChar(100)
+  rigId             Int?
+  communicationTime DateTime? @db.DateTimeOffset
+  priority          String?   @db.NVarChar(50)
+  description       String?   @db.NVarChar(Max)
+  mode              String?   @db.NVarChar(100)
+  status            String?   @db.NVarChar(50)
+  outageLevel       String?   @db.NVarChar(50)
+  recipients        String?   @db.NVarChar(Max)
+  createdAt         DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt         DateTime  @updatedAt @db.DateTimeOffset
+
+  rig                       Rig?                        @relation(fields: [rigId], references: [id])
+  failureCommunications     FailureCommunication[]
+  observationCommunications ObservationCommunication[]
+  attachments               CommunicationAttachment[]
+
+  @@map("communications")
+}
+
+model FailureCommunication {
+  id              Int      @id @default(autoincrement())
+  failureId       Int?
+  communicationId Int?
+  createdAt       DateTime @default(now()) @db.DateTimeOffset
+  updatedAt       DateTime @updatedAt @db.DateTimeOffset
+
+  failure       Failure?       @relation(fields: [failureId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  communication Communication? @relation(fields: [communicationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("failureCommunications")
+}
+
+model ObservationCommunication {
+  id              Int      @id @default(autoincrement())
+  observationId   Int?
+  communicationId Int?
+  createdAt       DateTime @default(now()) @db.DateTimeOffset
+  updatedAt       DateTime @updatedAt @db.DateTimeOffset
+
+  observation   Observation?   @relation(fields: [observationId], references: [id])
+  communication Communication? @relation(fields: [communicationId], references: [id])
+
+  @@map("observationCommunications")
+}
+
+// ─── SUPPORTING ───────────────────────────────────────────────────────────────
+
+model Notification {
+  id           Int       @id @default(autoincrement())
+  title        String?   @db.NVarChar(255)
+  message      String?   @db.NVarChar(Max)
+  status       String?   @db.VarChar(50)
+  assignedAs   String?   @db.NVarChar(100)
+  userId       Int?
+  eventId      Int?
+  completeDate DateTime? @db.DateTimeOffset
+  createdAt    DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime  @updatedAt @db.DateTimeOffset
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+model Comment {
+  id            Int      @id @default(autoincrement())
+  text          String?  @db.NVarChar(Max)
+  userId        Int?
+  failureId     Int?
+  observationId Int?
+  issueType     String?  @db.NVarChar(100)
+  issueId       Int?
+  createdAt     DateTime @default(now()) @db.DateTimeOffset
+  updatedAt     DateTime @updatedAt @db.DateTimeOffset
+
+  user        User?        @relation(fields: [userId], references: [id])
+  failure     Failure?     @relation(fields: [failureId], references: [id])
+  observation Observation? @relation(fields: [observationId], references: [id])
+
+  @@map("comments")
+}
+
+model Task {
+  id               Int       @id @default(autoincrement())
+  description      String?   @db.NVarChar(Max)
+  dueDate          DateTime? @db.DateTimeOffset
+  completed        DateTime? @db.DateTimeOffset
+  userId           Int?
+  isForEventManager Boolean  @default(false)
+  createdAt        DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt        DateTime  @updatedAt @db.DateTimeOffset
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("tasks")
+}
+
+model Note {
+  id               Int      @id @default(autoincrement())
+  title            String?  @db.NVarChar(255)
+  description      String?  @db.NVarChar(Max)
+  userId           Int?
+  isForEventManager Boolean @default(false)
+  createdAt        DateTime @default(now()) @db.DateTimeOffset
+  updatedAt        DateTime @updatedAt @db.DateTimeOffset
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("notes")
+}
+
+model CalendarEvent {
+  id                  Int       @id @default(autoincrement())
+  name                String?   @db.NVarChar(255)
+  startDate           DateTime? @db.DateTimeOffset
+  endDate             DateTime? @db.DateTimeOffset
+  rigId               Int?
+  calendarEventTypeId Int?
+  comment             String?   @db.NVarChar(Max)
+  enabled             Boolean   @default(true)
+  createdById         Int?
+  updatedById         Int?
+  createdAt           DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt           DateTime  @updatedAt @db.DateTimeOffset
+
+  rig       Rig?               @relation(fields: [rigId], references: [id])
+  eventType CalendarEventType? @relation(fields: [calendarEventTypeId], references: [id])
+
+  @@map("calendarEvents")
+}
+
+model CalendarEventType {
+  id        Int      @id @default(autoincrement())
+  name      String?  @db.NVarChar(100)
+  color     String?  @db.NVarChar(50)
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  calendarEvents CalendarEvent[]
+
+  @@map("calendarEventTypes")
+}
+
+model RigLanding {
+  id        Int      @id @default(autoincrement())
+  rigId     Int?
+  lattitude Float?
+  longitude Float?
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("rigLandings")
+}
+
+model Operator {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  rigMappings RigOperatorMapping[]
+
+  @@map("operators")
+}
+
+model RigOperatorMapping {
+  id          Int       @id @default(autoincrement())
+  rigId       Int?
+  operatorId  Int?
+  startDate   DateTime? @db.DateTimeOffset
+  endDate     DateTime? @db.DateTimeOffset
+  createdById Int?
+  updatedById Int?
+  createdAt   DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime  @updatedAt @db.DateTimeOffset
+
+  rig      Rig?      @relation(fields: [rigId], references: [id])
+  operator Operator? @relation(fields: [operatorId], references: [id])
+
+  @@map("RigOperatorMappings")
+}
+
+model Moa {
+  id                    Int       @id @default(autoincrement())
+  rigId                 Int?
+  bopType               String?   @db.NVarChar(100)
+  startDateTime         DateTime? @db.DateTimeOffset
+  expectedReadyDateTime DateTime? @db.DateTimeOffset
+  targetDateTime        DateTime? @db.DateTimeOffset
+  startComment          String?   @db.NVarChar(Max)
+  stopDateTime          DateTime? @db.DateTimeOffset
+  stopComment           String?   @db.NVarChar(Max)
+  createdById           Int?
+  updatedById           Int?
+  createdAt             DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt             DateTime  @updatedAt @db.DateTimeOffset
+
+  rig       Rig?       @relation(fields: [rigId], references: [id])
+  moaDelays MoaDelay[]
+
+  @@map("moas")
+}
+
+model MoaDelay {
+  id         Int      @id @default(autoincrement())
+  moaId      Int?
+  category   String?  @db.NVarChar(100)
+  delayHours String?  @db.NVarChar(50)
+  failureId  Int?
+  createdAt  DateTime @default(now()) @db.DateTimeOffset
+  updatedAt  DateTime @updatedAt @db.DateTimeOffset
+
+  moa     Moa?     @relation(fields: [moaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  failure Failure? @relation(fields: [failureId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("moaDelays")
+}
+
+model RigTest {
+  id              Int       @id @default(autoincrement())
+  rigId           Int?
+  bopId           Int?
+  startDate       DateTime? @db.DateTimeOffset
+  endDate         DateTime? @db.DateTimeOffset
+  testType        String?   @db.NVarChar(100)
+  pod             String?   @db.NVarChar(100)
+  panel           String?   @db.NVarChar(100)
+  bopType         String?   @db.NVarChar(100)
+  waitingOnReport Boolean   @default(false)
+  createdAt       DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt       DateTime  @updatedAt @db.DateTimeOffset
+
+  rig         Rig?               @relation(fields: [rigId], references: [id])
+  bop         Bop?               @relation(fields: [bopId], references: [id])
+  attachments RigTestAttachment[]
+
+  @@map("rigTests")
+}
+
+model RigWellChange {
+  id                 Int       @id @default(autoincrement())
+  rigId              Int?
+  wellId             Int?
+  date               DateTime? @db.DateTimeOffset
+  wellSessionId      Int?
+  operationStartDate DateTime? @db.DateTimeOffset
+  createdAt          DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt          DateTime  @updatedAt @db.DateTimeOffset
+
+  rig  Rig?  @relation(fields: [rigId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  well Well? @relation(fields: [wellId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("rigWellChanges")
+}
+
+model RigStatusChange {
+  id                   Int       @id @default(autoincrement())
+  rigId                Int?
+  projectedUnLatchDate DateTime? @db.DateTimeOffset
+  wellId               Int?
+  depth                Int?
+  status               String?   @db.NVarChar(50)
+  startDate            DateTime? @db.DateTimeOffset
+  bop1ChangesId        Int?
+  createdAt            DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt            DateTime  @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("rigStatusChanges")
+}
+
+model WellSession {
+  id                   Int       @id @default(autoincrement())
+  wellId               Int?
+  rigId                Int?
+  wellSessionStartDate DateTime? @db.DateTimeOffset
+  hasWellSessionEnded  Boolean   @default(false)
+  wellSessionEndDate   DateTime? @db.DateTimeOffset
+  hasWellHopEvent      Boolean   @default(false)
+  initialEquipment     String?   @db.NVarChar(255)
+  createdById          Int?
+  updatedById          Int?
+  createdAt            DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt            DateTime  @updatedAt @db.DateTimeOffset
+
+  rig  Rig?  @relation(fields: [rigId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  well Well? @relation(fields: [wellId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("wellSessions")
+}
+
+model Barsequence {
+  id                     Int      @id @default(autoincrement())
+  name                   String?  @db.NVarChar(255)
+  rigId                  Int?
+  rtmRigId               String?  @db.NVarChar(50)
+  functionStatusSequence String?  @db.NVarChar(Max)
+  chokeKillSequence      String?  @db.NVarChar(Max)
+  diverterSequence       String?  @db.NVarChar(Max)
+  createdAt              DateTime @default(now()) @db.DateTimeOffset
+  updatedAt              DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("barsequences")
+}
+
+model Track {
+  id        Int      @id @default(autoincrement())
+  name      String?  @db.NVarChar(255)
+  rigId     Int?
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  rig    Rig?    @relation(fields: [rigId], references: [id])
+  traces Trace[]
+
+  @@map("tracks")
+}
+
+model Trace {
+  id          Int      @id @default(autoincrement())
+  trackId     Int?
+  parameter   String?  @db.NVarChar(255)
+  min         Int?
+  max         Int?
+  invertValue Boolean  @default(false)
+  createdById Int?
+  updatedById Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  track Track? @relation(fields: [trackId], references: [id])
+
+  @@map("traces")
+}
+
+model Dhw {
+  id          Int      @id @default(autoincrement())
+  rigId       Int?
+  createdById Int?
+  updatedById Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  rig      Rig?      @relation(fields: [rigId], references: [id])
+  dhwWells DhwWell[]
+
+  @@map("dhw")
+}
+
+model DhwWell {
+  id              Int      @id @default(autoincrement())
+  dhwId           Int?
+  rigId           Int?
+  isSameWellAsBOP Boolean  @default(false)
+  wellName        String?  @db.NVarChar(255)
+  sideTrackNumber String?  @db.VarChar(50)
+  bypassNumber    String?  @db.VarChar(50)
+  createdById     Int?
+  updatedById     Int?
+  createdAt       DateTime @default(now()) @db.DateTimeOffset
+  updatedAt       DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  dhw Dhw? @relation(fields: [dhwId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("dhwWells")
+}
+
+model Mpd {
+  id          Int      @id @default(autoincrement())
+  rigId       Int?
+  createdById Int?
+  updatedById Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("mpd")
+}
+
+model Kpi {
+  id                Int       @id @map("KPIid") @default(autoincrement())
+  rigId             Int?
+  testsequenceid    BigInt?
+  rigtypeid         Int?
+  number_tests_CP   Int?
+  availability      Float?
+  utilizationRate   Float?
+  starttime         DateTime? @db.DateTimeOffset
+  endtime           DateTime? @db.DateTimeOffset
+  total_time        String?   @db.VarChar(50)
+  time_between_tests String?  @db.VarChar(50)
+  time_passed_tests  String?  @db.VarChar(50)
+  time_failed_tests  String?  @db.VarChar(50)
+  createdAt          DateTime @default(now()) @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("KPI")
+}
+
+model UserDigest {
+  userId    Int      @id
+  AIdigest  String?  @db.NVarChar(Max)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("UserDigests")
+}
+
+model AvailabilityDrilldown {
+  id          Int      @id @default(autoincrement())
+  rigId       Int?
+  name        String?  @db.VarChar(255)
+  value       String?  @db.VarChar(50)
+  path        String?  @db.VarChar(Max)
+  createdById Int?
+  updatedById Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("availabilityDrilldowns")
+}
+
+model AvailabilityComponent {
+  id        Int      @id @default(autoincrement())
+  RigId     Int?
+  LeftJson  String?  @db.NVarChar(Max)
+  RightJson String?  @db.NVarChar(Max)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [RigId], references: [id])
+
+  @@map("availabilityComponent")
+}
+
+model RigAttachment {
+  id              Int       @id @default(autoincrement())
+  rigId           Int?
+  description     String?   @db.NVarChar(Max)
+  documentType    String?   @db.NVarChar(100)
+  referenceNumber String?   @db.NVarChar(100)
+  attachmentId    Int?
+  bopType         String?   @db.NVarChar(100)
+  date            DateTime? @db.DateTimeOffset
+  createdAt       DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt       DateTime  @updatedAt @db.DateTimeOffset
+
+  rig        Rig?        @relation(fields: [rigId], references: [id])
+  attachment Attachment? @relation(fields: [attachmentId], references: [id])
+
+  @@map("rigAttachments")
+}
+
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  name      String?  @db.NVarChar(255)
+  blobName  String?  @db.NVarChar(500)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  rigAttachments            RigAttachment[]
+  failureAttachments        FailureAttachment[]
+  certificateAttachments    CertificateAttachment[]
+  communicationAttachments  CommunicationAttachment[]
+  recommendationAttachments RecommendationAttachment[]
+  lessonsLearnedAttachments LessonsLearnedAttachment[]
+  dmtAttachments            DmtAttachment[]
+  rigTestAttachments        RigTestAttachment[]
+  observationAttachments    ObservationAttachment[]
+  fwaiAttachments           FwaiAttachment[]
+  oemAttachments            OemAttachment[]
+  issueEquipmentAttachments IssueEquipmentAttachment[]
+
+  @@map("attachments")
+}
+
+// ─── JUNCTION / ATTACHMENT TABLES ─────────────────────────────────────────────
+
+model FailureAttachment {
+  id           Int      @id @default(autoincrement())
+  failureId    Int?
+  attachmentId Int?
+  createdAt    DateTime @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime @updatedAt @db.DateTimeOffset
+
+  failure    Failure?    @relation(fields: [failureId], references: [id])
+  attachment Attachment? @relation(fields: [attachmentId], references: [id])
+
+  @@map("failureAttachments")
+}
+
+model CommunicationAttachment {
+  id              Int      @id @default(autoincrement())
+  communicationId Int?
+  attachmentId    Int?
+  createdAt       DateTime @default(now()) @db.DateTimeOffset
+  updatedAt       DateTime @updatedAt @db.DateTimeOffset
+
+  communication Communication? @relation(fields: [communicationId], references: [id])
+  attachment    Attachment?    @relation(fields: [attachmentId], references: [id])
+
+  @@map("communicationAttachments")
+}
+
+model RecommendationAttachment {
+  id                   Int      @id @default(autoincrement())
+  rcmRecommendationsId Int?
+  attachmentId         Int?
+  createdAt            DateTime @default(now()) @db.DateTimeOffset
+  updatedAt            DateTime @updatedAt @db.DateTimeOffset
+
+  recommendation RcmRecommendation? @relation(fields: [rcmRecommendationsId], references: [id])
+  attachment     Attachment?        @relation(fields: [attachmentId], references: [id])
+
+  @@map("recommendationAttachments")
+}
+
+model LessonsLearnedAttachment {
+  id               Int      @id @default(autoincrement())
+  lessonsLearnedId Int?
+  attachmentId     Int?
+  createdAt        DateTime @default(now()) @db.DateTimeOffset
+  updatedAt        DateTime @updatedAt @db.DateTimeOffset
+
+  lessonsLearned LessonsLearned? @relation(fields: [lessonsLearnedId], references: [id])
+  attachment     Attachment?     @relation(fields: [attachmentId], references: [id])
+
+  @@map("lessonsLearnedAttachments")
+}
+
+model DmtAttachment {
+  id                       Int      @id @default(autoincrement())
+  deferredMaintenanceTaskId Int?
+  attachmentId             Int?
+  createdAt                DateTime @default(now()) @db.DateTimeOffset
+  updatedAt                DateTime @updatedAt @db.DateTimeOffset
+
+  deferredTask DeferredMaintenanceTask? @relation(fields: [deferredMaintenanceTaskId], references: [id])
+  attachment   Attachment?              @relation(fields: [attachmentId], references: [id])
+
+  @@map("dmtAttachments")
+}
+
+model RigTestAttachment {
+  id           Int      @id @default(autoincrement())
+  rigTestId    Int?
+  attachmentId Int?
+  createdAt    DateTime @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime @updatedAt @db.DateTimeOffset
+
+  rigTest    RigTest?    @relation(fields: [rigTestId], references: [id])
+  attachment Attachment? @relation(fields: [attachmentId], references: [id])
+
+  @@map("rigTestAttachments")
+}
+
+model FwaiAttachment {
+  id           Int      @id @default(autoincrement())
+  fwaiId       Int?
+  attachmentId Int?
+  createdAt    DateTime @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime @updatedAt @db.DateTimeOffset
+
+  fwai       Fwai?       @relation(fields: [fwaiId], references: [id])
+  attachment Attachment? @relation(fields: [attachmentId], references: [id])
+
+  @@map("fwaiAttachments")
+}
+
+model OemAttachment {
+  id           Int      @id @default(autoincrement())
+  oemId        Int?
+  attachmentId Int?
+  createdAt    DateTime @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime @updatedAt @db.DateTimeOffset
+
+  oem        Oem?        @relation(fields: [oemId], references: [id])
+  attachment Attachment? @relation(fields: [attachmentId], references: [id])
+
+  @@map("oemAttachments")
+}
+
+model IssueEquipmentAttachment {
+  id               Int      @id @default(autoincrement())
+  issueEquipmentId Int?
+  attachmentId     Int?
+  createdAt        DateTime @default(now()) @db.DateTimeOffset
+  updatedAt        DateTime @updatedAt @db.DateTimeOffset
+
+  attachment Attachment? @relation(fields: [attachmentId], references: [id])
+
+  @@map("issueEquipmentAttachments")
+}
+
+// ─── PERMISSIONS & FEATURES ───────────────────────────────────────────────────
+
+model Permission {
+  id        Int      @id @default(autoincrement())
+  type      String?  @db.NVarChar(100)
+  task      String?  @db.NVarChar(100)
+  can       String?  @db.NVarChar(50)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  id           Int      @id @default(autoincrement())
+  roleId       Int?
+  permissionId Int?
+  createdById  Int?
+  createdAt    DateTime @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime @updatedAt @db.DateTimeOffset
+
+  role       Role?       @relation(fields: [roleId], references: [id])
+  permission Permission? @relation(fields: [permissionId], references: [id])
+
+  @@map("rolePermissions")
+}
+
+model Feature {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.NVarChar(255)
+  icon        String?  @db.NVarChar(100)
+  url         String?  @db.NVarChar(500)
+  color       String?  @db.NVarChar(50)
+  description String?  @db.NVarChar(Max)
+  position    Int      @default(0)
+  enabled     Boolean  @default(true)
+  platformId  Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  roleFeatures RoleFeature[]
+  rigFeatures  RigFeature[]
+
+  @@map("features")
+}
+
+model RoleFeature {
+  id          Int      @id @default(autoincrement())
+  roleId      Int?
+  featureId   Int?
+  createdById Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  role    Role?    @relation(fields: [roleId], references: [id])
+  feature Feature? @relation(fields: [featureId], references: [id])
+
+  @@map("roleFeatures")
+}
+
+model RigFeature {
+  id          Int      @id @default(autoincrement())
+  rigId       Int?
+  featureId   Int?
+  createdById Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  rig     Rig?     @relation(fields: [rigId], references: [id])
+  feature Feature? @relation(fields: [featureId], references: [id])
+
+  @@map("rigFeatures")
+}
+
+model Platform {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  icon      String?  @db.NVarChar(100)
+  url       String?  @db.NVarChar(500)
+  path      String?  @db.NVarChar(500)
+  color     String?  @db.NVarChar(50)
+  position  Int      @default(0)
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("platforms")
+}
+
+// ─── ISSUE MANAGEMENT ─────────────────────────────────────────────────────────
+
+model IssueEquipment {
+  id             Int      @id @default(autoincrement())
+  rigId          Int?
+  equipmentType  String?  @db.NVarChar(100)
+  equipmentId    Int?
+  issueType      String?  @db.NVarChar(100)
+  issueId        Int?
+  amountPending  Int?
+  equipmentOrder Int?
+  createdAt      DateTime @default(now()) @db.DateTimeOffset
+  updatedAt      DateTime @updatedAt @db.DateTimeOffset
+
+  rig        Rig?                       @relation(fields: [rigId], references: [id])
+  issueTasks IssueTask[]
+
+  @@map("issueEquipments")
+}
+
+model IssueTask {
+  id               Int      @id @default(autoincrement())
+  issueEquipmentId Int?
+  maintenanceTaskId Int?
+  status           String?  @db.NVarChar(50)
+  createdAt        DateTime @default(now()) @db.DateTimeOffset
+  updatedAt        DateTime @updatedAt @db.DateTimeOffset
+
+  issueEquipment  IssueEquipment?  @relation(fields: [issueEquipmentId], references: [id])
+  maintenanceTask MaintenanceTask? @relation(fields: [maintenanceTaskId], references: [id])
+
+  @@map("issueTasks")
+}
+
+model WatchlistItem {
+  id        Int      @id @default(autoincrement())
+  issueId   String?  @db.NVarChar(100)
+  issueType String?  @db.NVarChar(100)
+  rigId     Int?
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("watchlistItems")
+}
+
+// ─── EVENTS ───────────────────────────────────────────────────────────────────
+
+model Event {
+  id         Int      @id @default(autoincrement())
+  type       String?  @db.VarChar(100)
+  createdBy  Int?
+  rigId      Int?
+  sourceId   Int?
+  sourceType String?  @db.NVarChar(100)
+  changes    String?  @db.NVarChar(Max)
+  createdAt  DateTime @default(now()) @db.DateTimeOffset
+  updatedAt  DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("events")
+}
+
+model AdminEvent {
+  id         Int      @id @default(autoincrement())
+  type       String?  @db.NVarChar(100)
+  changes    String?  @db.NVarChar(Max)
+  sourceId   Int?
+  sourceType String?  @db.NVarChar(100)
+  createdBy  Int?
+  createdAt  DateTime @default(now()) @db.DateTimeOffset
+  updatedAt  DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("adminEvents")
+}
+
+model EventDiagnosticMaster {
+  id                 Int      @id @default(autoincrement())
+  eventType          String?  @db.NVarChar(100)
+  startEventTitle    String?  @db.NVarChar(255)
+  startEventSubTitle String?  @db.NVarChar(255)
+  endEventTitle      String?  @db.NVarChar(255)
+  endEventSubTitle   String?  @db.NVarChar(255)
+  startIcon          String?  @db.VarChar(100)
+  endIcon            String?  @db.VarChar(100)
+  createdAt          DateTime @default(now()) @db.DateTimeOffset
+  updatedAt          DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("event_DaignosticMaster")
+}
+
+model EventDiagnosticReport {
+  id               Int       @id @default(autoincrement())
+  eventId          String?   @db.NVarChar(255)
+  azureRigId       Int?
+  rtmRigId         Int?
+  rig              String?   @db.NVarChar(255)
+  bop              String?   @db.NVarChar(255)
+  eventType        String?   @db.NVarChar(100)
+  eventDescription String?   @db.NVarChar(Max)
+  startTime        DateTime? @db.DateTimeOffset
+  endTime          DateTime? @db.DateTimeOffset
+  createdAt        DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt        DateTime  @updatedAt @db.DateTimeOffset
+
+  @@map("event_DaignosticReport")
+}
+
+// ─── MISC OPERATIONAL ─────────────────────────────────────────────────────────
+
+model AnnularHealthConstant {
+  id         Int     @id @default(autoincrement())
+  oem        String? @db.NVarChar(255)
+  const1     Float?
+  const2     Float?
+  const3     Float?
+  const4     Float?
+  const5     Float?
+  constLFrac Float?
+  constLFrac1 Float?
+  constLFrac2 Float?
+
+  @@map("annularHealthConstants")
+}
+
+model Contact {
+  id          Int      @id @default(autoincrement())
+  firstName   String?  @db.NVarChar(100)
+  lastName    String?  @db.NVarChar(100)
+  position    String?  @db.NVarChar(100)
+  officePhone String?  @db.NVarChar(50)
+  mobilePhone String?  @db.NVarChar(50)
+  email       String?  @db.NVarChar(255)
+  rigId       Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("contacts")
+}
+
+model Contractor {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("contractors")
+}
+
+model Manufacturer {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("manufacturers")
+}
+
+model Oem {
+  id             Int       @id @default(autoincrement())
+  title          String?   @db.NVarChar(255)
+  description    String?   @db.NVarChar(Max)
+  manufacturerId Int?
+  oemDate        DateTime? @db.DateTimeOffset
+  createdDate    DateTime? @db.DateTimeOffset
+  maintenanceReq Boolean   @default(false)
+  taskTitle      String?   @db.NVarChar(255)
+  createdAt      DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt      DateTime  @updatedAt @db.DateTimeOffset
+
+  attachments OemAttachment[]
+
+  @@map("oems")
+}
+
+model Fwai {
+  id             Int       @id @default(autoincrement())
+  title          String?   @db.NVarChar(255)
+  description    String?   @db.NVarChar(Max)
+  fwaiDate       DateTime? @db.DateTimeOffset
+  createdDate    DateTime? @db.DateTimeOffset
+  maintenanceReq Boolean   @default(false)
+  taskTitle      String?   @db.NVarChar(255)
+  manufacturerId Int?
+  createdAt      DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt      DateTime  @updatedAt @db.DateTimeOffset
+
+  attachments FwaiAttachment[]
+
+  @@map("fwais")
+}
+
+model Meeting {
+  id          Int      @id @default(autoincrement())
+  time        String?  @db.NVarChar(100)
+  phoneNumber String?  @db.NVarChar(50)
+  room        String?  @db.NVarChar(100)
+  accessCode  String?  @db.NVarChar(100)
+  duration    String?  @db.NVarChar(50)
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("meetings")
+}
+
+model InternalFailure {
+  id            Int       @id @default(autoincrement())
+  feature       String?   @db.NVarChar(255)
+  title         String?   @db.NVarChar(255)
+  status        String?   @db.NVarChar(50)
+  description   String?   @db.NVarChar(Max)
+  dateOfFailure DateTime? @db.DateTimeOffset
+  severity      String?   @db.NVarChar(50)
+  type          String?   @db.NVarChar(100)
+  rigId         Int?
+  createdById   Int?
+  createdAt     DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt     DateTime  @updatedAt @db.DateTimeOffset
+
+  rig         Rig?                       @relation(fields: [rigId], references: [id])
+  attachments InternalFailureAttachment[]
+
+  @@map("internalFailures")
+}
+
+model InternalFailureAttachment {
+  id                Int      @id @default(autoincrement())
+  internalFailureId Int?
+  attachmentId      Int?
+  createdAt         DateTime @default(now()) @db.DateTimeOffset
+  updatedAt         DateTime @updatedAt @db.DateTimeOffset
+
+  internalFailure InternalFailure? @relation(fields: [internalFailureId], references: [id])
+
+  @@map("internalFailureAttachments")
+}
+
+model InternalObservation {
+  id                  Int       @id @default(autoincrement())
+  feature             String?   @db.NVarChar(255)
+  title               String?   @db.NVarChar(255)
+  status              String?   @db.NVarChar(50)
+  description         String?   @db.NVarChar(Max)
+  dateOfObservation   DateTime? @db.DateTimeOffset
+  severity            String?   @db.NVarChar(50)
+  type                String?   @db.NVarChar(100)
+  rigId               Int?
+  createdById         Int?
+  createdAt           DateTime  @default(now()) @db.DateTimeOffset
+  updatedAt           DateTime  @updatedAt @db.DateTimeOffset
+
+  rig         Rig?                           @relation(fields: [rigId], references: [id])
+  attachments InternalObservationAttachment[]
+
+  @@map("internalObservations")
+}
+
+model InternalObservationAttachment {
+  id                    Int      @id @default(autoincrement())
+  internalObservationId Int?
+  attachmentId          Int?
+  createdAt             DateTime @default(now()) @db.DateTimeOffset
+  updatedAt             DateTime @updatedAt @db.DateTimeOffset
+
+  internalObservation InternalObservation? @relation(fields: [internalObservationId], references: [id])
+
+  @@map("internalObservationAttachments")
+}
+
+model DrillingCasing {
+  id             Int      @id @default(autoincrement())
+  name           String?  @db.NVarChar(255)
+  rigId          Int?
+  wellId         Int?
+  casingSize     Float?
+  casingSizeUnit String?  @db.NVarChar(50)
+  casingTop      Float?
+  casingTopUnit  String?  @db.NVarChar(50)
+  shoeDepth      Float?
+  shoeDepthUnit  String?  @db.NVarChar(50)
+  createdAt      DateTime @default(now()) @db.DateTimeOffset
+  updatedAt      DateTime @updatedAt @db.DateTimeOffset
+
+  rig  Rig?  @relation(fields: [rigId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  well Well? @relation(fields: [wellId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("drillingCasings")
+}
+
+model TrendingReadbackMinMax {
+  id          Int      @id @default(autoincrement())
+  rigId       Int?
+  readbackId  Int?
+  min         String?  @db.NVarChar(50)
+  max         String?  @db.NVarChar(50)
+  createdById Int?
+  updatedById Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  rig      Rig?      @relation(fields: [rigId], references: [id])
+  readback Readback? @relation(fields: [readbackId], references: [id])
+
+  @@map("trendingReadbackMinMax")
+}
+
+model DbaSetTrendsLimit {
+  id          Int      @id @default(autoincrement())
+  rigId       Int?
+  minLimit    Int?
+  maxLimit    Int?
+  type        String?  @db.NVarChar(100)
+  trendName   String?  @db.NVarChar(255)
+  createdById Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("dbaSetTrendsLimit")
+}
+
+model BrvUploadHistory {
+  id               Int      @id @default(autoincrement())
+  rigId            Int?
+  attachmentId     Int?
+  isUploadComplete Boolean  @default(false)
+  createdByUserId  Int?
+  createdAt        DateTime @default(now()) @db.DateTimeOffset
+  updatedAt        DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("brvUploadHistory")
+}
+
+model SurveyorStatusChange {
+  id           Int      @id @default(autoincrement())
+  userId       Int?
+  rigId        Int?
+  status       String?  @db.NVarChar(50)
+  activeRecord Boolean  @default(false)
+  createdAt    DateTime @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime @updatedAt @db.DateTimeOffset
+
+  user User? @relation(fields: [userId], references: [id])
+  rig  Rig?  @relation(fields: [rigId], references: [id])
+
+  @@map("surveyorStatusChanges")
+}
+
+model RigOperatorEventLog {
+  id           Int      @id @default(autoincrement())
+  rigId        Int?
+  event        String?  @db.VarChar(255)
+  source       String?  @db.VarChar(100)
+  status       String?  @db.VarChar(50)
+  createdById  Int?
+  previousRigId Int?
+  createdAt    DateTime @default(now()) @db.DateTimeOffset
+  updatedAt    DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("rigOperatorEventLogs")
+}
+
+model RigContactUpdate {
+  id          Int      @id @default(autoincrement())
+  rigId       Int?
+  updatedById Int?
+  createdAt   DateTime @default(now()) @db.DateTimeOffset
+  updatedAt   DateTime @updatedAt @db.DateTimeOffset
+
+  rig Rig? @relation(fields: [rigId], references: [id])
+
+  @@map("rigContactUpdates")
+}
+
+model RigItem {
+  rigId  Int
+  ItemId Int
+
+  rig Rig @relation(fields: [rigId], references: [id])
+
+  @@id([rigId, ItemId])
+  @@map("rigItems")
+}
+
+model UserMaintenanceNotification {
+  userId                    Int
+  maintenanceNotificationId Int
+  status                    String?  @db.NVarChar(50)
+  createdAt                 DateTime @default(now()) @db.DateTimeOffset
+  updatedAt                 DateTime @updatedAt @db.DateTimeOffset
+
+  notification MaintenanceNotification @relation(fields: [maintenanceNotificationId], references: [id])
+
+  @@id([userId, maintenanceNotificationId])
+  @@map("userMaintenanceNotifications")
+}
+
+model DefectMode {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  tag       String?  @db.NVarChar(100)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("defectModes")
+}
+
+model WciMaster {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.NVarChar(255)
+  tooltip   String?  @db.NVarChar(Max)
+  createdAt DateTime @default(now()) @db.DateTimeOffset
+  updatedAt DateTime @updatedAt @db.DateTimeOffset
+
+  @@map("wciMaster")
+}

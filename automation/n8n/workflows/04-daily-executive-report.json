@@ -1,0 +1,99 @@
+{
+  "name": "RigMind - Daily Executive Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 6 * * 1-5" }] }
+      },
+      "id": "trigger",
+      "name": "Weekdays 6AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT (SELECT COUNT(*) FROM rigs WHERE visible=1) as totalRigs, (SELECT COUNT(*) FROM failures WHERE isRemoved=0 AND status!='closed') as openFailures, (SELECT COUNT(*) FROM failures WHERE isRemoved=0 AND severity='critical' AND status!='closed') as criticalFailures, (SELECT ISNULL(SUM(CAST(nptHours AS FLOAT)),0) FROM nonProductionTimes WHERE isRemoved=0 AND dateOfNPT >= DATEADD(DAY,-1,GETDATE())) as nptHoursYesterday, (SELECT COUNT(*) FROM certificateAttachments WHERE expiryDate >= GETDATE() AND expiryDate <= DATEADD(DAY,30,GETDATE())) as certsExpiring30d, (SELECT COUNT(*) FROM deferredMaintenanceTasks WHERE isRemoved=0) as deferredTasks, (SELECT COUNT(*) FROM observations WHERE isRemoved=0 AND status='open') as openObservations, (SELECT ISNULL(AVG(availability),0) FROM KPI WHERE createdAt >= DATEADD(MONTH,-1,GETDATE())) as avgAvailability"
+      },
+      "id": "query-metrics",
+      "name": "Query Fleet Metrics",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "credentials": { "microsoftSql": { "id": "1", "name": "Azure SQL" } }
+    },
+    {
+      "parameters": {
+        "url": "={{ $vars.RIGMIND_API }}/api/v1/copilot/ask",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Authorization", "value": "=Bearer {{ $vars.RIGMIND_SERVICE_TOKEN }}" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [{
+            "name": "question",
+            "value": "=Generate a concise executive summary for today based on these fleet metrics: {{ JSON.stringify($node['Query Fleet Metrics'].json) }}. Highlight key risks, any critical failures, high NPT, and top 3 recommended actions for management attention."
+          }]
+        }
+      },
+      "id": "ai-summary",
+      "name": "Generate AI Executive Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT TOP 5 r.name as rigName, COUNT(f.id) as failureCount, ISNULL(SUM(CAST(n.nptHours AS FLOAT)),0) as nptHours FROM rigs r LEFT JOIN failures f ON f.rigId=r.id AND f.isRemoved=0 AND f.createdAt >= DATEADD(DAY,-1,GETDATE()) LEFT JOIN nonProductionTimes n ON n.rigId=r.id AND n.isRemoved=0 AND n.dateOfNPT >= DATEADD(DAY,-1,GETDATE()) WHERE r.visible=1 GROUP BY r.name ORDER BY failureCount DESC, nptHours DESC"
+      },
+      "id": "query-top-rigs",
+      "name": "Top Rigs by Activity",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [680, 460],
+      "credentials": { "microsoftSql": { "id": "1", "name": "Azure SQL" } }
+    },
+    {
+      "parameters": {
+        "jsCode": "const metrics = $node['Query Fleet Metrics'].json;\nconst aiSummary = $node['Generate AI Executive Summary'].json?.data?.answer || 'AI summary unavailable';\nconst topRigs = $node['Top Rigs by Activity'].json || [];\nconst date = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });\n\nlet rigTable = '<table border=\"1\" cellpadding=\"6\" style=\"border-collapse:collapse\"><tr><th>Rig</th><th>Failures</th><th>NPT Hours</th></tr>';\nfor (const rig of topRigs) {\n  rigTable += `<tr><td>${rig.rigName}</td><td>${rig.failureCount}</td><td>${rig.nptHours?.toFixed(1)}</td></tr>`;\n}\nrigTable += '</table>';\n\nconst html = `\n<html><body style=\"font-family:Arial;max-width:700px;margin:0 auto\">\n<h1 style=\"color:#1a365d\">🛢 RigMind AI™ — Daily Executive Report</h1>\n<p style=\"color:#666\">${date}</p>\n<hr/>\n<h2>📊 Fleet Overview</h2>\n<table border=\"1\" cellpadding=\"8\" style=\"border-collapse:collapse;width:100%\">\n<tr><td><b>Total Rigs</b></td><td>${metrics.totalRigs}</td><td><b>Open Failures</b></td><td style=\"color:${metrics.openFailures>5?'red':'green'}\">${metrics.openFailures}</td></tr>\n<tr><td><b>Critical Failures</b></td><td style=\"color:${metrics.criticalFailures>0?'red':'green'}\">${metrics.criticalFailures}</td><td><b>NPT Hours (24h)</b></td><td>${metrics.nptHoursYesterday?.toFixed(1)}</td></tr>\n<tr><td><b>Certs Expiring 30d</b></td><td>${metrics.certsExpiring30d}</td><td><b>Fleet Availability</b></td><td>${metrics.avgAvailability?.toFixed(1)}%</td></tr>\n<tr><td><b>Deferred Tasks</b></td><td>${metrics.deferredTasks}</td><td><b>Open Observations</b></td><td>${metrics.openObservations}</td></tr>\n</table>\n<h2>🤖 AI Intelligence Summary</h2>\n<div style=\"background:#f7f9fc;padding:16px;border-left:4px solid #3182ce\">${aiSummary}</div>\n<h2>🔍 Most Active Rigs (Last 24h)</h2>\n${rigTable}\n<br/><p><a href=\"https://rigmind.aquila-engineer.com/dashboard\" style=\"background:#3182ce;color:white;padding:10px 20px;text-decoration:none;border-radius:4px\">Open RigMind Dashboard →</a></p>\n</body></html>`;\n\nreturn [{ json: { emailHtml: html, subject: `RigMind Daily Report — ${date} | ${metrics.criticalFailures} Critical | ${metrics.openFailures} Open Failures` } }];"
+      },
+      "id": "build-report",
+      "name": "Build HTML Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 360]
+    },
+    {
+      "parameters": {
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.emailHtml }}",
+        "toRecipients": "={{ $vars.EXECUTIVE_REPORT_EMAILS }}",
+        "options": { "isHtml": true }
+      },
+      "id": "send-report",
+      "name": "Send Executive Report",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [1120, 360],
+      "credentials": { "microsoftOutlookOAuth2Api": { "id": "2", "name": "Outlook" } }
+    }
+  ],
+  "connections": {
+    "Weekdays 6AM": { "main": [[{ "node": "Query Fleet Metrics", "type": "main", "index": 0 }]] },
+    "Query Fleet Metrics": {
+      "main": [[
+        { "node": "Generate AI Executive Summary", "type": "main", "index": 0 },
+        { "node": "Top Rigs by Activity", "type": "main", "index": 0 }
+      ]]
+    },
+    "Generate AI Executive Summary": { "main": [[{ "node": "Build HTML Report", "type": "main", "index": 0 }]] },
+    "Top Rigs by Activity": { "main": [[{ "node": "Build HTML Report", "type": "main", "index": 0 }]] },
+    "Build HTML Report": { "main": [[{ "node": "Send Executive Report", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "rigmind" }, { "name": "executive" }]
+}

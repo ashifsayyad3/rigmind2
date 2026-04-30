@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file://D%3A/poc/rigmind/apps/web/src/components/common/Providers.tsx"],"sourcesContent":["'use client'\n\nimport { QueryClient, QueryClientProvider } from '@tanstack/react-query'\nimport { useState } from 'react'\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  const [queryClient] = useState(\n    () =>\n      new QueryClient({\n        defaultOptions: {\n          queries: {\n            staleTime:          30_000,\n            gcTime:             5 * 60_000,\n            refetchOnWindowFocus: false,\n            retry:              1,\n          },\n          mutations: { retry: 0 },\n        },\n      })\n  )\n\n  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>\n}\n"],"names":[],"mappings":";;;;AAEA;AAAA;AACA;;;AAHA;;;AAKO,SAAS,UAAU,EAAE,QAAQ,EAAiC;;IACnE,MAAM,CAAC,YAAY,GAAG,CAAA,GAAA,6JAAA,CAAA,WAAQ,AAAD;8BAC3B,IACE,IAAI,gLAAA,CAAA,cAAW,CAAC;gBACd,gBAAgB;oBACd,SAAS;wBACP,WAAoB;wBACpB,QAAoB,IAAI;wBACxB,sBAAsB;wBACtB,OAAoB;oBACtB;oBACA,WAAW;wBAAE,OAAO;oBAAE;gBACxB;YACF;;IAGJ,qBAAO,6LAAC,yLAAA,CAAA,sBAAmB;QAAC,QAAQ;kBAAc;;;;;;AACpD;GAjBgB;KAAA","debugId":null}}]
+}

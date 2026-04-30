@@ -1,0 +1,106 @@
+{
+  "name": "RigMind - Certificate Expiry Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "hours", "hoursInterval": 24 }] }
+      },
+      "id": "daily-trigger",
+      "name": "Daily Check at 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT c.id as certId, c.equipment, c.tag, c.serialNumber, c.rigId, r.name as rigName, ca.expiryDate, ca.fileName, ca.status, tc.name as certType, DATEDIFF(DAY, GETDATE(), ca.expiryDate) as daysUntilExpiry FROM certificates c JOIN rigs r ON r.id = c.rigId JOIN certificateAttachments ca ON ca.certificateId = c.id LEFT JOIN typeCodes tc ON tc.id = c.typeCodeId WHERE ca.expiryDate IS NOT NULL AND ca.expiryDate >= GETDATE() AND ca.expiryDate <= DATEADD(DAY, 90, GETDATE()) ORDER BY ca.expiryDate ASC"
+      },
+      "id": "query-expiring",
+      "name": "Query Expiring Certificates",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "credentials": { "microsoftSql": { "id": "1", "name": "Azure SQL" } }
+    },
+    {
+      "parameters": {
+        "mode": "multiplex",
+        "duplicateItem": false,
+        "options": {}
+      },
+      "id": "split-certs",
+      "name": "Process Each Certificate",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [{ "value1": "={{ $json.daysUntilExpiry }}", "operation": "smallerEqual", "value2": 30 }]
+        }
+      },
+      "id": "if-critical-expiry",
+      "name": "Expires Within 30 Days?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "subject": "=⚠️ Certificate Expiring in {{ $json.daysUntilExpiry }} days — {{ $json.rigName }}",
+        "message": "=<h2>Certificate Expiry Notice</h2><table><tr><td><b>Rig:</b></td><td>{{ $json.rigName }}</td></tr><tr><td><b>Equipment:</b></td><td>{{ $json.equipment }}</td></tr><tr><td><b>Certificate Type:</b></td><td>{{ $json.certType }}</td></tr><tr><td><b>Tag:</b></td><td>{{ $json.tag }}</td></tr><tr><td><b>Serial:</b></td><td>{{ $json.serialNumber }}</td></tr><tr><td><b>Expiry Date:</b></td><td>{{ $json.expiryDate }}</td></tr><tr><td><b>Days Remaining:</b></td><td><strong style='color:{{ $json.daysUntilExpiry <= 7 ? 'red' : $json.daysUntilExpiry <= 30 ? 'orange' : 'black' }}'>{{ $json.daysUntilExpiry }}</strong></td></tr></table><p><a href='https://rigmind.aquila-engineer.com/certificates/{{ $json.certId }}'>Renew Certificate →</a></p>",
+        "toRecipients": "={{ $vars.CERT_ALERT_EMAILS }}",
+        "options": {}
+      },
+      "id": "email-urgent",
+      "name": "Send Urgent Email",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [1120, 200],
+      "credentials": { "microsoftOutlookOAuth2Api": { "id": "2", "name": "Outlook" } }
+    },
+    {
+      "parameters": {
+        "subject": "=📋 Certificate Expiring in {{ $json.daysUntilExpiry }} days — {{ $json.rigName }}",
+        "message": "=Certificate {{ $json.certType }} for {{ $json.equipment }} on {{ $json.rigName }} expires on {{ $json.expiryDate }} ({{ $json.daysUntilExpiry }} days). Please initiate renewal process.",
+        "toRecipients": "={{ $vars.CERT_ALERT_EMAILS }}",
+        "options": {}
+      },
+      "id": "email-standard",
+      "name": "Send Standard Reminder",
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [1120, 400],
+      "credentials": { "microsoftOutlookOAuth2Api": { "id": "2", "name": "Outlook" } }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO notifications (title, message, status, assignedAs, userId, createdAt, updatedAt) SELECT 'Certificate expiring: {{ $json.equipment }}', 'Expires {{ $json.expiryDate }} ({{ $json.daysUntilExpiry }} days) on {{ $json.rigName }}', 'unread', 'cert_manager', u.id, GETDATE(), GETDATE() FROM users u JOIN userRigs ur ON ur.userId = u.id WHERE ur.rigId = {{ $json.rigId }} AND u.deleted = 0 AND u.enabled = 1"
+      },
+      "id": "create-db-notification",
+      "name": "Create DB Notification",
+      "type": "n8n-nodes-base.microsoftSql",
+      "typeVersion": 1,
+      "position": [1340, 300],
+      "credentials": { "microsoftSql": { "id": "1", "name": "Azure SQL" } }
+    }
+  ],
+  "connections": {
+    "Daily Check at 08:00": { "main": [[{ "node": "Query Expiring Certificates", "type": "main", "index": 0 }]] },
+    "Query Expiring Certificates": { "main": [[{ "node": "Process Each Certificate", "type": "main", "index": 0 }]] },
+    "Process Each Certificate": { "main": [[{ "node": "Expires Within 30 Days?", "type": "main", "index": 0 }]] },
+    "Expires Within 30 Days?": {
+      "main": [
+        [{ "node": "Send Urgent Email", "type": "main", "index": 0 }],
+        [{ "node": "Send Standard Reminder", "type": "main", "index": 0 }]
+      ]
+    },
+    "Send Urgent Email": { "main": [[{ "node": "Create DB Notification", "type": "main", "index": 0 }]] },
+    "Send Standard Reminder": { "main": [[{ "node": "Create DB Notification", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "rigmind" }, { "name": "certificates" }]
+}
