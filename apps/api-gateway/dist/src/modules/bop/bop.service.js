@@ -17,14 +17,12 @@ let BopService = class BopService {
         this.prisma = prisma;
     }
     async findAll(filters) {
-        const { rigId, type, page = 1, limit = 20 } = filters;
+        const { rigId, page = 1, limit = 20 } = filters;
         const where = {
-            ...(type && { type }),
             ...(rigId && {
                 OR: [
                     { rigs_rigs_bop1IdTobops: { some: { id: rigId } } },
                     { rigs_rigs_bop2IdTobops: { some: { id: rigId } } },
-                    { activeBOPAssignments: { some: { rigId, isActive: true } } },
                 ],
             }),
         };
@@ -33,7 +31,6 @@ let BopService = class BopService {
             this.prisma.bop.findMany({
                 where,
                 include: {
-                    activeBOPAssignments: { where: { isActive: true }, include: { rig: { select: { id: true, name: true } } } },
                     _count: { select: { bopEvents: true } },
                 },
                 skip: (page - 1) * limit,
@@ -48,7 +45,7 @@ let BopService = class BopService {
                 ...(bopId && { bopId }),
             },
             include: {
-                bop: { select: { id: true, name: true, type: true } },
+                bop: { select: { id: true } },
             },
             orderBy: { createdAt: 'desc' },
             take,
@@ -58,7 +55,7 @@ let BopService = class BopService {
         return this.prisma.bopChange.findMany({
             where: { ...(bopId && { bopId }) },
             include: {
-                bop: { select: { id: true, name: true, type: true } },
+                bop: { select: { id: true } },
             },
             orderBy: { createdAt: 'desc' },
             take,
@@ -66,10 +63,9 @@ let BopService = class BopService {
     }
     async getActiveAssignments(rigId) {
         return this.prisma.activeBOPAssignment.findMany({
-            where: { isActive: true, ...(rigId && { rigId }) },
+            where: { ...(rigId && { rigId }) },
             include: {
                 rig: { select: { id: true, name: true } },
-                bop: true,
             },
         });
     }

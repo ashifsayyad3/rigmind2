@@ -25,13 +25,14 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
             errorFormat: 'colorless',
         });
         this.logger = new common_1.Logger(PrismaService_1.name);
-        const softDeleteModels = [
-            'Failure', 'Observation', 'NonProductionTime',
-            'Certificate', 'DeferredMaintenanceTask',
-        ];
+        const isRemovedModels = ['Failure', 'Observation', 'NonProductionTime', 'DeferredMaintenanceTask'];
+        const isDeletedModels = ['Certificate'];
         this.$use(async (params, next) => {
-            if (softDeleteModels.includes(params.model)) {
-                if (['findFirst', 'findUnique', 'findMany'].includes(params.action)) {
+            const model = params.model;
+            const readActions = ['findFirst', 'findUnique', 'findMany', 'count'];
+            if (isRemovedModels.includes(model)) {
+                if (readActions.includes(params.action)) {
+                    params.args = params.args ?? {};
                     params.args.where = { ...params.args.where, isRemoved: false };
                 }
                 if (params.action === 'delete') {
@@ -41,6 +42,20 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                 if (params.action === 'deleteMany') {
                     params.action = 'updateMany';
                     params.args.data = { isRemoved: true };
+                }
+            }
+            if (isDeletedModels.includes(model)) {
+                if (readActions.includes(params.action)) {
+                    params.args = params.args ?? {};
+                    params.args.where = { ...params.args.where, isDeleted: false };
+                }
+                if (params.action === 'delete') {
+                    params.action = 'update';
+                    params.args.data = { isDeleted: true };
+                }
+                if (params.action === 'deleteMany') {
+                    params.action = 'updateMany';
+                    params.args.data = { isDeleted: true };
                 }
             }
             return next(params);

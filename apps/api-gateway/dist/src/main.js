@@ -5,7 +5,7 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const platform_socket_io_1 = require("@nestjs/platform-socket.io");
 const helmet_1 = require("helmet");
-const compression_1 = require("compression");
+const compression = require("compression");
 const nest_winston_1 = require("nest-winston");
 const winston = require("winston");
 const app_module_1 = require("./app.module");
@@ -28,14 +28,14 @@ async function bootstrap() {
     });
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { logger });
     app.use((0, helmet_1.default)({ contentSecurityPolicy: false }));
-    app.use((0, compression_1.default)());
+    app.use(compression());
     app.enableCors({
         origin: process.env.CORS_ORIGINS?.split(',') ?? ['http://localhost:3000'],
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
     });
-    app.enableVersioning({ type: common_1.VersioningType.URI });
+    app.enableVersioning({ type: common_1.VersioningType.URI, defaultVersion: '1' });
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: true,
@@ -45,16 +45,21 @@ async function bootstrap() {
     app.useWebSocketAdapter(new platform_socket_io_1.IoAdapter(app));
     app.setGlobalPrefix('api');
     if (process.env.NODE_ENV !== 'production') {
-        const config = new swagger_1.DocumentBuilder()
+        const isDev = process.env.NODE_ENV === 'development';
+        const builder = new swagger_1.DocumentBuilder()
             .setTitle('RigMind AI™ API')
             .setDescription('Enterprise Offshore Rig Intelligence Platform API')
             .setVersion('1.0')
-            .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT')
-            .addServer(`http://localhost:${process.env.PORT ?? 4000}`)
-            .build();
-        const document = swagger_1.SwaggerModule.createDocument(app, config);
+            .addServer(`http://localhost:${process.env.PORT ?? 4000}`);
+        if (!isDev) {
+            builder.addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT');
+        }
+        const document = swagger_1.SwaggerModule.createDocument(app, builder.build());
         swagger_1.SwaggerModule.setup('api/docs', app, document, {
-            swaggerOptions: { persistAuthorization: true },
+            swaggerOptions: {
+                persistAuthorization: !isDev,
+                docExpansion: isDev ? 'list' : 'none',
+            },
         });
     }
     const port = process.env.PORT ?? 4000;

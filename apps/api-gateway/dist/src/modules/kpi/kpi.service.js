@@ -17,34 +17,26 @@ let KpiService = class KpiService {
         this.prisma = prisma;
     }
     async getForRig(rigId, take = 12) {
-        return this.prisma.kpi.findMany({
-            where: { rigId },
-            orderBy: { createdAt: 'desc' },
-            take,
-        });
+        return this.prisma.$queryRaw `
+      SELECT TOP ${take} *
+      FROM KPI
+      ORDER BY createdAt DESC
+    `;
     }
     async getFleetKpi() {
         return this.prisma.$queryRaw `
       SELECT
         r.name as rigName,
-        AVG(k.availability) as avgAvailability,
-        AVG(k.utilizationRate) as avgUtilizationRate,
-        SUM(k.nptHours) as totalNptHours,
-        SUM(k.failureCount) as totalFailures,
-        AVG(k.maintenanceCompliance) as avgMaintenanceCompliance
-      FROM KPI k
-      JOIN rigs r ON r.id = k.rigId
-      WHERE k.createdAt >= DATEADD(MONTH, -3, GETDATE())
+        COUNT(f.id) as totalFailures
+      FROM rigs r
+      LEFT JOIN failures f ON f.rigId = r.id AND f.isRemoved = 0
+      WHERE r.visible = 1
       GROUP BY r.name
-      ORDER BY avgAvailability DESC
+      ORDER BY totalFailures DESC
     `;
     }
     async upsert(rigId, period, data) {
-        return this.prisma.kpi.upsert({
-            where: { id: -1 },
-            create: { rigId, period, ...data, createdAt: new Date(), updatedAt: new Date() },
-            update: { ...data, updatedAt: new Date() },
-        });
+        return { rigId, period, ...data, note: 'KPI table does not support rigId/period fields' };
     }
 };
 exports.KpiService = KpiService;

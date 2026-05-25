@@ -36,10 +36,10 @@ let MaintenanceService = class MaintenanceService {
         ]);
         return { items, total, page, limit, pages: Math.ceil(total / limit) };
     }
-    async getMaintenanceHistory(componentId, take = 20) {
+    async getMaintenanceHistory(rigId, take = 20) {
         return this.prisma.componentMaintainanceHistory.findMany({
-            where: { componentId },
-            orderBy: { maintenanceDate: 'desc' },
+            where: { rigId },
+            orderBy: { lastMaintainenceDate: 'desc' },
             take,
         });
     }

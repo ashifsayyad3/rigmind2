@@ -17,10 +17,9 @@ let RecommendationsService = class RecommendationsService {
         this.prisma = prisma;
     }
     async findReports(filters) {
-        const { rigId, status, page = 1, limit = 20 } = filters;
+        const { rigId, page = 1, limit = 20 } = filters;
         const where = {
             ...(rigId && { rigId }),
-            ...(status && { status }),
         };
         const [total, items] = await Promise.all([
             this.prisma.rcmReport.count({ where }),
@@ -54,7 +53,7 @@ let RecommendationsService = class RecommendationsService {
                         },
                         rcmRecommendationObservationLink: { include: { observations: true } },
                     },
-                    orderBy: [{ priority: 'asc' }, { createdAt: 'desc' }],
+                    orderBy: { createdAt: 'desc' },
                 },
             },
         });
@@ -63,10 +62,8 @@ let RecommendationsService = class RecommendationsService {
         return report;
     }
     async findRecommendations(filters) {
-        const { rigId, priority, status, page = 1, limit = 25 } = filters;
+        const { rigId, page = 1, limit = 25 } = filters;
         const where = {
-            ...(priority && { priority }),
-            ...(status && { status }),
             ...(rigId && { rcmReport: { rigId } }),
         };
         const [total, items] = await Promise.all([
@@ -80,40 +77,29 @@ let RecommendationsService = class RecommendationsService {
                 },
                 skip: (page - 1) * limit,
                 take: limit,
-                orderBy: [{ priority: 'asc' }, { createdAt: 'desc' }],
+                orderBy: { createdAt: 'desc' },
             }),
         ]);
         return { items, total, page, limit, pages: Math.ceil(total / limit) };
     }
     async updateRecommendationStatus(id, status, userId) {
+        const boolStatus = status === 'communicated' ? true : status === 'closed' ? false : null;
         return this.prisma.rcmRecommendation.update({
             where: { id },
-            data: { status, updatedAt: new Date() },
+            data: { status: boolStatus, updatedAt: new Date() },
         });
     }
     async getStats(rigId) {
         const where = rigId ? { rcmReport: { rigId } } : {};
-        const [total, byPriority, byStatus, overdue] = await Promise.all([
+        const [total, byCommunicated] = await Promise.all([
             this.prisma.rcmRecommendation.count({ where }),
-            this.prisma.rcmRecommendation.groupBy({
-                by: ['priority'],
-                where,
-                _count: { id: true },
-            }),
             this.prisma.rcmRecommendation.groupBy({
                 by: ['status'],
                 where,
                 _count: { id: true },
             }),
-            this.prisma.rcmRecommendation.count({
-                where: {
-                    ...where,
-                    dueDate: { lt: new Date() },
-                    status: { not: 'closed' },
-                },
-            }),
         ]);
-        return { total, byPriority, byStatus, overdue };
+        return { total, byCommunicated };
     }
 };
 exports.RecommendationsService = RecommendationsService;

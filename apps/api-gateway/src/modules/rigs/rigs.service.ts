@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class RigsService {
+  private readonly logger = new Logger(RigsService.name);
   constructor(private prisma: PrismaService) {}
 
   async findAll(filters: {
@@ -18,7 +19,6 @@ export class RigsService {
     const { status, isRTM, onContract, category, operatorId, page = 1, limit = 50 } = filters;
 
     const where: Prisma.RigWhereInput = {
-      visible: true,
       ...(accessibleRigIds && { id: { in: accessibleRigIds } }),
       ...(status && { status }),
       ...(typeof isRTM === 'boolean' && { isRTM }),
@@ -31,17 +31,22 @@ export class RigsService {
       this.prisma.rig.count({ where }),
       this.prisma.rig.findMany({
         where,
-        include: {
-          bops_rigs_bop1IdTobops: { select: { id: true, name: true, type: true } },
-          bops_rigs_bop2IdTobops: { select: { id: true, name: true, type: true } },
-          activeBOPAssignments: {
-            include: { bop: true },
-            where: { isActive: true },
-          },
+        select: {
+          id: true,
+          name: true,
+          status: true,
+          onContract: true,
+          isRTM: true,
+          category: true,
+          operatorId: true,
+          createdAt: true,
+          updatedAt: true,
+          bops_rigs_bop1IdTobops: { select: { id: true } },
+          bops_rigs_bop2IdTobops: { select: { id: true } },
           _count: {
             select: {
-              failures: { where: { isRemoved: false, status: { not: 'closed' } } },
-              deferredMaintenanceTasks: { where: { isRemoved: false } },
+              failures: true,
+              deferredMaintenanceTasks: true,
               certificates: true,
             },
           },
@@ -50,7 +55,10 @@ export class RigsService {
         take: limit,
         orderBy: { name: 'asc' },
       }),
-    ]);
+    ]).catch((err) => {
+      this.logger.error(`findAll query failed: ${err.message}`, err.stack);
+      throw err;
+    });
 
     return { items, total, page, limit, pages: Math.ceil(total / limit) };
   }
@@ -61,12 +69,11 @@ export class RigsService {
       include: {
         bops_rigs_bop1IdTobops: true,
         bops_rigs_bop2IdTobops: true,
-        activeBOPAssignments: { include: { bop: true } },
+        activeBOPAssignments: true,
         userRigs: { include: { user: { select: { id: true, firstName: true, lastName: true, email: true } } } },
         rigLandings: { take: 10, orderBy: { createdAt: 'desc' } },
         rigFeatures: { include: { feature: true } },
         rigCertificateComponents: { take: 20 },
-        kpis: { take: 12, orderBy: { createdAt: 'desc' } },
       },
     });
     if (!rig) throw new NotFoundException(`Rig ${id} not found`);
@@ -107,19 +114,14 @@ export class RigsService {
       `,
     ]);
 
-    const kpi = await this.prisma.kpi.findFirst({
-      where: { rigId: id },
-      orderBy: { createdAt: 'desc' },
-    });
-
     return {
       rigId: id,
       openFailures: failureCount,
       openMaintenanceTasks: openMaintenance,
       expiringCertificates: expiringCerts,
       nptHoursLast30d: nptHoursLast30d[0]?.totalNptHours ?? 0,
-      availability: kpi?.availability ?? null,
-      utilizationRate: kpi?.utilizationRate ?? null,
+      availability: null,
+      utilizationRate: null,
       updatedAt: new Date(),
     };
   }

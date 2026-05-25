@@ -12,40 +12,25 @@ export declare class BopService {
             _count: {
                 bopEvents: number;
             };
-            activeBOPAssignments: ({
-                rig: {
-                    id: number;
-                    name: string;
-                } | null;
-            } & {
-                id: number;
-                createdAt: Date;
-                updatedAt: Date;
-                name: string | null;
-                rigId: number | null;
-                rtmRigId: string | null;
-                updatedById: number | null;
-                isActive: boolean;
-                bopId: number | null;
-                startDate: Date | null;
-                endDate: Date | null;
-                createdById: number | null;
-            })[];
         } & {
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string | null;
-            type: string | null;
             location: string | null;
             onDeckDate: Date | null;
-            splashDate: Date | null;
-            latchTestStartDate: Date | null;
-            latchUpCompleteDate: Date | null;
+            createdAt: Date;
+            updatedAt: Date;
             installationDate: Date | null;
             vendorOEM: string | null;
             state: string | null;
-            serialNumber: string | null;
+            splashDate: Date | null;
+            latchTestStartDate: Date | null;
+            latchUpCompleteDate: Date | null;
+            maintenanceStartDate: Date | null;
+            plannedReadyDate: Date | null;
+            actualReadyDate: Date | null;
+            plannedSplashDate: Date | null;
+            preservationDate: Date | null;
+            lastStumpDate: Date | null;
+            maintenancePercent: number | null;
         })[];
         total: number;
         page: number;
@@ -54,15 +39,13 @@ export declare class BopService {
     getEvents(rigId?: number, bopId?: number, take?: number): Promise<({
         bop: {
             id: number;
-            name: string | null;
-            type: string | null;
-        } | null;
+        };
     } & {
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        bopId: number | null;
-        equipment: string | null;
+        bopId: number;
+        equipment: string;
         bopStatus: string | null;
         projectedOnDeckDate: Date | null;
         actualOnDeckDate: Date | null;
@@ -70,61 +53,51 @@ export declare class BopService {
         actualMaintenanceStartDate: Date | null;
         projectedMaintenanceCompleteDate: Date | null;
         actualMaintenanceCompleteDate: Date | null;
+        projectedSplashDate: Date | null;
+        actualSplashDate: Date | null;
+        projectedLatchDate: Date | null;
+        actualLatchDate: Date | null;
+        projectedLatchTestCompleteDate: Date | null;
+        actualLatchTestCompleteDate: Date | null;
+        projectedUnLatchDate: Date | null;
+        actualUnLatchDate: Date | null;
     })[]>;
     getChanges(bopId?: number, take?: number): Promise<({
         bop: {
             id: number;
-            name: string | null;
-            type: string | null;
         } | null;
     } & {
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         location: string | null;
         onDeckDate: Date | null;
+        createdAt: Date;
+        updatedAt: Date;
+        state: string | null;
         splashDate: Date | null;
         latchTestStartDate: Date | null;
         latchUpCompleteDate: Date | null;
-        state: string | null;
-        bopId: number | null;
         maintenanceStartDate: Date | null;
         plannedReadyDate: Date | null;
         actualReadyDate: Date | null;
+        plannedSplashDate: Date | null;
+        preservationDate: Date | null;
+        bopId: number | null;
     })[]>;
     getActiveAssignments(rigId?: number): Promise<({
         rig: {
             id: number;
-            name: string;
-        } | null;
-        bop: {
-            id: number;
-            createdAt: Date;
-            updatedAt: Date;
             name: string | null;
-            type: string | null;
-            location: string | null;
-            onDeckDate: Date | null;
-            splashDate: Date | null;
-            latchTestStartDate: Date | null;
-            latchUpCompleteDate: Date | null;
-            installationDate: Date | null;
-            vendorOEM: string | null;
-            state: string | null;
-            serialNumber: string | null;
-        } | null;
+        };
     } & {
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        name: string | null;
-        rigId: number | null;
-        rtmRigId: string | null;
-        updatedById: number | null;
-        isActive: boolean;
-        bopId: number | null;
-        startDate: Date | null;
+        name: string;
+        rigId: number;
+        rtmRigId: string;
+        startDate: Date;
         endDate: Date | null;
-        createdById: number | null;
+        createdById: number;
+        updatedById: number | null;
     })[]>;
 }

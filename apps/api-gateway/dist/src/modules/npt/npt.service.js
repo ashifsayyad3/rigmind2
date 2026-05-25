@@ -36,7 +36,6 @@ let NptService = class NptService {
                 where,
                 include: {
                     rig: { select: { id: true, name: true } },
-                    well: { select: { id: true, name: true, field: true } },
                 },
                 skip: (page - 1) * limit,
                 take: limit,

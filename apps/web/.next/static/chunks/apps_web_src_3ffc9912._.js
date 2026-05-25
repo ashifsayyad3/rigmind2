@@ -27,14 +27,16 @@ __turbopack_context__.s({
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/axios/lib/axios.js [app-client] (ecmascript)");
 ;
+const DEV_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlUxc1g0WUZIUzdaNlZsN1ZITEl6VGVqYnZqMCJ9.eyJhdWQiOiI4YjgwNjk4OC00NTg2LTQwNTktYjhjOS0xMzFjZjk5ZWU5NWUiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNTY1YjBjOTYtNGRmMi00YWE3LWFlM2YtODI2YmIxYTlmZDVlL3YyLjAiLCJpYXQiOjE3Nzc1NTQyMzgsIm5iZiI6MTc3NzU1NDIzOCwiZXhwIjoxNzc3NTU5NzcxLCJhaW8iOiJBZVFBRy84YkFBQUE3c01pWDRGZ2diVWtIelNzQTFVRzJSbVdmenVsajBLcG00OGc1Q2xQSmJRL2NlRTB1cXNqU05mbzErUHlDa3JFNHl6V241S0J1ZXNDbDNPZjE0am9wUjZCd0NoNUk0Sm1aWkFvNHFrTTZ6dXhCV3RaU0ZKK245Uk44R2FoSGVsM1FVa280cXpqSEE5VXVmYjBkeU9UU0JsN0xsV0tkMG9rR2c1OWpqaHBmWjhHQllneW9HSDM0MzRRZisvZDBvZ0RFd0JXbEc3Wk52bnkwZ3orakJOTEZXUmtQM0VIc2JoVDhoWFNnOU81MUdmb3AzTTQyN1E5dUlrUHZqN0J3MWZkTHI3UUpoVitVNENLaEtmQlVvWERZbm5Uek5TN2tESElpOFhzQmxTZktscz0iLCJhenAiOiIwNjI2YjlmYi1kZDk5LTQxYTEtOTc4My02YTYxZGU4ZmE4MWMiLCJhenBhY3IiOiIxIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvMDU4NTkyYWMtNGRjZi00ODU1LTg1ZGMtNGM0ODNiYmM4NzEwLyIsIm5hbWUiOiJBc2hpZiBTYXl5YWQiLCJvaWQiOiI4YjliYTE1Zi04OTExLTRiOGEtOGJjNi1kYzZhYTU1MWQ5MDgiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhc2hpZi5zYXl5YWRAYXF1aWxhLWVuZ2luZWVyLmNvbSIsInJoIjoiMS5BYjBBbGd4YlZ2Sk5wMHF1UDRKcnNhbjlYb2hwZ0l1R1JWbEF1TWtUSFBtZTZWNEFBTmU5QUEuIiwic2NwIjoidXNlcl9pbXBlcnNvbmF0aW9uIiwic2lkIjoiMDAyMjVjZmEtZDA4NS1kZTQ2LTY3ODEtMTg0OWQzNzQzODQ0Iiwic3ViIjoiVXRJM19jYWNsWHRqc3BXaE9CcE1wTnA1Yks1SXAwRVRJaEcwWXVjUjE4QSIsInRpZCI6IjU2NWIwYzk2LTRkZjItNGFhNy1hZTNmLTgyNmJiMWE5ZmQ1ZSIsInV0aSI6ImZ6TWFEQ3JQQVVhSmM2eTFVSXdEQUEiLCJ2ZXIiOiIyLjAiLCJ4bXNfZnRkIjoieU5SaFZDQVBERUstMnhyMk9pTjNSRzQxZTBEU2xlQUtTcHB3YjFvRkZxRUJkWE5sWVhOMExXUnpiWE0ifQ.TRB6F88aqHugNXZGc10unTxANjb6iC1VhvXXA5goVZ_zVL51uH8Mum31_0z9n4R1uj7g5-FbKKEnLR4OZ5VUOmbtXEvl84Nf-RBvVf_sKSbs54IxmjJsO-ARrCY3PzD1fdV53yutnQdN9GjDfaB9BIDunJZ0Fstekx5gp89NDoZJyJdKauMhdxjopEJ-tyX_TvWWTpwIS0O2RX55iNROsKZnU6Z6Wkwkgya2y6pywevfg-NAMQzi_UjVgBf7SilBXEVtZpAk6beB5nJA-WvYQIPveleDYCv_A_P_BPZuIzE0F-uDrp-GvO80U1M7OnlHAsnQswtSwLqvIF6qwJ-Vlw';
 const http = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].create({
-    baseURL: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001',
+    baseURL: ("TURBOPACK compile-time value", "http://localhost:4000") ?? 'http://localhost:4000',
     timeout: 30_000,
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${DEV_TOKEN}`
     }
 });
-// Attach JWT
+// Attach JWT (stored token overrides DEV_TOKEN if present)
 http.interceptors.request.use((cfg)=>{
     if ("TURBOPACK compile-time truthy", 1) {
         try {
@@ -70,152 +72,152 @@ async function del(url) {
     return r.data.data;
 }
 const authApi = {
-    login: (email, password)=>post('/api/auth/login', {
+    login: (email, password)=>post('/api/v1/auth/login', {
             email,
             password
         }),
-    refresh: ()=>post('/api/auth/refresh'),
-    logout: ()=>post('/api/auth/logout'),
-    me: ()=>get('/api/auth/me')
+    refresh: ()=>post('/api/v1/auth/refresh'),
+    logout: ()=>post('/api/v1/auth/logout'),
+    me: ()=>get('/api/v1/auth/me')
 };
 const fleetApi = {
-    getMetrics: ()=>get('/api/fleet/health'),
-    getGlobalMap: ()=>get('/api/fleet/map'),
-    getHealthHistory: (days = 30)=>get('/api/fleet/health-history', {
+    getMetrics: ()=>get('/api/v1/fleet/health'),
+    getGlobalMap: ()=>get('/api/v1/fleet/map'),
+    getHealthHistory: (days = 30)=>get('/api/v1/fleet/health-history', {
             days
         }),
-    getPredictions: ()=>get('/api/fleet/predictions'),
-    getHealthScores: ()=>get('/api/rigs', {
+    getPredictions: ()=>get('/api/v1/fleet/predictions'),
+    getHealthScores: ()=>get('/api/v1/rigs', {
             pageSize: 100
         })
 };
 const rigsApi = {
-    list: (p)=>get('/api/rigs', p),
-    get: (id)=>get(`/api/rigs/${id}`),
-    create: (b)=>post('/api/rigs', b),
-    update: (id, b)=>put(`/api/rigs/${id}`, b),
-    getHealthScore: (id)=>get(`/api/rigs/${id}/health`),
-    getTimeline: (id, days)=>get(`/api/rigs/${id}/timeline`, {
+    list: (p)=>get('/api/v1/rigs', p),
+    get: (id)=>get(`/api/v1/rigs/${id}`),
+    create: (b)=>post('/api/v1/rigs', b),
+    update: (id, b)=>put(`/api/v1/rigs/${id}`, b),
+    getHealthScore: (id)=>get(`/api/v1/rigs/${id}/health`),
+    getTimeline: (id, days)=>get(`/api/v1/rigs/${id}/timeline`, {
             days
         }),
-    getComponents: (id)=>get(`/api/rigs/${id}/components`)
+    getComponents: (id)=>get(`/api/v1/rigs/${id}/components`)
 };
 const wellsApi = {
-    list: (p)=>get('/api/wells', p),
-    get: (id)=>get(`/api/wells/${id}`),
-    create: (b)=>post('/api/wells', b),
-    update: (id, b)=>put(`/api/wells/${id}`, b)
+    list: (p)=>get('/api/v1/wells', p),
+    get: (id)=>get(`/api/v1/wells/${id}`),
+    create: (b)=>post('/api/v1/wells', b),
+    update: (id, b)=>put(`/api/v1/wells/${id}`, b)
 };
 const failuresApi = {
-    list: (p)=>get('/api/failures', p),
-    get: (id)=>get(`/api/failures/${id}`),
-    create: (b)=>post('/api/failures', b),
-    update: (id, b)=>put(`/api/failures/${id}`, b),
-    delete: (id)=>del(`/api/failures/${id}`),
-    getByRig: (rigId, p)=>get(`/api/rigs/${rigId}/failures`, p),
-    getSimilar: (id)=>get(`/api/failures/${id}/similar`),
-    getRootCause: (id)=>post(`/api/failures/${id}/root-cause`),
-    getTimeline: (id)=>get(`/api/failures/${id}/timeline`),
-    getStats: (rigId, days)=>get('/api/failures/stats', {
+    list: (p)=>get('/api/v1/failures', p),
+    get: (id)=>get(`/api/v1/failures/${id}`),
+    create: (b)=>post('/api/v1/failures', b),
+    update: (id, b)=>put(`/api/v1/failures/${id}`, b),
+    delete: (id)=>del(`/api/v1/failures/${id}`),
+    getByRig: (rigId, p)=>get(`/api/v1/rigs/${rigId}/failures`, p),
+    getSimilar: (id)=>get(`/api/v1/failures/${id}/similar`),
+    getRootCause: (id)=>post(`/api/v1/failures/${id}/root-cause`),
+    getTimeline: (id)=>get(`/api/v1/failures/${id}/timeline`),
+    getStats: (rigId, days)=>get('/api/v1/failures/stats', {
             rigId,
             days
         }),
-    addCorrectiveAction: (failureId, b)=>post(`/api/failures/${failureId}/corrective-actions`, b)
+    addCorrectiveAction: (failureId, b)=>post(`/api/v1/failures/${failureId}/corrective-actions`, b)
 };
 const maintenanceApi = {
-    listDeferred: (p)=>get('/api/maintenance/deferred', p),
-    getDeferred: (id)=>get(`/api/maintenance/deferred/${id}`),
-    createDeferred: (b)=>post('/api/maintenance/deferred', b),
-    updateDeferred: (id, b)=>put(`/api/maintenance/deferred/${id}`, b),
-    deleteDeferred: (id)=>del(`/api/maintenance/deferred/${id}`),
-    getOverdue: (rigId)=>get('/api/maintenance/overdue', rigId ? {
+    listDeferred: (p)=>get('/api/v1/maintenance/deferred', p),
+    getDeferred: (id)=>get(`/api/v1/maintenance/deferred/${id}`),
+    createDeferred: (b)=>post('/api/v1/maintenance/deferred', b),
+    updateDeferred: (id, b)=>put(`/api/v1/maintenance/deferred/${id}`, b),
+    deleteDeferred: (id)=>del(`/api/v1/maintenance/deferred/${id}`),
+    getOverdue: (rigId)=>get('/api/v1/maintenance/overdue', rigId ? {
             rigId
         } : undefined),
-    getSchedule: (rigId)=>get(`/api/rigs/${rigId}/maintenance/schedule`)
+    getSchedule: (rigId)=>get(`/api/v1/rigs/${rigId}/maintenance/schedule`)
 };
 const certificatesApi = {
-    list: (p)=>get('/api/certificates', p),
-    get: (id)=>get(`/api/certificates/${id}`),
-    create: (b)=>post('/api/certificates', b),
-    update: (id, b)=>put(`/api/certificates/${id}`, b),
-    delete: (id)=>del(`/api/certificates/${id}`),
-    getExpiringSoon: (days)=>get('/api/certificates/expiring', {
+    list: (p)=>get('/api/v1/certificates', p),
+    get: (id)=>get(`/api/v1/certificates/${id}`),
+    create: (b)=>post('/api/v1/certificates', b),
+    update: (id, b)=>put(`/api/v1/certificates/${id}`, b),
+    delete: (id)=>del(`/api/v1/certificates/${id}`),
+    getExpiringSoon: (days)=>get('/api/v1/certificates/expiring', {
             days: days ?? 60
         })
 };
 const nptApi = {
-    list: (p)=>get('/api/npt', p),
-    getSummary: (p)=>get('/api/npt/summary', p),
-    getTrend: (rigId, months)=>get('/api/npt/trend', {
+    list: (p)=>get('/api/v1/npt', p),
+    getSummary: (p)=>get('/api/v1/npt/summary', p),
+    getTrend: (rigId, months)=>get('/api/v1/npt/trend', {
             rigId,
             months
         }),
-    getByCategory: ()=>get('/api/npt/by-category')
+    getByCategory: ()=>get('/api/v1/npt/by-category')
 };
 const observationsApi = {
-    list: (p)=>get('/api/observations', p),
-    get: (id)=>get(`/api/observations/${id}`),
-    create: (b)=>post('/api/observations', b),
-    update: (id, b)=>put(`/api/observations/${id}`, b),
-    delete: (id)=>del(`/api/observations/${id}`)
+    list: (p)=>get('/api/v1/observations', p),
+    get: (id)=>get(`/api/v1/observations/${id}`),
+    create: (b)=>post('/api/v1/observations', b),
+    update: (id, b)=>put(`/api/v1/observations/${id}`, b),
+    delete: (id)=>del(`/api/v1/observations/${id}`)
 };
 const recommendationsApi = {
-    list: (p)=>get('/api/recommendations', p),
-    getAll: (p)=>get('/api/recommendations', p),
-    get: (id)=>get(`/api/recommendations/${id}`),
-    markCommunicated: (id)=>put(`/api/recommendations/${id}/communicate`),
-    updateStatus: (id, status)=>put(`/api/recommendations/${id}/status`, {
+    list: (p)=>get('/api/v1/recommendations', p),
+    getAll: (p)=>get('/api/v1/recommendations', p),
+    get: (id)=>get(`/api/v1/recommendations/${id}`),
+    markCommunicated: (id)=>put(`/api/v1/recommendations/${id}/communicate`),
+    updateStatus: (id, status)=>put(`/api/v1/recommendations/${id}/status`, {
             status
         }),
-    getStats: ()=>get('/api/recommendations/stats')
+    getStats: ()=>get('/api/v1/recommendations/stats')
 };
 const bopApi = {
-    getEvents: (rigId, p)=>get(`/api/rigs/${rigId}/bop-events`, p),
-    getChanges: (bopId)=>get(`/api/bops/${bopId}/changes`),
-    getAssignments: (rigId)=>get(`/api/rigs/${rigId}/bop-assignments`)
+    getEvents: (rigId, p)=>get(`/api/v1/rigs/${rigId}/bop-events`, p),
+    getChanges: (bopId)=>get(`/api/v1/bops/${bopId}/changes`),
+    getAssignments: (rigId)=>get(`/api/v1/rigs/${rigId}/bop-assignments`)
 };
 const rtmApi = {
-    getEvents: (rigId, p)=>get(`/api/rigs/${rigId}/rtm-events`, p),
-    getAlarmConfigs: (rigId)=>get(`/api/rigs/${rigId}/alarm-configs`),
-    getSensorData: (rigId, param, hours)=>get(`/api/rigs/${rigId}/sensors/${param}`, {
+    getEvents: (rigId, p)=>get(`/api/v1/rigs/${rigId}/rtm-events`, p),
+    getAlarmConfigs: (rigId)=>get(`/api/v1/rigs/${rigId}/alarm-configs`),
+    getSensorData: (rigId, param, hours)=>get(`/api/v1/rigs/${rigId}/sensors/${param}`, {
             hours
         }),
-    acknowledgeEvent: (id)=>put(`/api/rtm-events/${id}/acknowledge`)
+    acknowledgeEvent: (id)=>put(`/api/v1/rtm-events/${id}/acknowledge`)
 };
 const copilotApi = {
-    ask: (question, history)=>post('/api/copilot/ask', {
+    ask: (question, history)=>post('/api/v1/copilot/ask', {
             question,
             history
         }),
-    generateReport: (rigId, type)=>post('/api/copilot/report', {
+    generateReport: (rigId, type)=>post('/api/v1/copilot/report', {
             rigId,
             type
         }),
-    getRca: (failureId)=>post(`/api/copilot/rca/${failureId}`),
-    getPrediction: (rigId)=>post('/api/copilot/predict', {
+    getRca: (failureId)=>post(`/api/v1/copilot/rca/${failureId}`),
+    getPrediction: (rigId)=>post('/api/v1/copilot/predict', {
             rigId
         })
 };
 const notificationsApi = {
-    list: ()=>get('/api/notifications'),
-    markRead: (id)=>put(`/api/notifications/${id}/read`),
-    markAllRead: ()=>put('/api/notifications/read-all')
+    list: ()=>get('/api/v1/notifications'),
+    markRead: (id)=>put(`/api/v1/notifications/${id}/read`),
+    markAllRead: ()=>put('/api/v1/notifications/read-all')
 };
 const reportsApi = {
-    generate: (rigId, type, dateRange)=>post('/api/reports/generate', {
+    generate: (rigId, type, dateRange)=>post('/api/v1/reports/generate', {
             rigId,
             type,
             dateRange
         }),
-    list: ()=>get('/api/reports'),
-    download: (id)=>`${__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.NEXT_PUBLIC_API_URL}/api/reports/${id}/download`
+    list: ()=>get('/api/v1/reports'),
+    download: (id)=>`${"TURBOPACK compile-time value", "http://localhost:4000"}/api/v1/reports/${id}/download`
 };
 const automationApi = {
-    getWorkflows: ()=>get('/api/automation/workflows'),
-    toggleWorkflow: (id, active)=>put(`/api/automation/workflows/${id}`, {
+    getWorkflows: ()=>get('/api/v1/automation/workflows'),
+    toggleWorkflow: (id, active)=>put(`/api/v1/automation/workflows/${id}`, {
             active
         }),
-    triggerWorkflow: (id)=>post(`/api/automation/workflows/${id}/trigger`)
+    triggerWorkflow: (id)=>post(`/api/v1/automation/workflows/${id}/trigger`)
 };
 ;
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -805,7 +807,7 @@ function AdminPage() {
                             },
                             {
                                 label: 'CORS',
-                                status: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.NEXT_PUBLIC_API_URL ?? 'localhost only',
+                                status: ("TURBOPACK compile-time value", "http://localhost:4000") ?? 'localhost only',
                                 color: 'text-amber-400'
                             },
                             {

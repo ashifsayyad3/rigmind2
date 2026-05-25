@@ -16,11 +16,10 @@ export class ObservationsService {
     page?: number;
     limit?: number;
   }) {
-    const { rigId, status, type, dateFrom, dateTo, search, page = 1, limit = 25 } = filters;
+    const { rigId: _rigId, status, type, dateFrom, dateTo, search, page = 1, limit = 25 } = filters;
 
     const where: Prisma.ObservationWhereInput = {
       isRemoved: false,
-      ...(rigId && { rigId }),
       ...(status && { status }),
       ...(type && { type }),
       ...(dateFrom || dateTo
@@ -41,10 +40,9 @@ export class ObservationsService {
         where,
         include: {
           components: { select: { id: true, uniqueComponentName: true } },
-          bops: { select: { id: true, name: true } },
+          bops: { select: { id: true } },
           wells: { select: { id: true, name: true } },
           observationAttachments: { take: 3 },
-          observationCommunications: { include: { communication: true }, take: 3 },
           rcmRecommendationObservationLink: {
             include: { rcmRecommendations: true },
           },
@@ -66,7 +64,6 @@ export class ObservationsService {
         bops: true,
         wells: true,
         observationAttachments: { include: { attachment: true } },
-        observationCommunications: { include: { communication: true } },
         rcmRecommendationObservationLink: { include: { rcmRecommendations: true } },
       },
     });
@@ -76,7 +73,7 @@ export class ObservationsService {
 
   async create(data: Prisma.ObservationCreateInput, userId: number) {
     return this.prisma.observation.create({
-      data: { ...data, createdById: userId, isRemoved: false },
+      data: { ...data as any, createdById: userId, isRemoved: false },
     });
   }
 
@@ -84,7 +81,7 @@ export class ObservationsService {
     await this.findOne(id);
     return this.prisma.observation.update({
       where: { id },
-      data: { ...data, updatedById: userId, updatedAt: new Date() },
+      data: { ...data as any, updatedById: userId, updatedAt: new Date() },
     });
   }
 

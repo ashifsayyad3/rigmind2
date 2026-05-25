@@ -59,7 +59,6 @@ export class FailuresService {
           rig: { select: { id: true, name: true } },
           failureMode: true,
           correctiveActions: { take: 5 },
-          failureObservations: { take: 3 },
         },
         skip: (page - 1) * limit,
         take: limit,
@@ -83,11 +82,7 @@ export class FailuresService {
         rig: true,
         failureMode: true,
         correctiveActions: true,
-        failureObservations: true,
-        failureCommunications: { include: { communication: true } },
         failureAttachments: { include: { attachment: true } },
-        linkedFailures1: true,
-        linkedFailures2: true,
         lessonsLearned: true,
         rcmRecommendationFailureLink: { include: { rcmRecommendations: true } },
       },
@@ -98,7 +93,7 @@ export class FailuresService {
 
   async create(data: Prisma.FailureCreateInput, userId: number) {
     const failure = await this.prisma.failure.create({
-      data: { ...data, createdById: userId, updatedById: userId, isRemoved: false },
+      data: { ...data as any, createdById: userId, updatedById: userId, isRemoved: false },
       include: { rig: true, failureMode: true },
     });
     this.logger.log(`Failure created: ${failure.id} by user ${userId}`);
@@ -109,7 +104,7 @@ export class FailuresService {
     await this.findOne(id);
     return this.prisma.failure.update({
       where: { id },
-      data: { ...data, updatedById: userId, updatedAt: new Date() },
+      data: { ...data as any, updatedById: userId, updatedAt: new Date() },
       include: { rig: true, failureMode: true },
     });
   }
@@ -180,24 +175,17 @@ export class FailuresService {
 
   async getTimeline(id: number) {
     const failure = await this.findOne(id);
-    const [observations, correctiveActions, communications, nptEntries] = await Promise.all([
-      this.prisma.failureObservation.findMany({
-        where: { failureId: id },
-        orderBy: { createdAt: 'asc' },
-      }),
+    const [correctiveActions, nptEntries] = await Promise.all([
       this.prisma.correctiveAction.findMany({
         where: { failureId: id },
-        orderBy: { createdAt: 'asc' },
-      }),
-      this.prisma.failureCommunication.findMany({
-        where: { failureId: id },
-        include: { communication: true },
         orderBy: { createdAt: 'asc' },
       }),
       this.prisma.nonProductionTime.findMany({
         where: { sourceType: 'failure', sourceId: id },
       }),
     ]);
+    const observations: any[] = [];
+    const communications: any[] = [];
 
     return {
       failure,

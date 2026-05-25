@@ -47,7 +47,6 @@ let FailuresService = FailuresService_1 = class FailuresService {
                     rig: { select: { id: true, name: true } },
                     failureMode: true,
                     correctiveActions: { take: 5 },
-                    failureObservations: { take: 3 },
                 },
                 skip: (page - 1) * limit,
                 take: limit,
@@ -69,11 +68,7 @@ let FailuresService = FailuresService_1 = class FailuresService {
                 rig: true,
                 failureMode: true,
                 correctiveActions: true,
-                failureObservations: true,
-                failureCommunications: { include: { communication: true } },
                 failureAttachments: { include: { attachment: true } },
-                linkedFailures1: true,
-                linkedFailures2: true,
                 lessonsLearned: true,
                 rcmRecommendationFailureLink: { include: { rcmRecommendations: true } },
             },
@@ -158,24 +153,17 @@ let FailuresService = FailuresService_1 = class FailuresService {
     }
     async getTimeline(id) {
         const failure = await this.findOne(id);
-        const [observations, correctiveActions, communications, nptEntries] = await Promise.all([
-            this.prisma.failureObservation.findMany({
-                where: { failureId: id },
-                orderBy: { createdAt: 'asc' },
-            }),
+        const [correctiveActions, nptEntries] = await Promise.all([
             this.prisma.correctiveAction.findMany({
                 where: { failureId: id },
-                orderBy: { createdAt: 'asc' },
-            }),
-            this.prisma.failureCommunication.findMany({
-                where: { failureId: id },
-                include: { communication: true },
                 orderBy: { createdAt: 'asc' },
             }),
             this.prisma.nonProductionTime.findMany({
                 where: { sourceType: 'failure', sourceId: id },
             }),
         ]);
+        const observations = [];
+        const communications = [];
         return {
             failure,
             timeline: [

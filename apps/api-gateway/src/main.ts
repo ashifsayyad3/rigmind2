@@ -3,7 +3,7 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import helmet from 'helmet';
-import compression from 'compression';
+import * as compression from 'compression';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { AppModule } from './app.module';
@@ -46,8 +46,8 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
   });
 
-  // Versioning
-  app.enableVersioning({ type: VersioningType.URI });
+  // Versioning — default to v1 so /api/rigs resolves same as /api/v1/rigs
+  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
 
   // Global pipes
   app.useGlobalPipes(
@@ -67,16 +67,22 @@ async function bootstrap() {
 
   // Swagger
   if (process.env.NODE_ENV !== 'production') {
-    const config = new DocumentBuilder()
+    const isDev = process.env.NODE_ENV === 'development';
+    const builder = new DocumentBuilder()
       .setTitle('RigMind AI™ API')
       .setDescription('Enterprise Offshore Rig Intelligence Platform API')
       .setVersion('1.0')
-      .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT')
-      .addServer(`http://localhost:${process.env.PORT ?? 4000}`)
-      .build();
-    const document = SwaggerModule.createDocument(app, config);
+      .addServer(`http://localhost:${process.env.PORT ?? 4000}`);
+    if (!isDev) {
+      builder.addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT');
+    }
+    const document = SwaggerModule.createDocument(app, builder.build());
     SwaggerModule.setup('api/docs', app, document, {
-      swaggerOptions: { persistAuthorization: true },
+      swaggerOptions: {
+        persistAuthorization: !isDev,
+        // Auto-expand all endpoints in dev for easier browsing
+        docExpansion: isDev ? 'list' : 'none',
+      },
     });
   }
 

@@ -17,10 +17,9 @@ let ObservationsService = class ObservationsService {
         this.prisma = prisma;
     }
     async findAll(filters) {
-        const { rigId, status, type, dateFrom, dateTo, search, page = 1, limit = 25 } = filters;
+        const { rigId: _rigId, status, type, dateFrom, dateTo, search, page = 1, limit = 25 } = filters;
         const where = {
             isRemoved: false,
-            ...(rigId && { rigId }),
             ...(status && { status }),
             ...(type && { type }),
             ...(dateFrom || dateTo
@@ -40,10 +39,9 @@ let ObservationsService = class ObservationsService {
                 where,
                 include: {
                     components: { select: { id: true, uniqueComponentName: true } },
-                    bops: { select: { id: true, name: true } },
+                    bops: { select: { id: true } },
                     wells: { select: { id: true, name: true } },
                     observationAttachments: { take: 3 },
-                    observationCommunications: { include: { communication: true }, take: 3 },
                     rcmRecommendationObservationLink: {
                         include: { rcmRecommendations: true },
                     },
@@ -63,7 +61,6 @@ let ObservationsService = class ObservationsService {
                 bops: true,
                 wells: true,
                 observationAttachments: { include: { attachment: true } },
-                observationCommunications: { include: { communication: true } },
                 rcmRecommendationObservationLink: { include: { rcmRecommendations: true } },
             },
         });

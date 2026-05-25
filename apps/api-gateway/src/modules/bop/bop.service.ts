@@ -6,14 +6,12 @@ export class BopService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(filters: { rigId?: number; type?: string; page?: number; limit?: number }) {
-    const { rigId, type, page = 1, limit = 20 } = filters;
+    const { rigId, page = 1, limit = 20 } = filters;
     const where: any = {
-      ...(type && { type }),
       ...(rigId && {
         OR: [
           { rigs_rigs_bop1IdTobops: { some: { id: rigId } } },
           { rigs_rigs_bop2IdTobops: { some: { id: rigId } } },
-          { activeBOPAssignments: { some: { rigId, isActive: true } } },
         ],
       }),
     };
@@ -22,7 +20,6 @@ export class BopService {
       this.prisma.bop.findMany({
         where,
         include: {
-          activeBOPAssignments: { where: { isActive: true }, include: { rig: { select: { id: true, name: true } } } },
           _count: { select: { bopEvents: true } },
         },
         skip: (page - 1) * limit,
@@ -38,7 +35,7 @@ export class BopService {
         ...(bopId && { bopId }),
       },
       include: {
-        bop: { select: { id: true, name: true, type: true } },
+        bop: { select: { id: true } },
       },
       orderBy: { createdAt: 'desc' },
       take,
@@ -49,7 +46,7 @@ export class BopService {
     return this.prisma.bopChange.findMany({
       where: { ...(bopId && { bopId }) },
       include: {
-        bop: { select: { id: true, name: true, type: true } },
+        bop: { select: { id: true } },
       },
       orderBy: { createdAt: 'desc' },
       take,
@@ -58,10 +55,9 @@ export class BopService {
 
   async getActiveAssignments(rigId?: number) {
     return this.prisma.activeBOPAssignment.findMany({
-      where: { isActive: true, ...(rigId && { rigId }) },
+      where: { ...(rigId && { rigId }) },
       include: {
         rig: { select: { id: true, name: true } },
-        bop: true,
       },
     });
   }

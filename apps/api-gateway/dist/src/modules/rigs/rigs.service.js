@@ -8,18 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var RigsService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RigsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../prisma/prisma.service");
-let RigsService = class RigsService {
+let RigsService = RigsService_1 = class RigsService {
     constructor(prisma) {
         this.prisma = prisma;
+        this.logger = new common_1.Logger(RigsService_1.name);
     }
     async findAll(filters, accessibleRigIds) {
         const { status, isRTM, onContract, category, operatorId, page = 1, limit = 50 } = filters;
         const where = {
-            visible: true,
             ...(accessibleRigIds && { id: { in: accessibleRigIds } }),
             ...(status && { status }),
             ...(typeof isRTM === 'boolean' && { isRTM }),
@@ -31,17 +32,22 @@ let RigsService = class RigsService {
             this.prisma.rig.count({ where }),
             this.prisma.rig.findMany({
                 where,
-                include: {
-                    bops_rigs_bop1IdTobops: { select: { id: true, name: true, type: true } },
-                    bops_rigs_bop2IdTobops: { select: { id: true, name: true, type: true } },
-                    activeBOPAssignments: {
-                        include: { bop: true },
-                        where: { isActive: true },
-                    },
+                select: {
+                    id: true,
+                    name: true,
+                    status: true,
+                    onContract: true,
+                    isRTM: true,
+                    category: true,
+                    operatorId: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    bops_rigs_bop1IdTobops: { select: { id: true } },
+                    bops_rigs_bop2IdTobops: { select: { id: true } },
                     _count: {
                         select: {
-                            failures: { where: { isRemoved: false, status: { not: 'closed' } } },
-                            deferredMaintenanceTasks: { where: { isRemoved: false } },
+                            failures: true,
+                            deferredMaintenanceTasks: true,
                             certificates: true,
                         },
                     },
@@ -50,7 +56,10 @@ let RigsService = class RigsService {
                 take: limit,
                 orderBy: { name: 'asc' },
             }),
-        ]);
+        ]).catch((err) => {
+            this.logger.error(`findAll query failed: ${err.message}`, err.stack);
+            throw err;
+        });
         return { items, total, page, limit, pages: Math.ceil(total / limit) };
     }
     async findOne(id) {
@@ -59,12 +68,11 @@ let RigsService = class RigsService {
             include: {
                 bops_rigs_bop1IdTobops: true,
                 bops_rigs_bop2IdTobops: true,
-                activeBOPAssignments: { include: { bop: true } },
+                activeBOPAssignments: true,
                 userRigs: { include: { user: { select: { id: true, firstName: true, lastName: true, email: true } } } },
                 rigLandings: { take: 10, orderBy: { createdAt: 'desc' } },
                 rigFeatures: { include: { feature: true } },
                 rigCertificateComponents: { take: 20 },
-                kpis: { take: 12, orderBy: { createdAt: 'desc' } },
             },
         });
         if (!rig)
@@ -103,18 +111,14 @@ let RigsService = class RigsService {
           AND dateOfNPT >= DATEADD(DAY, -30, GETDATE())
       `,
         ]);
-        const kpi = await this.prisma.kpi.findFirst({
-            where: { rigId: id },
-            orderBy: { createdAt: 'desc' },
-        });
         return {
             rigId: id,
             openFailures: failureCount,
             openMaintenanceTasks: openMaintenance,
             expiringCertificates: expiringCerts,
             nptHoursLast30d: nptHoursLast30d[0]?.totalNptHours ?? 0,
-            availability: kpi?.availability ?? null,
-            utilizationRate: kpi?.utilizationRate ?? null,
+            availability: null,
+            utilizationRate: null,
             updatedAt: new Date(),
         };
     }
@@ -136,7 +140,7 @@ let RigsService = class RigsService {
     }
 };
 exports.RigsService = RigsService;
-exports.RigsService = RigsService = __decorate([
+exports.RigsService = RigsService = RigsService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], RigsService);

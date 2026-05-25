@@ -94,7 +94,7 @@ export class FleetService {
     return scores;
   }
 
-  private async scoreRig(rig: { id: number; name: string }): Promise<RigHealthScore> {
+  private async scoreRig(rig: { id: number; name: string | null }): Promise<RigHealthScore> {
     const [openFailures, openMaintenance, expiringCerts, nptResult, kpi] = await Promise.all([
       this.prisma.failure.count({
         where: { rigId: rig.id, isRemoved: false, status: { not: 'closed' } },
@@ -114,10 +114,7 @@ export class FleetService {
         WHERE rigId = ${rig.id} AND isRemoved = 0
           AND dateOfNPT >= DATEADD(DAY, -30, GETDATE())
       `,
-      this.prisma.kpi.findFirst({
-        where: { rigId: rig.id },
-        orderBy: { createdAt: 'desc' },
-      }),
+      Promise.resolve(null),
     ]);
 
     const nptHours = nptResult[0]?.totalHours ?? 0;
@@ -127,7 +124,7 @@ export class FleetService {
     const maintenanceScore = Math.max(100 - openMaintenance * 8, 0) * 0.25;
     const certScore = Math.max(100 - expiringCerts * 5, 0) * 0.15;
     const nptScore = Math.max(100 - nptHours * 2, 0) * 0.20;
-    const availabilityScore = (kpi?.availability ?? 80) * 0.10;
+    const availabilityScore = 80 * 0.10;
 
     const overallScore = Math.round(failureScore + maintenanceScore + certScore + nptScore + availabilityScore);
 

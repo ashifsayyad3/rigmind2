@@ -25,61 +25,55 @@ export class RtmService {
       select: { id: true, name: true, rtmRigId: true, status: true },
     });
 
-    const [latestSensors, activeAlarms, recentEvents] = await Promise.all([
-      this.prisma.sensorReading.findMany({
-        where: { rigId },
-        orderBy: { timestamp: 'desc' },
-        take: 20,
-        distinct: ['sensorTag'],
-      }),
+    const [activeAlarms, recentEvents] = await Promise.all([
       this.prisma.rtmAlarmConfiguration.findMany({
-        where: { rigId, enabled: true },
+        where: { rigId, status: true },
       }),
       this.prisma.rtmEventData.findMany({
-        where: { rtmRigId: rig?.rtmRigId ?? '' },
-        orderBy: { timestamp: 'desc' },
+        where: { rigId },
+        orderBy: { startTime: 'desc' },
         take: 10,
       }),
     ]);
 
-    return { rig, latestSensors, activeAlarms, recentEvents, updatedAt: new Date() };
+    return { rig, activeAlarms, recentEvents, updatedAt: new Date() };
   }
 
   async getSensorHistory(rigId: number, sensorTag: string, hours = 24) {
+    // SensorReading does not have rigId/sensorTag/timestamp fields
+    // Return event data filtered by rig and parameter name instead
     const since = new Date(Date.now() - hours * 60 * 60 * 1000);
-    return this.prisma.sensorReading.findMany({
-      where: { rigId, sensorTag, timestamp: { gte: since } },
-      orderBy: { timestamp: 'asc' },
+    return this.prisma.rtmEventData.findMany({
+      where: { rigId, parameterName: sensorTag, startTime: { gte: since } },
+      orderBy: { startTime: 'asc' },
     });
   }
 
   async getAlarmHistory(rigId: number, take = 50) {
-    const rig = await this.prisma.rig.findUnique({ where: { id: rigId }, select: { rtmRigId: true } });
     return this.prisma.rtmEventDataHistory.findMany({
-      where: { rtmRigId: rig?.rtmRigId ?? '' },
-      orderBy: { timestamp: 'desc' },
+      where: { rigId },
+      orderBy: { startTime: 'desc' },
       take,
     });
   }
 
   async checkAndBroadcastAlarms(rigId: number) {
     const configs = await this.prisma.rtmAlarmConfiguration.findMany({
-      where: { rigId, enabled: true },
+      where: { rigId, status: true },
     });
-    const rig = await this.prisma.rig.findUnique({ where: { id: rigId }, select: { rtmRigId: true } });
 
     for (const config of configs) {
       const latest = await this.prisma.rtmEventData.findFirst({
-        where: { rtmRigId: rig?.rtmRigId ?? '', sensorId: config.sensorId ?? '' },
-        orderBy: { timestamp: 'desc' },
+        where: { rigId, parameterName: config.parameterName ?? undefined },
+        orderBy: { startTime: 'desc' },
       });
-      if (latest && config.threshold != null && latest.value != null && latest.value > config.threshold) {
+      if (latest) {
         this.eventEmitter.emit('rtm.alarm.triggered', {
           rigId,
-          sensorId: config.sensorId,
-          value: latest.value,
-          threshold: config.threshold,
+          parameterName: config.parameterName,
           alarmType: config.alarmType,
+          alarmName: config.alarmName,
+          event: latest,
         });
       }
     }
