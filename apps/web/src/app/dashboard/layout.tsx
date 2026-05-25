@@ -80,6 +80,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         animate={{ width: sidebarCollapsed ? 56 : 220 }}
         transition={{ duration: 0.2, ease: 'easeInOut' }}
         className="flex-shrink-0 flex flex-col overflow-hidden relative z-20"
+        suppressHydrationWarning
         style={{
           background: 'linear-gradient(180deg, rgba(14,21,32,0.98) 0%, rgba(10,15,26,0.99) 100%)',
           borderRight: '1px solid rgba(26,36,56,0.8)',

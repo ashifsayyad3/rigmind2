@@ -12,7 +12,7 @@ export default function ReportsPage() {
   const [report, setReport] = useState<any>(null)
 
   const { data: fleetData } = useQuery({ queryKey: ['fleet-health-scores'], queryFn: fleetApi.getHealthScores })
-  const rigs: any[] = (fleetData as any) ?? []
+  const rigs: any[] = Array.isArray(fleetData) ? fleetData : []
 
   const generateMutation = useMutation({
     mutationFn: (rigId: number) => copilotApi.generateReport(rigId, 'full'),

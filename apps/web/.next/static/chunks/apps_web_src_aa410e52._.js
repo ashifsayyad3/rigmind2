@@ -465,8 +465,10 @@ function AiCopilotPage() {
         messages
     ]);
     const conversationHistory = messages.filter((m)=>m.id !== '0').map((m)=>({
+            id: m.id,
             role: m.role,
-            content: m.content
+            content: m.content,
+            timestamp: new Date().toISOString()
         }));
     const send = async (question)=>{
         if (!question.trim() || loading) return;
@@ -483,7 +485,7 @@ function AiCopilotPage() {
             ]);
         try {
             const res = await __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["copilotApi"].ask(question, conversationHistory);
-            const data = res?.data?.data ?? res?.data;
+            const data = res ?? {};
             const aiMsg = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',

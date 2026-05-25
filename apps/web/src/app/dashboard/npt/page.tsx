@@ -20,7 +20,7 @@ function MiniBarChart({ data }: { data: Array<{ label: string; hours: number }> 
               style={{ width: `${max > 0 ? (d.hours / max) * 100 : 0}%` }}
             />
           </div>
-          <span className="text-surface-300 w-14 text-right shrink-0">{d.hours.toFixed(1)}h</span>
+          <span className="text-surface-300 w-14 text-right shrink-0">{(d.hours ?? 0).toFixed(1)}h</span>
         </div>
       ))}
     </div>

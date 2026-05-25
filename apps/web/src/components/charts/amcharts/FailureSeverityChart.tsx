@@ -113,7 +113,7 @@ export function FailureSeverityChart() {
     <div className="chart-container p-4">
       <div className="flex items-center justify-between mb-2">
         <div className="section-label mb-0">Failures by Severity — Last 30 Days</div>
-        {stats && <div className="text-[11px] text-surface-500 mono">NPT: <span className="text-amber-400">{stats.totalNptHours.toFixed(1)}h</span></div>}
+        {stats && <div className="text-[11px] text-surface-500 mono">NPT: <span className="text-amber-400">{(stats.totalNptHours ?? 0).toFixed(1)}h</span></div>}
       </div>
       {isLoading
         ? <div className="h-60 bg-surface-800/30 rounded-lg animate-pulse" />

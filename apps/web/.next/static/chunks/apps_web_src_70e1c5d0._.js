@@ -262,13 +262,13 @@ function ReportsPage() {
         ],
         queryFn: __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["fleetApi"].getHealthScores
     });
-    const rigs = fleetData?.data ?? [];
+    const rigs = Array.isArray(fleetData) ? fleetData : [];
     const generateMutation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useMutation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMutation"])({
         mutationFn: {
-            "ReportsPage.useMutation[generateMutation]": (rigId)=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["copilotApi"].generateRigReport(rigId)
+            "ReportsPage.useMutation[generateMutation]": (rigId)=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["copilotApi"].generateReport(rigId, 'full')
         }["ReportsPage.useMutation[generateMutation]"],
         onSuccess: {
-            "ReportsPage.useMutation[generateMutation]": (data)=>setReport(data?.data)
+            "ReportsPage.useMutation[generateMutation]": (data)=>setReport(data)
         }["ReportsPage.useMutation[generateMutation]"]
     });
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
