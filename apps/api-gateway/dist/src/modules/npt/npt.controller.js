@@ -23,6 +23,15 @@ let NptController = class NptController {
     findAll(filters) {
         return this.svc.findAll(filters);
     }
+    getSummary(rigId, startDate, endDate) {
+        return this.svc.getSummary(rigId ? Number(rigId) : undefined, startDate, endDate);
+    }
+    getTrend(rigId, months = 6) {
+        return this.svc.getTrend(rigId ? Number(rigId) : undefined, +months);
+    }
+    getByCategory() {
+        return this.svc.getByCategory();
+    }
     getAnalytics(rigId) {
         return this.svc.getAnalytics(rigId ? Number(rigId) : undefined);
     }
@@ -39,6 +48,32 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], NptController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('summary'),
+    (0, swagger_1.ApiOperation)({ summary: 'NPT summary totals' }),
+    __param(0, (0, common_1.Query)('rigId')),
+    __param(1, (0, common_1.Query)('startDate')),
+    __param(2, (0, common_1.Query)('endDate')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String, String]),
+    __metadata("design:returntype", void 0)
+], NptController.prototype, "getSummary", null);
+__decorate([
+    (0, common_1.Get)('trend'),
+    (0, swagger_1.ApiOperation)({ summary: 'NPT trend by month' }),
+    __param(0, (0, common_1.Query)('rigId')),
+    __param(1, (0, common_1.Query)('months')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], NptController.prototype, "getTrend", null);
+__decorate([
+    (0, common_1.Get)('by-category'),
+    (0, swagger_1.ApiOperation)({ summary: 'NPT hours grouped by category' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], NptController.prototype, "getByCategory", null);
 __decorate([
     (0, common_1.Get)('analytics'),
     (0, swagger_1.ApiOperation)({ summary: 'NPT analytics: trends, by category, by rig' }),

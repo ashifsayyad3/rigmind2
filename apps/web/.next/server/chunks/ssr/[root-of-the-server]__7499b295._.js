@@ -323,37 +323,38 @@ function MiniBarChart({ data }) {
 }
 function NptPage() {
     const [page, setPage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(1);
-    const { data: analyticsData } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useQuery"])({
+    const { data: summaryData } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useQuery"])({
         queryKey: [
-            'npt-analytics'
+            'npt-summary'
         ],
-        queryFn: ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["nptApi"].getAnalytics()
+        queryFn: ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["nptApi"].getSummary()
+    });
+    const { data: categoryRaw } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useQuery"])({
+        queryKey: [
+            'npt-by-category'
+        ],
+        queryFn: __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["nptApi"].getByCategory
     });
     const { data: listData, isLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useQuery"])({
         queryKey: [
             'npt-list',
             page
         ],
-        queryFn: ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["nptApi"].getAll({
+        queryFn: ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["nptApi"].list({
                 page,
                 limit: 25
-            }),
-        keepPreviousData: true
+            })
     });
-    const analytics = analyticsData?.data;
-    const nptList = listData?.data?.items ?? [];
-    const total = listData?.data?.total ?? 0;
-    const pages = listData?.data?.pages ?? 1;
-    const totalHours = analytics?.totalNptHours ?? 0;
+    const nptList = listData?.items ?? [];
+    const total = listData?.total ?? 0;
+    const pages = listData?.pages ?? 1;
+    const totalHours = summaryData?.totalHours ?? 0;
     const totalCost = (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["nptCostEstimate"])(totalHours);
-    const categoryData = (analytics?.byCategory ?? []).map((c)=>({
-            label: c.delayCategory,
-            hours: parseFloat(c.totalHours ?? 0)
+    const categoryData = (categoryRaw ?? []).map((c)=>({
+            label: c.category,
+            hours: parseFloat(c.hours ?? 0)
         }));
-    const rigData = (analytics?.byRig ?? []).map((r)=>({
-            label: r.rigName,
-            hours: parseFloat(r.totalHours ?? 0)
-        }));
+    const rigData = [];
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-6 space-y-5",
         children: [
@@ -364,7 +365,7 @@ function NptPage() {
                         children: "NPT Intelligence"
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 65,
+                        lineNumber: 58,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -372,13 +373,13 @@ function NptPage() {
                         children: "Non-Productive Time analysis & root cause"
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 66,
+                        lineNumber: 59,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                lineNumber: 64,
+                lineNumber: 57,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -398,13 +399,13 @@ function NptPage() {
                     },
                     {
                         label: 'Total Events',
-                        value: analytics?.totalEvents ?? '—',
+                        value: total,
                         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__["AlertTriangle"],
                         color: 'text-amber-400'
                     },
                     {
                         label: 'Avg per Event',
-                        value: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["formatNptHours"])(analytics?.avgNptHours),
+                        value: total > 0 ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["formatNptHours"])(totalHours / total) : '—',
                         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$column$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BarChart3$3e$__["BarChart3"],
                         color: 'text-brand-400'
                     }
@@ -418,7 +419,7 @@ function NptPage() {
                                         className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])('w-4 h-4', c.color)
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                        lineNumber: 79,
+                                        lineNumber: 72,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -426,13 +427,13 @@ function NptPage() {
                                         children: c.label
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                        lineNumber: 80,
+                                        lineNumber: 73,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 78,
+                                lineNumber: 71,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -440,18 +441,18 @@ function NptPage() {
                                 children: c.value
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 82,
+                                lineNumber: 75,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, c.label, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 77,
+                        lineNumber: 70,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                lineNumber: 70,
+                lineNumber: 63,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -465,20 +466,20 @@ function NptPage() {
                                 children: "NPT Hours by Delay Category"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 90,
+                                lineNumber: 83,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(MiniBarChart, {
                                 data: categoryData
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 91,
+                                lineNumber: 84,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 89,
+                        lineNumber: 82,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -489,29 +490,29 @@ function NptPage() {
                                 children: "NPT Hours by Rig"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 94,
+                                lineNumber: 87,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(MiniBarChart, {
                                 data: rigData
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 95,
+                                lineNumber: 88,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 93,
+                        lineNumber: 86,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                lineNumber: 88,
+                lineNumber: 81,
                 columnNumber: 7
             }, this),
-            analytics?.monthlyTrend?.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            false && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "bg-surface-800/60 border border-surface-700/60 rounded-xl p-5",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -519,14 +520,13 @@ function NptPage() {
                         children: "Monthly NPT Trend (12 months)"
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 102,
+                        lineNumber: 95,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex items-end gap-1 h-20",
-                        children: analytics.monthlyTrend.map((m)=>{
-                            const max = Math.max(...analytics.monthlyTrend.map((x)=>x.totalHours));
-                            const pct = max > 0 ? m.totalHours / max * 100 : 0;
+                        children: [].map((m)=>{
+                            const pct = 0;
                             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex-1 flex flex-col items-center gap-1",
                                 children: [
@@ -534,11 +534,10 @@ function NptPage() {
                                         className: "w-full bg-brand-500/70 rounded-sm transition-all",
                                         style: {
                                             height: `${pct}%`
-                                        },
-                                        title: `${m.month}: ${m.totalHours?.toFixed(1)}h`
+                                        }
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                        lineNumber: 109,
+                                        lineNumber: 101,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -549,25 +548,25 @@ function NptPage() {
                                         children: m.month?.slice(5)
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                        lineNumber: 110,
+                                        lineNumber: 102,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, m.month, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 108,
+                                lineNumber: 100,
                                 columnNumber: 17
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 103,
+                        lineNumber: 96,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                lineNumber: 101,
+                lineNumber: 94,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -580,12 +579,12 @@ function NptPage() {
                             children: "Recent NPT Events"
                         }, void 0, false, {
                             fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                            lineNumber: 121,
+                            lineNumber: 113,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 120,
+                        lineNumber: 112,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
@@ -600,7 +599,7 @@ function NptPage() {
                                             children: "Rig"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                            lineNumber: 126,
+                                            lineNumber: 118,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -608,7 +607,7 @@ function NptPage() {
                                             children: "BOP Type"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                            lineNumber: 127,
+                                            lineNumber: 119,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -616,7 +615,7 @@ function NptPage() {
                                             children: "Category"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                            lineNumber: 128,
+                                            lineNumber: 120,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -624,7 +623,7 @@ function NptPage() {
                                             children: "NPT Type"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                            lineNumber: 129,
+                                            lineNumber: 121,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -632,7 +631,7 @@ function NptPage() {
                                             children: "Hours"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                            lineNumber: 130,
+                                            lineNumber: 122,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -640,18 +639,18 @@ function NptPage() {
                                             children: "Date"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                            lineNumber: 131,
+                                            lineNumber: 123,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                    lineNumber: 125,
+                                    lineNumber: 117,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 124,
+                                lineNumber: 116,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -667,17 +666,17 @@ function NptPage() {
                                                     className: "h-4 bg-surface-700/50 rounded animate-pulse"
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                                    lineNumber: 137,
+                                                    lineNumber: 129,
                                                     columnNumber: 106
                                                 }, this)
                                             }, j, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                                lineNumber: 137,
+                                                lineNumber: 129,
                                                 columnNumber: 72
                                             }, this))
                                     }, i, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                        lineNumber: 137,
+                                        lineNumber: 129,
                                         columnNumber: 19
                                     }, this)) : nptList.map((n)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                         className: "hover:bg-surface-700/20 transition-colors",
@@ -687,7 +686,7 @@ function NptPage() {
                                                 children: n.rigs?.name ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                                lineNumber: 141,
+                                                lineNumber: 133,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -695,7 +694,7 @@ function NptPage() {
                                                 children: n.bopType
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                                lineNumber: 142,
+                                                lineNumber: 134,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -703,7 +702,7 @@ function NptPage() {
                                                 children: n.delayCategory ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                                lineNumber: 143,
+                                                lineNumber: 135,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -711,7 +710,7 @@ function NptPage() {
                                                 children: n.nptType ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                                lineNumber: 144,
+                                                lineNumber: 136,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -719,7 +718,7 @@ function NptPage() {
                                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["formatNptHours"])(n.nptHours)
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                                lineNumber: 145,
+                                                lineNumber: 137,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -727,24 +726,24 @@ function NptPage() {
                                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["formatDate"])(n.dateOfNPT)
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                                lineNumber: 146,
+                                                lineNumber: 138,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, n.id, true, {
                                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                        lineNumber: 140,
+                                        lineNumber: 132,
                                         columnNumber: 19
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 134,
+                                lineNumber: 126,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 123,
+                        lineNumber: 115,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -761,7 +760,7 @@ function NptPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 152,
+                                lineNumber: 144,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -774,7 +773,7 @@ function NptPage() {
                                         children: "Prev"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                        lineNumber: 154,
+                                        lineNumber: 146,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -784,31 +783,31 @@ function NptPage() {
                                         children: "Next"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                        lineNumber: 155,
+                                        lineNumber: 147,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                                lineNumber: 153,
+                                lineNumber: 145,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                        lineNumber: 151,
+                        lineNumber: 143,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-                lineNumber: 119,
+                lineNumber: 111,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/apps/web/src/app/dashboard/npt/page.tsx",
-        lineNumber: 63,
+        lineNumber: 56,
         columnNumber: 5
     }, this);
 }

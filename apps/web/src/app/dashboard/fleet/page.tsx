@@ -43,8 +43,8 @@ export default function FleetPage() {
   const { data: metrics } = useQuery({ queryKey: ['fleet-metrics'], queryFn: fleetApi.getMetrics, refetchInterval: 60_000 })
   const { data: scores } = useQuery({ queryKey: ['fleet-health-scores'], queryFn: fleetApi.getHealthScores, refetchInterval: 60_000 })
 
-  const rigScores: any[] = scores?.data ?? []
-  const m = metrics?.data
+  const rigScores: any[] = (scores as any) ?? []
+  const m = metrics as any
 
   const statCards = [
     { label: 'Fleet Score', value: `${m?.overallFleetScore ?? '—'}`, sub: 'composite', icon: Activity, color: 'text-brand-400' },

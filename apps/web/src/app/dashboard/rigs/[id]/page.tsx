@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { rigsApi, failuresApi, nptApi, kpiApi, copilotApi, bopApi } from '@/lib/api/client'
+import { rigsApi, failuresApi, nptApi, copilotApi, bopApi } from '@/lib/api/client'
 import { cn, formatDate, timeAgo, healthScoreColor, formatNptHours } from '@/lib/utils'
 import {
   Anchor, ChevronLeft, Activity, AlertTriangle, Wrench,
@@ -23,33 +23,27 @@ export default function RigDetailPage() {
 
   const { data: rigData, isLoading } = useQuery({
     queryKey: ['rig', rigId],
-    queryFn: () => rigsApi.getOne(rigId),
+    queryFn: () => rigsApi.get(rigId),
     enabled: !!rigId,
   })
 
   const { data: healthData } = useQuery({
     queryKey: ['rig-health', rigId],
-    queryFn: () => rigsApi.getHealth(rigId),
+    queryFn: () => rigsApi.getHealthScore(rigId),
     enabled: !!rigId,
     refetchInterval: 60_000,
   })
 
   const { data: failuresData } = useQuery({
     queryKey: ['rig-failures', rigId],
-    queryFn: () => failuresApi.getAll({ rigId, limit: 10, sortOrder: 'desc' }),
+    queryFn: () => failuresApi.list({ rigId, limit: 10 } as any),
     enabled: tab === 'failures' && !!rigId,
   })
 
   const { data: nptData } = useQuery({
-    queryKey: ['rig-npt-analytics', rigId],
-    queryFn: () => nptApi.getAnalytics(rigId),
+    queryKey: ['rig-npt', rigId],
+    queryFn: () => nptApi.getSummary({ rigId }),
     enabled: tab === 'npt' && !!rigId,
-  })
-
-  const { data: kpiData } = useQuery({
-    queryKey: ['rig-kpi', rigId],
-    queryFn: () => kpiApi.getRig(rigId),
-    enabled: tab === 'kpi' && !!rigId,
   })
 
   const { data: bopData } = useQuery({
@@ -58,21 +52,16 @@ export default function RigDetailPage() {
     enabled: tab === 'bop' && !!rigId,
   })
 
-  const { data: currentWellData } = useQuery({
-    queryKey: ['rig-current-well', rigId],
-    queryFn: () => rigsApi.getCurrentWell(rigId),
-    enabled: !!rigId,
-  })
-
-  const rig = rigData?.data
-  const health = healthData?.data
+  const rig = rigData as any
+  const health = healthData as any
+  const kpiData: any[] = []
 
   const generateReport = async () => {
     setReportLoading(true)
     setTab('report')
     try {
-      const res = await copilotApi.generateRigReport(rigId)
-      setReport(res?.data)
+      const res = await copilotApi.generateReport(rigId, 'full')
+      setReport(res as any)
     } finally {
       setReportLoading(false)
     }
@@ -196,13 +185,7 @@ export default function RigDetailPage() {
               {/* Current well */}
               <div className="bg-surface-800/60 border border-surface-700/60 rounded-xl p-4">
                 <h3 className="text-xs font-semibold text-surface-400 uppercase tracking-wide mb-3">Current Well</h3>
-                {(currentWellData?.data as any)?.[0] ? (
-                  <div className="space-y-1 text-sm">
-                    <p className="text-white font-medium">{(currentWellData.data as any)[0].name}</p>
-                    <p className="text-surface-400 text-xs">{(currentWellData.data as any)[0].field} · {(currentWellData.data as any)[0].region}</p>
-                    <p className="text-surface-400 text-xs">Depth: {(currentWellData.data as any)[0].depth ?? '—'} m</p>
-                  </div>
-                ) : <p className="text-surface-500 text-sm">No current well assigned</p>}
+                <p className="text-surface-500 text-sm">No current well assigned</p>
               </div>
 
               {/* BOP assignments */}
@@ -241,7 +224,7 @@ export default function RigDetailPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-surface-700/40">
-                {(failuresData?.data?.items ?? []).map((f: any) => (
+                {((failuresData as any)?.items ?? []).map((f: any) => (
                   <tr key={f.id} className="hover:bg-surface-700/20 transition-colors">
                     <td className="px-4 py-3">
                       <span className={cn('text-xs font-semibold uppercase',
@@ -267,12 +250,12 @@ export default function RigDetailPage() {
         )}
 
         {/* NPT tab */}
-        {tab === 'npt' && nptData?.data && (
+        {tab === 'npt' && nptData && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { label: 'Total NPT Hours', value: formatNptHours(nptData.data.totalNptHours) },
-              { label: 'Total Events', value: nptData.data.totalEvents },
-              { label: 'Avg per Event', value: formatNptHours(nptData.data.avgNptHours) },
+              { label: 'Total NPT Hours', value: formatNptHours((nptData as any).totalNptHours) },
+              { label: 'Total Events', value: (nptData as any).totalEvents },
+              { label: 'Avg per Event', value: formatNptHours((nptData as any).avgNptHours) },
             ].map((s) => (
               <div key={s.label} className="bg-surface-800/60 border border-surface-700/60 rounded-xl p-4">
                 <div className="text-xs text-surface-400 mb-1">{s.label}</div>
@@ -314,7 +297,7 @@ export default function RigDetailPage() {
         {/* KPI tab */}
         {tab === 'kpi' && (
           <div className="grid grid-cols-1 gap-3">
-            {(kpiData?.data ?? []).map((k: any, i: number) => (
+            {((kpiData as any) ?? []).map((k: any, i: number) => (
               <div key={i} className="bg-surface-800/60 border border-surface-700/60 rounded-xl p-4 grid grid-cols-2 sm:grid-cols-5 gap-3 text-sm">
                 <div><div className="text-xs text-surface-500 mb-0.5">Period</div><div className="text-surface-200">{k.period ?? formatDate(k.createdAt)}</div></div>
                 <div><div className="text-xs text-surface-500 mb-0.5">Availability</div><div className="text-green-400 font-semibold">{k.availability?.toFixed(1)}%</div></div>
@@ -323,7 +306,7 @@ export default function RigDetailPage() {
                 <div><div className="text-xs text-surface-500 mb-0.5">Failures</div><div className="text-amber-400 font-semibold">{k.failureCount}</div></div>
               </div>
             ))}
-            {(kpiData?.data ?? []).length === 0 && (
+            {((kpiData as any) ?? []).length === 0 && (
               <p className="text-surface-500 text-sm">No KPI data recorded yet</p>
             )}
           </div>

@@ -30,34 +30,27 @@ function MiniBarChart({ data }: { data: Array<{ label: string; hours: number }> 
 export default function NptPage() {
   const [page, setPage] = useState(1)
 
-  const { data: analyticsData } = useQuery({
-    queryKey: ['npt-analytics'],
-    queryFn: () => nptApi.getAnalytics(),
-  })
+  const { data: summaryData } = useQuery({ queryKey: ['npt-summary'], queryFn: () => nptApi.getSummary() })
+  const { data: categoryRaw } = useQuery({ queryKey: ['npt-by-category'], queryFn: nptApi.getByCategory })
 
   const { data: listData, isLoading } = useQuery({
     queryKey: ['npt-list', page],
-    queryFn: () => nptApi.getAll({ page, limit: 25 }),
-    keepPreviousData: true,
+    queryFn: () => nptApi.list({ page, limit: 25 } as any),
   })
 
-  const analytics = analyticsData?.data
-  const nptList: any[] = listData?.data?.items ?? []
-  const total: number = listData?.data?.total ?? 0
-  const pages: number = listData?.data?.pages ?? 1
+  const nptList: any[] = (listData as any)?.items ?? []
+  const total: number = (listData as any)?.total ?? 0
+  const pages: number = (listData as any)?.pages ?? 1
 
-  const totalHours = analytics?.totalNptHours ?? 0
+  const totalHours = (summaryData as any)?.totalHours ?? 0
   const totalCost = nptCostEstimate(totalHours)
 
-  const categoryData = (analytics?.byCategory ?? []).map((c: any) => ({
-    label: c.delayCategory,
-    hours: parseFloat(c.totalHours ?? 0),
+  const categoryData = ((categoryRaw as any[]) ?? []).map((c: any) => ({
+    label: c.category,
+    hours: parseFloat(c.hours ?? 0),
   }))
 
-  const rigData = (analytics?.byRig ?? []).map((r: any) => ({
-    label: r.rigName,
-    hours: parseFloat(r.totalHours ?? 0),
-  }))
+  const rigData: Array<{ label: string; hours: number }> = []
 
   return (
     <div className="p-6 space-y-5">
@@ -71,8 +64,8 @@ export default function NptPage() {
         {[
           { label: 'Total NPT Hours', value: formatNptHours(totalHours), icon: Clock, color: 'text-red-400' },
           { label: 'Estimated Cost', value: formatCurrency(totalCost), icon: DollarSign, color: 'text-orange-400' },
-          { label: 'Total Events', value: analytics?.totalEvents ?? '—', icon: AlertTriangle, color: 'text-amber-400' },
-          { label: 'Avg per Event', value: formatNptHours(analytics?.avgNptHours), icon: BarChart3, color: 'text-brand-400' },
+          { label: 'Total Events', value: total, icon: AlertTriangle, color: 'text-amber-400' },
+          { label: 'Avg per Event', value: total > 0 ? formatNptHours(totalHours / total) : '—', icon: BarChart3, color: 'text-brand-400' },
         ].map((c) => (
           <div key={c.label} className="bg-surface-800/60 border border-surface-700/60 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-1">
@@ -96,17 +89,16 @@ export default function NptPage() {
         </div>
       </div>
 
-      {/* Monthly trend */}
-      {analytics?.monthlyTrend?.length > 0 && (
+      {/* Monthly trend — hidden until data available */}
+      {false && (
         <div className="bg-surface-800/60 border border-surface-700/60 rounded-xl p-5">
           <h3 className="text-sm font-semibold text-white mb-4">Monthly NPT Trend (12 months)</h3>
           <div className="flex items-end gap-1 h-20">
-            {analytics.monthlyTrend.map((m: any) => {
-              const max = Math.max(...analytics.monthlyTrend.map((x: any) => x.totalHours))
-              const pct = max > 0 ? (m.totalHours / max) * 100 : 0
+            {[].map((m: any) => {
+              const pct = 0
               return (
                 <div key={m.month} className="flex-1 flex flex-col items-center gap-1">
-                  <div className="w-full bg-brand-500/70 rounded-sm transition-all" style={{ height: `${pct}%` }} title={`${m.month}: ${m.totalHours?.toFixed(1)}h`} />
+                  <div className="w-full bg-brand-500/70 rounded-sm transition-all" style={{ height: `${pct}%` }} />
                   <span className="text-xs text-surface-500 rotate-45 origin-left" style={{ fontSize: 9 }}>{m.month?.slice(5)}</span>
                 </div>
               )

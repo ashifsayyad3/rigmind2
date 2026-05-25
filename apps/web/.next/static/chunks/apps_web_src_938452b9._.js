@@ -295,16 +295,15 @@ function RigsPage() {
             }
         ],
         queryFn: {
-            "RigsPage.useQuery": ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["rigsApi"].getAll({
+            "RigsPage.useQuery": ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["rigsApi"].list({
                     page,
                     limit: 30
                 })
-        }["RigsPage.useQuery"],
-        keepPreviousData: true
+        }["RigsPage.useQuery"]
     });
-    const rigs = data?.data?.items ?? [];
-    const total = data?.data?.total ?? 0;
-    const pages = data?.data?.pages ?? 1;
+    const rigs = data?.items ?? [];
+    const total = data?.total ?? 0;
+    const pages = data?.pages ?? 1;
     const filtered = search ? rigs.filter((r)=>r.name?.toLowerCase().includes(search.toLowerCase())) : rigs;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-6 space-y-5",
@@ -318,7 +317,7 @@ function RigsPage() {
                             children: "Rigs"
                         }, void 0, false, {
                             fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                            lineNumber: 49,
+                            lineNumber: 48,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -329,18 +328,18 @@ function RigsPage() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                            lineNumber: 50,
+                            lineNumber: 49,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                    lineNumber: 48,
+                    lineNumber: 47,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                lineNumber: 47,
+                lineNumber: 46,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -350,7 +349,7 @@ function RigsPage() {
                         className: "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-500"
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                        lineNumber: 56,
+                        lineNumber: 55,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -360,13 +359,13 @@ function RigsPage() {
                         onChange: (e)=>setSearch(e.target.value)
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                        lineNumber: 57,
+                        lineNumber: 56,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                lineNumber: 55,
+                lineNumber: 54,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -377,7 +376,7 @@ function RigsPage() {
                         className: "bg-surface-800/60 border border-surface-700/60 rounded-xl p-5 animate-pulse h-40"
                     }, i, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                        lineNumber: 69,
+                        lineNumber: 68,
                         columnNumber: 15
                     }, this)) : filtered.map((rig, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
                         initial: {
@@ -406,7 +405,7 @@ function RigsPage() {
                                                         className: "w-4 h-4 text-brand-400 shrink-0"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 82,
+                                                        lineNumber: 81,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -414,33 +413,33 @@ function RigsPage() {
                                                         children: rig.name
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 83,
+                                                        lineNumber: 82,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                lineNumber: 81,
+                                                lineNumber: 80,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
                                                 className: "w-4 h-4 text-surface-600 group-hover:text-surface-400 transition-colors"
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                lineNumber: 87,
+                                                lineNumber: 86,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                        lineNumber: 80,
+                                        lineNumber: 79,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StatusDot, {
                                         status: rig.status
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                        lineNumber: 90,
+                                        lineNumber: 89,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -453,7 +452,7 @@ function RigsPage() {
                                                         children: "Category"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 94,
+                                                        lineNumber: 93,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -461,13 +460,13 @@ function RigsPage() {
                                                         children: rig.category ?? '—'
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 95,
+                                                        lineNumber: 94,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                lineNumber: 93,
+                                                lineNumber: 92,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -477,7 +476,7 @@ function RigsPage() {
                                                         children: "BOP Type"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 98,
+                                                        lineNumber: 97,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -485,13 +484,13 @@ function RigsPage() {
                                                         children: rig.bopType ?? '—'
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 99,
+                                                        lineNumber: 98,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                lineNumber: 97,
+                                                lineNumber: 96,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -501,7 +500,7 @@ function RigsPage() {
                                                         children: "Operator"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 102,
+                                                        lineNumber: 101,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -509,13 +508,13 @@ function RigsPage() {
                                                         children: rig.operators?.name ?? '—'
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 103,
+                                                        lineNumber: 102,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                lineNumber: 101,
+                                                lineNumber: 100,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -525,7 +524,7 @@ function RigsPage() {
                                                         children: "RTM"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 106,
+                                                        lineNumber: 105,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -533,19 +532,19 @@ function RigsPage() {
                                                         children: rig.isRTM ? 'Connected' : 'Offline'
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 107,
+                                                        lineNumber: 106,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                lineNumber: 105,
+                                                lineNumber: 104,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                        lineNumber: 92,
+                                        lineNumber: 91,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -559,7 +558,7 @@ function RigsPage() {
                                                         children: rig._count?.failures ?? 0
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 116,
+                                                        lineNumber: 115,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -567,13 +566,13 @@ function RigsPage() {
                                                         children: "failures"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 117,
+                                                        lineNumber: 116,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                lineNumber: 115,
+                                                lineNumber: 114,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -584,7 +583,7 @@ function RigsPage() {
                                                         children: rig._count?.deferredMaintenanceTasks ?? 0
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 120,
+                                                        lineNumber: 119,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -592,13 +591,13 @@ function RigsPage() {
                                                         children: "deferred"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 121,
+                                                        lineNumber: 120,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                lineNumber: 119,
+                                                lineNumber: 118,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -609,7 +608,7 @@ function RigsPage() {
                                                         children: rig._count?.certificates ?? 0
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 124,
+                                                        lineNumber: 123,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -617,40 +616,40 @@ function RigsPage() {
                                                         children: "certs"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                        lineNumber: 125,
+                                                        lineNumber: 124,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                                lineNumber: 123,
+                                                lineNumber: 122,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                        lineNumber: 114,
+                                        lineNumber: 113,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                lineNumber: 79,
+                                lineNumber: 78,
                                 columnNumber: 19
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                            lineNumber: 78,
+                            lineNumber: 77,
                             columnNumber: 17
                         }, this)
                     }, rig.id, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                        lineNumber: 72,
+                        lineNumber: 71,
                         columnNumber: 15
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                lineNumber: 66,
+                lineNumber: 65,
                 columnNumber: 7
             }, this),
             pages > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -666,7 +665,7 @@ function RigsPage() {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                        lineNumber: 137,
+                        lineNumber: 136,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -679,7 +678,7 @@ function RigsPage() {
                                 children: "Prev"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                lineNumber: 139,
+                                lineNumber: 138,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -689,25 +688,25 @@ function RigsPage() {
                                 children: "Next"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                                lineNumber: 141,
+                                lineNumber: 140,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                        lineNumber: 138,
+                        lineNumber: 137,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-                lineNumber: 136,
+                lineNumber: 135,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/apps/web/src/app/dashboard/rigs/page.tsx",
-        lineNumber: 46,
+        lineNumber: 45,
         columnNumber: 5
     }, this);
 }

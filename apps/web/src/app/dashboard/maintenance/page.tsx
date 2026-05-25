@@ -10,22 +10,21 @@ export default function MaintenancePage() {
   const [page, setPage] = useState(1)
   const qc = useQueryClient()
 
-  const { data: statsData } = useQuery({ queryKey: ['maintenance-stats'], queryFn: maintenanceApi.getStats })
+  const { data: statsData } = useQuery({ queryKey: ['maintenance-stats'], queryFn: () => maintenanceApi.listDeferred({ page: 1, limit: 1 } as any) })
   const { data: listData, isLoading } = useQuery({
     queryKey: ['maintenance-deferred', page],
-    queryFn: () => maintenanceApi.getDeferredTasks({ page, limit: 25 }),
-    keepPreviousData: true,
+    queryFn: () => maintenanceApi.listDeferred({ page, limit: 25 } as any),
   })
 
   const closeMutation = useMutation({
-    mutationFn: (id: number) => maintenanceApi.closeDeferredTask(id),
+    mutationFn: (id: number) => maintenanceApi.deleteDeferred(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['maintenance-deferred'] }),
   })
 
-  const tasks: any[] = listData?.data?.items ?? []
-  const total: number = listData?.data?.total ?? 0
-  const pages: number = listData?.data?.pages ?? 1
-  const stats = statsData?.data
+  const tasks: any[] = (listData as any)?.items ?? []
+  const total: number = (listData as any)?.total ?? 0
+  const pages: number = (listData as any)?.pages ?? 1
+  const stats = { totalDeferred: total, byRig: [] }
 
   return (
     <div className="p-6 space-y-5">

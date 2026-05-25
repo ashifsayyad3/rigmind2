@@ -34,6 +34,32 @@ export declare class MaintenanceController {
         limit: number;
         pages: number;
     }>;
+    getOverdue(rigId?: number): Promise<({
+        rig: {
+            id: number;
+            name: string | null;
+        } | null;
+    } & {
+        id: number;
+        equipmentId: number;
+        equipmentType: string;
+        title: string;
+        description: string;
+        componentName: string;
+        defermentDate: Date;
+        plannedCompletionDate: Date | null;
+        createdAt: Date;
+        updatedAt: Date;
+        rigId: number | null;
+        equipmentName: string | null;
+        status: string;
+        createdById: number | null;
+        updatedById: number | null;
+        createdByRTOCId: number | null;
+        updatedByRTOCId: number | null;
+        availability: string;
+        isRemoved: boolean;
+    })[]>;
     getStats(rigId?: number): Promise<{
         totalDeferred: number;
         byRig: (import(".prisma/client").Prisma.PickEnumerable<import(".prisma/client").Prisma.DeferredMaintenanceTaskGroupByOutputType, "rigId"[]> & {

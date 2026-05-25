@@ -41,7 +41,7 @@ function FailureDrawer({ failure, onClose }: { failure: any; onClose: () => void
     queryFn: () => failuresApi.getTimeline(failure.id),
     enabled: !!failure.id,
   })
-  const timeline: any[] = data?.data?.timeline ?? []
+  const timeline: any[] = (data as any) ?? []
 
   return (
     <motion.div
@@ -125,8 +125,7 @@ export default function FailuresPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['failures', { search, severity, status, page }],
-    queryFn: () => failuresApi.getAll({ search, severity, status, page, limit: 25 }),
-    keepPreviousData: true,
+    queryFn: () => failuresApi.list({ search, severity, status, page, limit: 25 } as any),
   })
 
   const { data: statsData } = useQuery({
@@ -134,10 +133,10 @@ export default function FailuresPage() {
     queryFn: () => failuresApi.getStats(),
   })
 
-  const failures: any[] = data?.data?.items ?? []
-  const total: number = data?.data?.total ?? 0
-  const pages: number = data?.data?.pages ?? 1
-  const stats = statsData?.data
+  const failures: any[] = (data as any)?.items ?? []
+  const total: number = (data as any)?.total ?? 0
+  const pages: number = (data as any)?.pages ?? 1
+  const stats = statsData as any
 
   return (
     <div className="p-6 space-y-5">

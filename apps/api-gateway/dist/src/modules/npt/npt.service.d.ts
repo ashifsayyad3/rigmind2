@@ -64,6 +64,21 @@ export declare class NptService {
             count: number;
         }[];
     }>;
+    getSummary(rigId?: number, startDate?: string, endDate?: string): Promise<{
+        total: number;
+        totalHours: number;
+        totalCost: number;
+    }>;
+    getTrend(rigId?: number, months?: number): Promise<Array<{
+        month: string;
+        hours: number;
+        cost: number;
+    }>>;
+    getByCategory(): Promise<Array<{
+        category: string;
+        hours: number;
+        pct: number;
+    }>>;
     getMoaDelays(filters: {
         rigId?: number;
         page?: number;

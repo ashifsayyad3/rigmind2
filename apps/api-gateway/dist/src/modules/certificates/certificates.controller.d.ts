@@ -4,10 +4,6 @@ export declare class CertificatesController {
     constructor(svc: CertificatesService);
     findAll(filters: any): Promise<{
         items: ({
-            rig: {
-                id: number;
-                name: string | null;
-            };
             attachments: {
                 id: number;
                 createdAt: Date;
@@ -20,6 +16,10 @@ export declare class CertificatesController {
                 attachmentId: number;
                 isDeleted: boolean;
             }[];
+            rig: {
+                id: number;
+                name: string | null;
+            };
             typeCode: {
                 id: number;
                 createdAt: Date;
@@ -30,16 +30,16 @@ export declare class CertificatesController {
             } | null;
         } & {
             id: number;
+            rigId: number;
+            equipment: string | null;
+            typeCodeId: number | null;
+            serialNumber: string | null;
+            tag: string | null;
+            manufacturer: string | null;
             createdAt: Date;
             updatedAt: Date;
-            rigId: number;
-            installationDate: Date | null;
-            equipment: string | null;
-            manufacturer: string | null;
             partNumber: string | null;
-            serialNumber: string | null;
-            typeCodeId: number | null;
-            tag: string | null;
+            installationDate: Date | null;
             rigCertificateComponentId: number | null;
         })[];
         total: number;
@@ -47,6 +47,46 @@ export declare class CertificatesController {
         limit: number;
         pages: number;
     }>;
+    getExpiring(days?: number): Promise<({
+        certificate: {
+            rig: {
+                id: number;
+                name: string | null;
+            };
+            typeCode: {
+                id: number;
+                createdAt: Date;
+                updatedAt: Date;
+                name: string | null;
+                bopType: string | null;
+                subType: string | null;
+            } | null;
+        } & {
+            id: number;
+            rigId: number;
+            equipment: string | null;
+            typeCodeId: number | null;
+            serialNumber: string | null;
+            tag: string | null;
+            manufacturer: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            partNumber: string | null;
+            installationDate: Date | null;
+            rigCertificateComponentId: number | null;
+        };
+    } & {
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        createdById: number | null;
+        updatedById: number | null;
+        expirationDate: Date;
+        certificateId: number;
+        certificateType: string | null;
+        attachmentId: number;
+        isDeleted: boolean;
+    })[]>;
     getExpiryDashboard(rigId?: number): Promise<{
         expired: number;
         expiring30: number;
@@ -58,18 +98,28 @@ export declare class CertificatesController {
         }[];
     }>;
     findOne(id: number): Promise<{
-        rig: {
+        attachments: {
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            name: string | null;
-            projectedUnLatchDate: Date | null;
-            rtmRigId: string | null;
             createdById: number | null;
             updatedById: number | null;
+            expirationDate: Date;
+            certificateId: number;
+            certificateType: string | null;
+            attachmentId: number;
+            isDeleted: boolean;
+        }[];
+        rig: {
+            id: number;
+            manufacturer: string | null;
+            createdAt: Date;
+            updatedAt: Date;
             onContract: boolean | null;
             offContractDate: Date;
+            name: string | null;
             status: string | null;
+            projectedUnLatchDate: Date | null;
             operationStart: Date | null;
             bop1Id: number | null;
             bop2Id: number | null;
@@ -77,7 +127,6 @@ export declare class CertificatesController {
             interventionStackId: number | null;
             contractorId: number | null;
             meetingId: number | null;
-            manufacturer: string | null;
             model: string | null;
             visible: boolean;
             manufacturerId: number | null;
@@ -91,6 +140,7 @@ export declare class CertificatesController {
             category: string | null;
             canAccessPressureTest: boolean;
             canAccessBRV: boolean | null;
+            rtmRigId: string | null;
             sendStaleNotifications: boolean;
             mpdId: number | null;
             operatorId: number | null;
@@ -99,19 +149,9 @@ export declare class CertificatesController {
             mpdTypesId: number | null;
             mpdManufacturersId: number | null;
             hasDiverter: boolean | null;
-        };
-        attachments: {
-            id: number;
-            createdAt: Date;
-            updatedAt: Date;
             createdById: number | null;
             updatedById: number | null;
-            expirationDate: Date;
-            certificateId: number;
-            certificateType: string | null;
-            attachmentId: number;
-            isDeleted: boolean;
-        }[];
+        };
         typeCode: {
             id: number;
             createdAt: Date;
@@ -122,16 +162,16 @@ export declare class CertificatesController {
         } | null;
     } & {
         id: number;
+        rigId: number;
+        equipment: string | null;
+        typeCodeId: number | null;
+        serialNumber: string | null;
+        tag: string | null;
+        manufacturer: string | null;
         createdAt: Date;
         updatedAt: Date;
-        rigId: number;
-        installationDate: Date | null;
-        equipment: string | null;
-        manufacturer: string | null;
         partNumber: string | null;
-        serialNumber: string | null;
-        typeCodeId: number | null;
-        tag: string | null;
+        installationDate: Date | null;
         rigCertificateComponentId: number | null;
     }>;
 }

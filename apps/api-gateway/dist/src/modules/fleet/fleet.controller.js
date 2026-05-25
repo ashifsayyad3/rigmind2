@@ -21,24 +21,65 @@ let FleetController = class FleetController {
     constructor(svc) {
         this.svc = svc;
     }
+    getHealth() {
+        return this.svc.getFleetHealthMetrics();
+    }
     getMetrics() {
         return this.svc.getFleetHealthMetrics();
     }
+    getMap() {
+        return this.svc.getGlobalMap();
+    }
+    getHealthHistory(days = 30) {
+        return this.svc.getHealthHistory(+days);
+    }
+    getPredictions() {
+        return this.svc.getFailurePredictions();
+    }
     getHealthScores(user) {
-        return this.svc.getRigHealthScores(user.accessibleRigIds);
+        return this.svc.getRigHealthScores(user?.accessibleRigIds ?? null);
     }
 };
 exports.FleetController = FleetController;
 __decorate([
+    (0, common_1.Get)('health'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get fleet-wide health metrics' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], FleetController.prototype, "getHealth", null);
+__decorate([
     (0, common_1.Get)('metrics'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get fleet-wide health metrics for executive dashboard' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get fleet-wide health metrics (alias)' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], FleetController.prototype, "getMetrics", null);
 __decorate([
+    (0, common_1.Get)('map'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get rig positions for global map' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], FleetController.prototype, "getMap", null);
+__decorate([
+    (0, common_1.Get)('health-history'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get fleet health score history' }),
+    __param(0, (0, common_1.Query)('days')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], FleetController.prototype, "getHealthHistory", null);
+__decorate([
+    (0, common_1.Get)('predictions'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get fleet failure predictions' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], FleetController.prototype, "getPredictions", null);
+__decorate([
     (0, common_1.Get)('health-scores'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get per-rig health scores with 5-dimension scoring' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get per-rig health scores' }),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

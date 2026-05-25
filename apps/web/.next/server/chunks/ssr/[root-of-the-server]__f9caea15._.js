@@ -1328,13 +1328,11 @@ function RecentFailuresPanel() {
             'recent'
         ],
         queryFn: ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["failuresApi"].list({
-                pageSize: 8,
-                sort: 'createdAt',
-                order: 'desc'
+                limit: 8
             }),
         refetchInterval: 60_000
     });
-    const failures = data?.data ?? [];
+    const failures = data?.items ?? [];
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "glass rounded-xl p-4 flex flex-col h-full",
         children: [
@@ -1458,9 +1456,9 @@ function RecentFailuresPanel() {
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "text-[9px] text-surface-500 mt-0.5 truncate",
                                             children: [
-                                                f.rigName,
+                                                f.rigName ?? f.rig?.name,
                                                 " ",
-                                                f.componentName ? `· ${f.componentName}` : ''
+                                                f.failureType ? `· ${f.failureType}` : ''
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/apps/web/src/components/dashboard/RecentFailuresPanel.tsx",
@@ -1538,7 +1536,7 @@ function urgencyClass(days) {
     return 'text-amber-400 bg-amber-400/10';
 }
 function CertExpiryPanel() {
-    const { data: certs = [], isLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useQuery"])({
+    const { data, isLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useQuery"])({
         queryKey: [
             'certificates',
             'expiring'
@@ -1546,9 +1544,10 @@ function CertExpiryPanel() {
         queryFn: ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["certificatesApi"].getExpiringSoon(60),
         refetchInterval: 300_000
     });
+    const certs = data ?? [];
     const sorted = [
         ...certs
-    ].sort((a, b)=>new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime());
+    ].sort((a, b)=>new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime());
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "glass rounded-xl p-4 flex flex-col h-full",
         children: [
@@ -1562,7 +1561,7 @@ function CertExpiryPanel() {
                                 className: "w-3.5 h-3.5 text-purple-400"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                                lineNumber: 35,
+                                lineNumber: 36,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1570,7 +1569,7 @@ function CertExpiryPanel() {
                                 children: "Cert Expiry (60d)"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                                lineNumber: 36,
+                                lineNumber: 37,
                                 columnNumber: 11
                             }, this),
                             certs.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1578,13 +1577,13 @@ function CertExpiryPanel() {
                                 children: certs.length
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                                lineNumber: 38,
+                                lineNumber: 39,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                        lineNumber: 34,
+                        lineNumber: 35,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1596,19 +1595,19 @@ function CertExpiryPanel() {
                                 className: "w-3 h-3"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                                lineNumber: 44,
+                                lineNumber: 45,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                        lineNumber: 43,
+                        lineNumber: 44,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                lineNumber: 33,
+                lineNumber: 34,
                 columnNumber: 7
             }, this),
             isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1619,12 +1618,12 @@ function CertExpiryPanel() {
                         className: "h-12 bg-surface-800/40 rounded-lg animate-pulse"
                     }, i, false, {
                         fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                        lineNumber: 51,
+                        lineNumber: 52,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                lineNumber: 49,
+                lineNumber: 50,
                 columnNumber: 9
             }, this) : sorted.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex-1 flex flex-col items-center justify-center gap-2 text-surface-500",
@@ -1633,7 +1632,7 @@ function CertExpiryPanel() {
                         className: "w-8 h-8 text-green-500/40"
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                        lineNumber: 56,
+                        lineNumber: 57,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1641,20 +1640,20 @@ function CertExpiryPanel() {
                         children: "No certs expiring soon"
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                        lineNumber: 57,
+                        lineNumber: 58,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                lineNumber: 55,
+                lineNumber: 56,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "space-y-1.5 flex-1 overflow-y-auto",
                 children: sorted.slice(0, 8).map((cert)=>{
-                    const days = daysUntil(cert.expiryDate);
+                    const days = daysUntil(cert.expirationDate);
                     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                        href: `/dashboard/certificates/${cert.id}`,
+                        href: `/dashboard/certificates`,
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-900/50 hover:bg-surface-800/50 transition-colors group",
                             children: [
@@ -1666,7 +1665,7 @@ function CertExpiryPanel() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                                    lineNumber: 66,
+                                    lineNumber: 67,
                                     columnNumber: 19
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1674,51 +1673,47 @@ function CertExpiryPanel() {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "text-[11px] text-surface-200 leading-snug truncate group-hover:text-white transition-colors",
-                                            children: cert.certType ?? cert.name
+                                            children: cert.certificate?.equipment ?? cert.attachmentType ?? '—'
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                                            lineNumber: 70,
+                                            lineNumber: 71,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "text-[9px] text-surface-500 mt-0.5 truncate",
-                                            children: [
-                                                cert.rigName,
-                                                " ",
-                                                cert.issuer ? `· ${cert.issuer}` : ''
-                                            ]
-                                        }, void 0, true, {
+                                            children: cert.certificate?.rig?.name ?? ''
+                                        }, void 0, false, {
                                             fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                                            lineNumber: 73,
+                                            lineNumber: 74,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                                    lineNumber: 69,
+                                    lineNumber: 70,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                            lineNumber: 65,
+                            lineNumber: 66,
                             columnNumber: 17
                         }, this)
                     }, cert.id, false, {
                         fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                        lineNumber: 64,
+                        lineNumber: 65,
                         columnNumber: 15
                     }, this);
                 })
             }, void 0, false, {
                 fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-                lineNumber: 60,
+                lineNumber: 61,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/apps/web/src/components/dashboard/CertExpiryPanel.tsx",
-        lineNumber: 32,
+        lineNumber: 33,
         columnNumber: 5
     }, this);
 }
@@ -1735,12 +1730,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@tanstack/react-query/build/modern/useQuery.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/client/app-dir/link.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/apps/web/src/lib/api/client.ts [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/apps/web/src/lib/utils/index.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/brain.js [app-ssr] (ecmascript) <export default as Brain>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowRight$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/arrow-right.js [app-ssr] (ecmascript) <export default as ArrowRight>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lightbulb$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Lightbulb$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/lightbulb.js [app-ssr] (ecmascript) <export default as Lightbulb>");
 'use client';
-;
 ;
 ;
 ;
@@ -1759,12 +1752,11 @@ function AiInsightsPanel() {
             'dashboard'
         ],
         queryFn: ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["recommendationsApi"].list({
-                pageSize: 6,
-                sort: 'priority'
+                pageSize: 6
             }),
         refetchInterval: 120_000
     });
-    const items = data?.data ?? [];
+    const items = data?.items ?? [];
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "glass rounded-xl p-4 flex flex-col",
         children: [
@@ -1865,12 +1857,7 @@ function AiInsightsPanel() {
                             className: "flex items-start gap-2",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])('w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5', {
-                                        'bg-red-400': rec.priority === 'critical',
-                                        'bg-orange-400': rec.priority === 'high',
-                                        'bg-amber-400': rec.priority === 'medium',
-                                        'bg-blue-400': rec.priority === 'low'
-                                    })
+                                    className: "w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5 bg-brand-400"
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/components/dashboard/AiInsightsPanel.tsx",
                                     lineNumber: 54,
@@ -1881,56 +1868,31 @@ function AiInsightsPanel() {
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "text-[11px] text-surface-200 leading-snug line-clamp-2",
-                                            children: rec.recommendation
+                                            children: rec.recommendation ?? rec.title ?? '—'
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/components/dashboard/AiInsightsPanel.tsx",
-                                            lineNumber: 61,
+                                            lineNumber: 56,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex items-center gap-2 mt-1",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])('text-[9px] font-bold uppercase', PRIORITY_COLOR[rec.priority] ?? 'text-surface-400'),
-                                                    children: rec.priority
-                                                }, void 0, false, {
-                                                    fileName: "[project]/apps/web/src/components/dashboard/AiInsightsPanel.tsx",
-                                                    lineNumber: 63,
-                                                    columnNumber: 21
-                                                }, this),
-                                                rec.rigName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-[9px] text-surface-600",
-                                                    children: [
-                                                        "· ",
-                                                        rec.rigName
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/apps/web/src/components/dashboard/AiInsightsPanel.tsx",
-                                                    lineNumber: 66,
-                                                    columnNumber: 37
-                                                }, this),
-                                                rec.estimatedSavings && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-[9px] text-green-500/70 ml-auto",
-                                                    children: [
-                                                        "$",
-                                                        (rec.estimatedSavings / 1000).toFixed(0),
-                                                        "k saved"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/apps/web/src/components/dashboard/AiInsightsPanel.tsx",
-                                                    lineNumber: 68,
-                                                    columnNumber: 23
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "text-[9px] text-surface-500",
+                                                children: rec.rcmReport?.rig?.name ?? ''
+                                            }, void 0, false, {
+                                                fileName: "[project]/apps/web/src/components/dashboard/AiInsightsPanel.tsx",
+                                                lineNumber: 58,
+                                                columnNumber: 21
+                                            }, this)
+                                        }, void 0, false, {
                                             fileName: "[project]/apps/web/src/components/dashboard/AiInsightsPanel.tsx",
-                                            lineNumber: 62,
+                                            lineNumber: 57,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/web/src/components/dashboard/AiInsightsPanel.tsx",
-                                    lineNumber: 60,
+                                    lineNumber: 55,
                                     columnNumber: 17
                                 }, this)
                             ]

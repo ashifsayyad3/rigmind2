@@ -22,6 +22,7 @@ let MaintenanceController = class MaintenanceController {
         this.svc = svc;
     }
     getDeferredTasks(f) { return this.svc.getDeferredTasks(f); }
+    getOverdue(rigId) { return this.svc.getOverdueTasks(rigId ? Number(rigId) : undefined); }
     getStats(rigId) { return this.svc.getStats(rigId ? Number(rigId) : undefined); }
     getHistory(id) { return this.svc.getMaintenanceHistory(id); }
     closeTask(id, u) { return this.svc.closeDeferredTask(id, u.id); }
@@ -34,6 +35,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], MaintenanceController.prototype, "getDeferredTasks", null);
+__decorate([
+    (0, common_1.Get)('overdue'),
+    __param(0, (0, common_1.Query)('rigId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], MaintenanceController.prototype, "getOverdue", null);
 __decorate([
     (0, common_1.Get)('stats'),
     __param(0, (0, common_1.Query)('rigId')),

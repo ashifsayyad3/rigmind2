@@ -30,13 +30,12 @@ export default function RigsPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['rigs', { search, page }],
-    queryFn: () => rigsApi.getAll({ page, limit: 30 }),
-    keepPreviousData: true,
+    queryFn: () => rigsApi.list({ page, limit: 30 } as any),
   })
 
-  const rigs: any[] = data?.data?.items ?? []
-  const total: number = data?.data?.total ?? 0
-  const pages: number = data?.data?.pages ?? 1
+  const rigs: any[] = (data as any)?.items ?? []
+  const total: number = (data as any)?.total ?? 0
+  const pages: number = (data as any)?.pages ?? 1
 
   const filtered = search
     ? rigs.filter((r) => r.name?.toLowerCase().includes(search.toLowerCase()))

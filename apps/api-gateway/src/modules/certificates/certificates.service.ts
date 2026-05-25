@@ -57,6 +57,24 @@ export class CertificatesService {
     return { items, total, page, limit, pages: Math.ceil(total / limit) };
   }
 
+  async getExpiringSoon(days = 60) {
+    const cutoff = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+    // Expiry dates are on CertificateAttachment, not Certificate
+    const attachments = await this.prisma.certificateAttachment.findMany({
+      where: {
+        expirationDate: { gte: new Date(), lte: cutoff },
+      },
+      include: {
+        certificate: {
+          include: { rig: { select: { id: true, name: true } }, typeCode: true },
+        },
+      },
+      orderBy: { expirationDate: 'asc' },
+      take: 100,
+    });
+    return attachments;
+  }
+
   async findOne(id: number) {
     const cert = await this.prisma.certificate.findUnique({
       where: { id },

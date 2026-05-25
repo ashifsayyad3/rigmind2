@@ -34,6 +34,21 @@ export declare class NptController {
         limit: number;
         pages: number;
     }>;
+    getSummary(rigId?: number, startDate?: string, endDate?: string): Promise<{
+        total: number;
+        totalHours: number;
+        totalCost: number;
+    }>;
+    getTrend(rigId?: number, months?: number): Promise<{
+        month: string;
+        hours: number;
+        cost: number;
+    }[]>;
+    getByCategory(): Promise<{
+        category: string;
+        hours: number;
+        pct: number;
+    }[]>;
     getAnalytics(rigId?: number): Promise<{
         totalNptHours: number;
         avgNptHours: number;

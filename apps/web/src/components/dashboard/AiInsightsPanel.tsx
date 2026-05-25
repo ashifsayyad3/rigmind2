@@ -17,11 +17,11 @@ const PRIORITY_COLOR: Record<string, string> = {
 export function AiInsightsPanel() {
   const { data, isLoading } = useQuery({
     queryKey: ['recommendations', 'dashboard'],
-    queryFn:  () => recommendationsApi.list({ pageSize: 6, sort: 'priority' }),
+    queryFn:  () => recommendationsApi.list({ pageSize: 6 } as any),
     refetchInterval: 120_000,
   })
 
-  const items = data?.data ?? []
+  const items: any[] = (data as any)?.items ?? []
 
   return (
     <div className="glass rounded-xl p-4 flex flex-col">
@@ -48,25 +48,14 @@ export function AiInsightsPanel() {
         </div>
       ) : (
         <div className="space-y-2">
-          {items.map((rec: RcmRecommendation) => (
+          {items.map((rec: any) => (
             <div key={rec.id} className="p-2.5 rounded-lg bg-surface-900/50 border border-surface-800/50 hover:border-brand-500/20 transition-colors">
               <div className="flex items-start gap-2">
-                <div className={cn('w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5', {
-                  'bg-red-400':    rec.priority === 'critical',
-                  'bg-orange-400': rec.priority === 'high',
-                  'bg-amber-400':  rec.priority === 'medium',
-                  'bg-blue-400':   rec.priority === 'low',
-                })} />
+                <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5 bg-brand-400" />
                 <div className="min-w-0">
-                  <div className="text-[11px] text-surface-200 leading-snug line-clamp-2">{rec.recommendation}</div>
+                  <div className="text-[11px] text-surface-200 leading-snug line-clamp-2">{rec.recommendation ?? rec.title ?? '—'}</div>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className={cn('text-[9px] font-bold uppercase', PRIORITY_COLOR[rec.priority] ?? 'text-surface-400')}>
-                      {rec.priority}
-                    </span>
-                    {rec.rigName && <span className="text-[9px] text-surface-600">· {rec.rigName}</span>}
-                    {rec.estimatedSavings && (
-                      <span className="text-[9px] text-green-500/70 ml-auto">${(rec.estimatedSavings / 1000).toFixed(0)}k saved</span>
-                    )}
+                    <span className="text-[9px] text-surface-500">{rec.rcmReport?.rig?.name ?? ''}</span>
                   </div>
                 </div>
               </div>

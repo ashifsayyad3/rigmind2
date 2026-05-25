@@ -23,6 +23,9 @@ let CertificatesController = class CertificatesController {
     findAll(filters) {
         return this.svc.findAll(filters);
     }
+    getExpiring(days = 60) {
+        return this.svc.getExpiringSoon(+days);
+    }
     getExpiryDashboard(rigId) {
         return this.svc.getExpiryDashboard(rigId ? Number(rigId) : undefined);
     }
@@ -39,6 +42,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], CertificatesController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('expiring'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get certificates expiring within N days' }),
+    __param(0, (0, common_1.Query)('days')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], CertificatesController.prototype, "getExpiring", null);
 __decorate([
     (0, common_1.Get)('expiry-dashboard'),
     (0, swagger_1.ApiOperation)({ summary: 'Certificate expiry heatmap dashboard' }),

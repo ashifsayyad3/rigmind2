@@ -21,10 +21,13 @@ let NotificationsController = class NotificationsController {
     constructor(svc) {
         this.svc = svc;
     }
-    findAll(u, unreadOnly) { return this.svc.findForUser(u.id, unreadOnly); }
-    getCount(u) { return this.svc.getUnreadCount(u.id); }
-    markRead(id, u) { return this.svc.markRead(id, u.id); }
-    markAllRead(u) { return this.svc.markAllRead(u.id); }
+    findAll(u, unreadOnly) {
+        return this.svc.findForUser(u?.id ?? 1, unreadOnly);
+    }
+    getCount(u) { return this.svc.getUnreadCount(u?.id ?? 1); }
+    markAllReadAlias(u) { return this.svc.markAllRead(u?.id ?? 1); }
+    markAllRead(u) { return this.svc.markAllRead(u?.id ?? 1); }
+    markRead(id, u) { return this.svc.markRead(id, u?.id ?? 1); }
 };
 exports.NotificationsController = NotificationsController;
 __decorate([
@@ -43,13 +46,12 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], NotificationsController.prototype, "getCount", null);
 __decorate([
-    (0, common_1.Put)(':id/read'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
-    __param(1, (0, current_user_decorator_1.CurrentUser)()),
+    (0, common_1.Put)('read-all'),
+    __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], NotificationsController.prototype, "markRead", null);
+], NotificationsController.prototype, "markAllReadAlias", null);
 __decorate([
     (0, common_1.Put)('mark-all-read'),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
@@ -57,6 +59,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], NotificationsController.prototype, "markAllRead", null);
+__decorate([
+    (0, common_1.Put)(':id/read'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], NotificationsController.prototype, "markRead", null);
 exports.NotificationsController = NotificationsController = __decorate([
     (0, swagger_1.ApiTags)('Notifications'),
     (0, swagger_1.ApiBearerAuth)('JWT'),

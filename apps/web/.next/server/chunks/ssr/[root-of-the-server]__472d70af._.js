@@ -275,16 +275,15 @@ function WellsPage() {
                 page
             }
         ],
-        queryFn: ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["wellsApi"].getAll({
+        queryFn: ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["wellsApi"].list({
                 availability,
                 page,
                 limit: 30
-            }),
-        keepPreviousData: true
+            })
     });
-    const wells = data?.data?.items ?? [];
-    const total = data?.data?.total ?? 0;
-    const pages = data?.data?.pages ?? 1;
+    const wells = data?.items ?? [];
+    const total = data?.total ?? 0;
+    const pages = data?.pages ?? 1;
     const filtered = search ? wells.filter((w)=>w.name?.toLowerCase().includes(search.toLowerCase()) || w.field?.toLowerCase().includes(search.toLowerCase())) : wells;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-6 space-y-5",
@@ -296,7 +295,7 @@ function WellsPage() {
                         children: "Wells"
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                        lineNumber: 34,
+                        lineNumber: 33,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -307,13 +306,13 @@ function WellsPage() {
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                        lineNumber: 35,
+                        lineNumber: 34,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                lineNumber: 33,
+                lineNumber: 32,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -326,7 +325,7 @@ function WellsPage() {
                                 className: "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-500"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                lineNumber: 41,
+                                lineNumber: 40,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -336,13 +335,13 @@ function WellsPage() {
                                 onChange: (e)=>setSearch(e.target.value)
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                lineNumber: 42,
+                                lineNumber: 41,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                        lineNumber: 40,
+                        lineNumber: 39,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -360,18 +359,18 @@ function WellsPage() {
                                 children: a || 'All'
                             }, a, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                lineNumber: 51,
+                                lineNumber: 50,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                        lineNumber: 49,
+                        lineNumber: 48,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                lineNumber: 39,
+                lineNumber: 38,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -389,7 +388,7 @@ function WellsPage() {
                                             children: "Name"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                            lineNumber: 64,
+                                            lineNumber: 63,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -397,7 +396,7 @@ function WellsPage() {
                                             children: "Field"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                            lineNumber: 65,
+                                            lineNumber: 64,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -405,7 +404,7 @@ function WellsPage() {
                                             children: "Region"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                            lineNumber: 66,
+                                            lineNumber: 65,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -413,7 +412,7 @@ function WellsPage() {
                                             children: "Depth (m)"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                            lineNumber: 67,
+                                            lineNumber: 66,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -421,7 +420,7 @@ function WellsPage() {
                                             children: "Current Rig"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                            lineNumber: 68,
+                                            lineNumber: 67,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -429,7 +428,7 @@ function WellsPage() {
                                             children: "Availability"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                            lineNumber: 69,
+                                            lineNumber: 68,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -437,18 +436,18 @@ function WellsPage() {
                                             children: "Failures"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                            lineNumber: 70,
+                                            lineNumber: 69,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                    lineNumber: 63,
+                                    lineNumber: 62,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                lineNumber: 62,
+                                lineNumber: 61,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -464,17 +463,17 @@ function WellsPage() {
                                                     className: "h-4 bg-surface-700/50 rounded animate-pulse"
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                    lineNumber: 76,
+                                                    lineNumber: 75,
                                                     columnNumber: 106
                                                 }, this)
                                             }, j, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                lineNumber: 76,
+                                                lineNumber: 75,
                                                 columnNumber: 72
                                             }, this))
                                     }, i, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                        lineNumber: 76,
+                                        lineNumber: 75,
                                         columnNumber: 19
                                     }, this)) : filtered.map((well)=>{
                                     const currentRig = well.rigWellChanges?.[0]?.rigs;
@@ -490,7 +489,7 @@ function WellsPage() {
                                                             className: "w-3.5 h-3.5 text-brand-400 shrink-0"
                                                         }, void 0, false, {
                                                             fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                            lineNumber: 84,
+                                                            lineNumber: 83,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -498,18 +497,18 @@ function WellsPage() {
                                                             children: well.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                            lineNumber: 85,
+                                                            lineNumber: 84,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                    lineNumber: 83,
+                                                    lineNumber: 82,
                                                     columnNumber: 25
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                lineNumber: 82,
+                                                lineNumber: 81,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -517,7 +516,7 @@ function WellsPage() {
                                                 children: well.field ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                lineNumber: 88,
+                                                lineNumber: 87,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -525,7 +524,7 @@ function WellsPage() {
                                                 children: well.region ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                lineNumber: 89,
+                                                lineNumber: 88,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -533,7 +532,7 @@ function WellsPage() {
                                                 children: well.depth ? well.depth.toLocaleString() : '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                lineNumber: 90,
+                                                lineNumber: 89,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -541,7 +540,7 @@ function WellsPage() {
                                                 children: currentRig?.name ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                lineNumber: 93,
+                                                lineNumber: 92,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -551,12 +550,12 @@ function WellsPage() {
                                                     children: well.availability
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                    lineNumber: 95,
+                                                    lineNumber: 94,
                                                     columnNumber: 25
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                lineNumber: 94,
+                                                lineNumber: 93,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -564,25 +563,25 @@ function WellsPage() {
                                                 children: well._count?.failures ?? 0
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                                lineNumber: 99,
+                                                lineNumber: 98,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, well.id, true, {
                                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                        lineNumber: 81,
+                                        lineNumber: 80,
                                         columnNumber: 21
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                lineNumber: 73,
+                                lineNumber: 72,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                        lineNumber: 61,
+                        lineNumber: 60,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -599,7 +598,7 @@ function WellsPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                lineNumber: 108,
+                                lineNumber: 107,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -612,7 +611,7 @@ function WellsPage() {
                                         children: "Prev"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                        lineNumber: 110,
+                                        lineNumber: 109,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -622,31 +621,31 @@ function WellsPage() {
                                         children: "Next"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                        lineNumber: 111,
+                                        lineNumber: 110,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                                lineNumber: 109,
+                                lineNumber: 108,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                        lineNumber: 107,
+                        lineNumber: 106,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-                lineNumber: 60,
+                lineNumber: 59,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/apps/web/src/app/dashboard/wells/page.tsx",
-        lineNumber: 32,
+        lineNumber: 31,
         columnNumber: 5
     }, this);
 }

@@ -14,6 +14,12 @@ export class CertificatesController {
     return this.svc.findAll(filters);
   }
 
+  @Get('expiring')
+  @ApiOperation({ summary: 'Get certificates expiring within N days' })
+  getExpiring(@Query('days') days = 60) {
+    return this.svc.getExpiringSoon(+days);
+  }
+
   @Get('expiry-dashboard')
   @ApiOperation({ summary: 'Certificate expiry heatmap dashboard' })
   getExpiryDashboard(@Query('rigId') rigId?: number) {

@@ -23,16 +23,13 @@ export default function ObservationsPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['observations', { search, status, page }],
-    queryFn: () => observationsApi.getAll({ search, status, page, limit: 25 }),
-    keepPreviousData: true,
+    queryFn: () => observationsApi.list({ search, status, page, limit: 25 } as any),
   })
 
-  const { data: statsData } = useQuery({ queryKey: ['obs-stats'], queryFn: observationsApi.getStats })
-
-  const items: any[] = data?.data?.items ?? []
-  const total: number = data?.data?.total ?? 0
-  const pages: number = data?.data?.pages ?? 1
-  const stats = statsData?.data
+  const items: any[] = (data as any)?.items ?? []
+  const total: number = (data as any)?.total ?? 0
+  const pages: number = (data as any)?.pages ?? 1
+  const stats: any = null
 
   return (
     <div className="p-6 space-y-5">

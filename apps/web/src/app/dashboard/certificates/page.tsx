@@ -24,25 +24,32 @@ export default function CertificatesPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['certificates', { search, expiringInDays: expiringFilter, page }],
-    queryFn: () => certificatesApi.getAll({ expiringInDays: expiringFilter, page, limit: 30 }),
-    keepPreviousData: true,
+    queryFn: () => certificatesApi.list({ expiringInDays: expiringFilter, page, limit: 30 } as any),
   })
 
-  const { data: expiryData } = useQuery({
-    queryKey: ['cert-expiry-dashboard'],
-    queryFn: certificatesApi.getExpiryDashboard,
+  const { data: expiringSoon } = useQuery({
+    queryKey: ['certs-expiring-90'],
+    queryFn: () => certificatesApi.getExpiringSoon(90),
   })
 
-  const certs: any[] = data?.data?.items ?? []
-  const total: number = data?.data?.total ?? 0
-  const pages: number = data?.data?.pages ?? 1
-  const expiry = expiryData?.data
+  const certs: any[] = (data as any)?.items ?? []
+  const total: number = (data as any)?.total ?? 0
+  const pages: number = (data as any)?.pages ?? 1
+  const now = Date.now()
+  const soon = (expiringSoon as any[]) ?? []
+  const expiry = {
+    expired:    soon.filter((a) => new Date(a.expirationDate).getTime() < now).length,
+    expiring30: soon.filter((a) => { const t = new Date(a.expirationDate).getTime(); return t >= now && t <= now + 30*864e5 }).length,
+    expiring60: soon.filter((a) => { const t = new Date(a.expirationDate).getTime(); return t >= now && t <= now + 60*864e5 }).length,
+    expiring90: soon.length,
+    byRig: [] as any[],
+  }
 
   const expiryCards = [
-    { label: 'Expired', value: expiry?.expired ?? 0, color: 'text-red-400', bg: 'bg-red-500/10', filter: undefined, icon: AlertTriangle },
-    { label: 'Expiring 30d', value: expiry?.expiring30 ?? 0, color: 'text-orange-400', bg: 'bg-orange-500/10', filter: 30, icon: Clock },
-    { label: 'Expiring 60d', value: expiry?.expiring60 ?? 0, color: 'text-amber-400', bg: 'bg-amber-500/10', filter: 60, icon: Clock },
-    { label: 'Expiring 90d', value: expiry?.expiring90 ?? 0, color: 'text-yellow-400', bg: 'bg-yellow-500/10', filter: 90, icon: Clock },
+    { label: 'Expired', value: expiry.expired, color: 'text-red-400', bg: 'bg-red-500/10', filter: undefined as number | undefined, icon: AlertTriangle },
+    { label: 'Expiring 30d', value: expiry.expiring30, color: 'text-orange-400', bg: 'bg-orange-500/10', filter: 30 as number | undefined, icon: Clock },
+    { label: 'Expiring 60d', value: expiry.expiring60, color: 'text-amber-400', bg: 'bg-amber-500/10', filter: 60 as number | undefined, icon: Clock },
+    { label: 'Expiring 90d', value: expiry.expiring90, color: 'text-yellow-400', bg: 'bg-yellow-500/10', filter: 90 as number | undefined, icon: Clock },
   ]
 
   return (

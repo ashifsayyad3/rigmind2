@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { certificatesApi } from '@/lib/api/client'
 import { cn } from '@/lib/utils'
 import { Award, ArrowRight, CheckCircle } from 'lucide-react'
-import type { CertificateSummary } from '@/lib/types'
 
 function daysUntil(dateStr: string): number {
   return Math.ceil((new Date(dateStr).getTime() - Date.now()) / 86_400_000)
@@ -18,14 +17,16 @@ function urgencyClass(days: number): string {
 }
 
 export function CertExpiryPanel() {
-  const { data: certs = [], isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['certificates', 'expiring'],
     queryFn:  () => certificatesApi.getExpiringSoon(60),
     refetchInterval: 300_000,
   })
 
-  const sorted = [...certs].sort((a: CertificateSummary, b: CertificateSummary) =>
-    new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
+  const certs: any[] = (data as any) ?? []
+
+  const sorted = [...certs].sort((a: any, b: any) =>
+    new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime()
   )
 
   return (
@@ -58,20 +59,20 @@ export function CertExpiryPanel() {
         </div>
       ) : (
         <div className="space-y-1.5 flex-1 overflow-y-auto">
-          {sorted.slice(0, 8).map((cert: CertificateSummary) => {
-            const days = daysUntil(cert.expiryDate)
+          {sorted.slice(0, 8).map((cert: any) => {
+            const days = daysUntil(cert.expirationDate)
             return (
-              <Link key={cert.id} href={`/dashboard/certificates/${cert.id}`}>
+              <Link key={cert.id} href={`/dashboard/certificates`}>
                 <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-surface-900/50 hover:bg-surface-800/50 transition-colors group">
                   <span className={cn('text-[10px] font-bold tabular-nums px-1.5 py-0.5 rounded flex-shrink-0 mt-0.5 w-10 text-center', urgencyClass(days))}>
                     {days}d
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="text-[11px] text-surface-200 leading-snug truncate group-hover:text-white transition-colors">
-                      {cert.certType ?? cert.name}
+                      {cert.certificate?.equipment ?? cert.attachmentType ?? '—'}
                     </div>
                     <div className="text-[9px] text-surface-500 mt-0.5 truncate">
-                      {cert.rigName} {cert.issuer ? `· ${cert.issuer}` : ''}
+                      {cert.certificate?.rig?.name ?? ''}
                     </div>
                   </div>
                 </div>

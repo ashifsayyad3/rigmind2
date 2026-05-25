@@ -17,11 +17,11 @@ const SEVERITY_COLOR: Record<string, string> = {
 export function RecentFailuresPanel() {
   const { data, isLoading } = useQuery({
     queryKey: ['failures', 'recent'],
-    queryFn:  () => failuresApi.list({ pageSize: 8, sort: 'createdAt', order: 'desc' }),
+    queryFn:  () => failuresApi.list({ limit: 8 } as any),
     refetchInterval: 60_000,
   })
 
-  const failures = data?.data ?? []
+  const failures: any[] = (data as any)?.items ?? []
 
   return (
     <div className="glass rounded-xl p-4 flex flex-col h-full">
@@ -48,7 +48,7 @@ export function RecentFailuresPanel() {
         </div>
       ) : (
         <div className="space-y-1.5 flex-1 overflow-y-auto">
-          {failures.map((f: FailureSummary) => {
+          {failures.map((f: any) => {
             const severityClass = SEVERITY_COLOR[f.severity] ?? SEVERITY_COLOR.low
             return (
               <Link key={f.id} href={`/dashboard/failures/${f.id}`}>
@@ -61,7 +61,7 @@ export function RecentFailuresPanel() {
                       {f.description ?? f.failureType}
                     </div>
                     <div className="text-[9px] text-surface-500 mt-0.5 truncate">
-                      {f.rigName} {f.componentName ? `· ${f.componentName}` : ''}
+                      {f.rigName ?? f.rig?.name} {f.failureType ? `· ${f.failureType}` : ''}
                     </div>
                   </div>
                   <div className="text-[9px] text-surface-600 flex-shrink-0">

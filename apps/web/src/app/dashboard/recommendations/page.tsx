@@ -23,9 +23,8 @@ export default function RecommendationsPage() {
   const qc = useQueryClient()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['recommendations', { priority, page }],
-    queryFn: () => recommendationsApi.getAll({ priority, page, limit: 25 }),
-    keepPreviousData: true,
+    queryKey: ['recommendations', { page }],
+    queryFn: () => recommendationsApi.list({ page, limit: 25 } as any),
   })
 
   const { data: statsData } = useQuery({ queryKey: ['rec-stats'], queryFn: recommendationsApi.getStats })
@@ -36,10 +35,10 @@ export default function RecommendationsPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['recommendations'] }),
   })
 
-  const items: any[] = data?.data?.items ?? []
-  const total: number = data?.data?.total ?? 0
-  const pages: number = data?.data?.pages ?? 1
-  const stats = statsData?.data
+  const items: any[] = (data as any)?.items ?? []
+  const total: number = (data as any)?.total ?? 0
+  const pages: number = (data as any)?.pages ?? 1
+  const stats = statsData as any
 
   return (
     <div className="p-6 space-y-5">

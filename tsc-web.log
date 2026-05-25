@@ -1,0 +1,129 @@
+src/app/auth/login/page.tsx(28,41): error TS2339: Property 'data' does not exist on type '{ token: string; user: UserProfile; }'.
+src/app/dashboard/ai-copilot/page.tsx(122,50): error TS2345: Argument of type '{ role: "user" | "assistant"; content: string; }[]' is not assignable to parameter of type 'CopilotMessage[]'.
+  Type '{ role: "user" | "assistant"; content: string; }' is missing the following properties from type 'CopilotMessage': id, timestamp
+src/app/dashboard/ai-copilot/page.tsx(123,31): error TS2339: Property 'data' does not exist on type 'unknown[]'.
+src/app/dashboard/certificates/page.tsx(27,36): error TS2339: Property 'getAll' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<CertificateSummary>>; get: (id: number) => Promise<CertificateSummary>; create: (b: Partial<...>) => Promise<...>; update: (id: number, b: Partial<...>) => Promise<...>; delete: (id: number) => Promise<...>; getExpiringSoon: (days?: number) => Promise<...>; }'.
+src/app/dashboard/certificates/page.tsx(28,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | { search: string; expiringInDays: number; page: number; })[]>, queryClient?: QueryClient): DefinedUseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | { search: string; expiringInDays: number; page: number; })[]>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<any, Error, any, (string | { search: string; expiringInDays: number; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UndefinedInitialDataOptions<any, Error, any, (string | { search: string; expiringInDays: number; page: number; })[]>'.
+  Overload 3 of 3, '(options: UseQueryOptions<any, Error, any, (string | { search: string; expiringInDays: number; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UseQueryOptions<any, Error, any, (string | { search: string; expiringInDays: number; page: number; })[]>'.
+src/app/dashboard/certificates/page.tsx(33,30): error TS2339: Property 'getExpiryDashboard' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<CertificateSummary>>; get: (id: number) => Promise<CertificateSummary>; create: (b: Partial<...>) => Promise<...>; update: (id: number, b: Partial<...>) => Promise<...>; delete: (id: number) => Promise<...>; getExpiringSoon: (days?: number) => Promise<...>; }'.
+src/app/dashboard/certificates/page.tsx(36,30): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/certificates/page.tsx(37,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/certificates/page.tsx(38,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/certificates/page.tsx(39,30): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/failures/page.tsx(44,33): error TS2339: Property 'data' does not exist on type '{ timestamp: string; type: string; description: string; }[]'.
+src/app/dashboard/failures/page.tsx(128,32): error TS2339: Property 'getAll' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<FailureSummary>>; get: (id: number) => Promise<FailureDetail>; ... 8 more ...; addCorrectiveAction: (failureId: number, b: Partial<...>) => Promise<...>; }'.
+src/app/dashboard/failures/page.tsx(129,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | { search: string; severity: string; status: string; page: number; })[]>, queryClient?: QueryClient): DefinedUseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | { search: string; severity: string; status: string; page: number; })[]>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<any, Error, any, (string | { search: string; severity: string; status: string; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UndefinedInitialDataOptions<any, Error, any, (string | { search: string; severity: string; status: string; page: number; })[]>'.
+  Overload 3 of 3, '(options: UseQueryOptions<any, Error, any, (string | { search: string; severity: string; status: string; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UseQueryOptions<any, Error, any, (string | { search: string; severity: string; status: string; page: number; })[]>'.
+src/app/dashboard/failures/page.tsx(137,33): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/failures/page.tsx(138,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/failures/page.tsx(139,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/failures/page.tsx(140,28): error TS2339: Property 'data' does not exist on type '{ total: number; bySeverity: Record<string, number>; byType: { type: string; count: number; }[]; totalNptHours: number; }'.
+src/app/dashboard/fleet/page.tsx(47,22): error TS2339: Property 'data' does not exist on type 'FleetHealthMetrics'.
+src/app/dashboard/maintenance/page.tsx(13,99): error TS2339: Property 'getStats' does not exist on type '{ listDeferred: (p?: FilterParams) => Promise<PaginatedResponse<DeferredMaintenanceTask>>; getDeferred: (id: number) => Promise<...>; ... 4 more ...; getSchedule: (rigId: number) => Promise<...>; }'.
+src/app/dashboard/maintenance/page.tsx(16,35): error TS2551: Property 'getDeferredTasks' does not exist on type '{ listDeferred: (p?: FilterParams) => Promise<PaginatedResponse<DeferredMaintenanceTask>>; getDeferred: (id: number) => Promise<...>; ... 4 more ...; getSchedule: (rigId: number) => Promise<...>; }'. Did you mean 'getDeferred'?
+src/app/dashboard/maintenance/page.tsx(17,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | number)[]>, queryClient?: QueryClient): DefinedUseQueryResult<unknown, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | number)[]>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<any, Error, any, (string | number)[]>, queryClient?: QueryClient): UseQueryResult<any, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UndefinedInitialDataOptions<any, Error, any, (string | number)[]>'.
+  Overload 3 of 3, '(options: UseQueryOptions<any, Error, any, (string | number)[]>, queryClient?: QueryClient): UseQueryResult<any, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UseQueryOptions<any, Error, any, (string | number)[]>'.
+src/app/dashboard/maintenance/page.tsx(21,48): error TS2339: Property 'closeDeferredTask' does not exist on type '{ listDeferred: (p?: FilterParams) => Promise<PaginatedResponse<DeferredMaintenanceTask>>; getDeferred: (id: number) => Promise<...>; ... 4 more ...; getSchedule: (rigId: number) => Promise<...>; }'.
+src/app/dashboard/maintenance/page.tsx(25,34): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/maintenance/page.tsx(26,35): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/maintenance/page.tsx(27,35): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/maintenance/page.tsx(28,28): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/npt/page.tsx(35,27): error TS2339: Property 'getAnalytics' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<NonProductionTime>>; getSummary: (p?: { rigId?: number; startDate?: string; endDate?: string; }) => Promise<...>; getTrend: (rigId?: number, months?: number) => Promise<...>; getByCategory: () => Promise<...>; }'.
+src/app/dashboard/npt/page.tsx(40,27): error TS2339: Property 'getAll' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<NonProductionTime>>; getSummary: (p?: { rigId?: number; startDate?: string; endDate?: string; }) => Promise<...>; getTrend: (rigId?: number, months?: number) => Promise<...>; getByCategory: () => Promise<...>; }'.
+src/app/dashboard/npt/page.tsx(41,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | number)[]>, queryClient?: QueryClient): DefinedUseQueryResult<unknown, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | number)[]>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<any, Error, any, (string | number)[]>, queryClient?: QueryClient): UseQueryResult<any, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UndefinedInitialDataOptions<any, Error, any, (string | number)[]>'.
+  Overload 3 of 3, '(options: UseQueryOptions<any, Error, any, (string | number)[]>, queryClient?: QueryClient): UseQueryResult<any, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UseQueryOptions<any, Error, any, (string | number)[]>'.
+src/app/dashboard/npt/page.tsx(45,36): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/npt/page.tsx(46,35): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/npt/page.tsx(47,35): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/observations/page.tsx(26,36): error TS2339: Property 'getAll' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<ObservationSummary>>; get: (id: number) => Promise<ObservationSummary>; create: (b: Partial<...>) => Promise<...>; update: (id: number, b: Partial<...>) => Promise<...>; delete: (id: number) => Promise<...>; }'.
+src/app/dashboard/observations/page.tsx(27,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | { search: string; status: string; page: number; })[]>, queryClient?: QueryClient): DefinedUseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | { search: string; status: string; page: number; })[]>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<any, Error, any, (string | { search: string; status: string; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UndefinedInitialDataOptions<any, Error, any, (string | { search: string; status: string; page: number; })[]>'.
+  Overload 3 of 3, '(options: UseQueryOptions<any, Error, any, (string | { search: string; status: string; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<any, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UseQueryOptions<any, Error, any, (string | { search: string; status: string; page: number; })[]>'.
+src/app/dashboard/observations/page.tsx(30,92): error TS2339: Property 'getStats' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<ObservationSummary>>; get: (id: number) => Promise<ObservationSummary>; create: (b: Partial<...>) => Promise<...>; update: (id: number, b: Partial<...>) => Promise<...>; delete: (id: number) => Promise<...>; }'.
+src/app/dashboard/observations/page.tsx(32,30): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/observations/page.tsx(33,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/observations/page.tsx(34,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/observations/page.tsx(35,28): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/recommendations/page.tsx(27,48): error TS2353: Object literal may only specify known properties, and 'priority' does not exist in type 'FilterParams'.
+src/app/dashboard/recommendations/page.tsx(28,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | { priority: string; page: number; })[]>, queryClient?: QueryClient): DefinedUseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | { priority: string; page: number; })[]>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<PaginatedResponse<RcmRecommendation>, Error, PaginatedResponse<RcmRecommendation>, (string | { ...; })[]>, queryClient?: QueryClient): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UndefinedInitialDataOptions<PaginatedResponse<RcmRecommendation>, Error, PaginatedResponse<RcmRecommendation>, (string | { ...; })[]>'.
+  Overload 3 of 3, '(options: UseQueryOptions<PaginatedResponse<RcmRecommendation>, Error, PaginatedResponse<RcmRecommendation>, (string | { ...; })[]>, queryClient?: QueryClient): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UseQueryOptions<PaginatedResponse<RcmRecommendation>, Error, PaginatedResponse<RcmRecommendation>, (string | { ...; })[]>'.
+src/app/dashboard/recommendations/page.tsx(39,30): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/recommendations/page.tsx(40,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/recommendations/page.tsx(41,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/recommendations/page.tsx(42,28): error TS2339: Property 'data' does not exist on type '{ total: number; overdue: number; byStatus: Record<string, number>; }'.
+src/app/dashboard/reports/page.tsx(18,47): error TS2551: Property 'generateRigReport' does not exist on type '{ ask: (question: string, history: CopilotMessage[]) => Promise<{ answer: string; sql?: string; data?: unknown[]; chartType?: string; rowCount?: number; }>; generateReport: (rigId: number, type: string) => Promise<...>; getRca: (failureId: number) => Promise<...>; getPrediction: (rigId: number) => Promise<...>; }'. Did you mean 'generateReport'?
+src/app/dashboard/reports/page.tsx(19,42): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/rigs/[id]/page.tsx(8,40): error TS2305: Module '"@/lib/api/client"' has no exported member 'kpiApi'.
+src/app/dashboard/rigs/[id]/page.tsx(26,28): error TS2339: Property 'getOne' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<RigSummary>>; get: (id: number) => Promise<RigDetail>; ... 4 more ...; getComponents: (id: number) => Promise<...>; }'.
+src/app/dashboard/rigs/[id]/page.tsx(32,28): error TS2339: Property 'getHealth' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<RigSummary>>; get: (id: number) => Promise<RigDetail>; ... 4 more ...; getComponents: (id: number) => Promise<...>; }'.
+src/app/dashboard/rigs/[id]/page.tsx(39,32): error TS2339: Property 'getAll' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<FailureSummary>>; get: (id: number) => Promise<FailureDetail>; ... 8 more ...; addCorrectiveAction: (failureId: number, b: Partial<...>) => Promise<...>; }'.
+src/app/dashboard/rigs/[id]/page.tsx(45,27): error TS2339: Property 'getAnalytics' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<NonProductionTime>>; getSummary: (p?: { rigId?: number; startDate?: string; endDate?: string; }) => Promise<...>; getTrend: (rigId?: number, months?: number) => Promise<...>; getByCategory: () => Promise<...>; }'.
+src/app/dashboard/rigs/[id]/page.tsx(63,28): error TS2339: Property 'getCurrentWell' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<RigSummary>>; get: (id: number) => Promise<RigDetail>; ... 4 more ...; getComponents: (id: number) => Promise<...>; }'.
+src/app/dashboard/rigs/[id]/page.tsx(74,36): error TS2551: Property 'generateRigReport' does not exist on type '{ ask: (question: string, history: CopilotMessage[]) => Promise<{ answer: string; sql?: string; data?: unknown[]; chartType?: string; rowCount?: number; }>; generateReport: (rigId: number, type: string) => Promise<...>; getRca: (failureId: number) => Promise<...>; getPrediction: (rigId: number) => Promise<...>; }'. Did you mean 'generateReport'?
+src/app/dashboard/rigs/page.tsx(33,28): error TS2339: Property 'getAll' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<RigSummary>>; get: (id: number) => Promise<RigDetail>; ... 4 more ...; getComponents: (id: number) => Promise<...>; }'.
+src/app/dashboard/rigs/page.tsx(34,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | { search: string; page: number; })[]>, queryClient?: QueryClient): DefinedUseQueryResult<unknown, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | { search: string; page: number; })[]>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<any, Error, any, (string | { search: string; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UndefinedInitialDataOptions<any, Error, any, (string | { search: string; page: number; })[]>'.
+  Overload 3 of 3, '(options: UseQueryOptions<any, Error, any, (string | { search: string; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<any, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UseQueryOptions<any, Error, any, (string | { search: string; page: number; })[]>'.
+src/app/dashboard/rigs/page.tsx(37,29): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/rigs/page.tsx(38,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/rigs/page.tsx(39,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/wells/page.tsx(16,29): error TS2339: Property 'getAll' does not exist on type '{ list: (p?: FilterParams) => Promise<PaginatedResponse<WellSummary>>; get: (id: number) => Promise<WellSummary>; create: (b: Partial<...>) => Promise<...>; update: (id: number, b: Partial<...>) => Promise<...>; }'.
+src/app/dashboard/wells/page.tsx(17,5): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<unknown, Error, unknown, (string | { availability: string; page: number; })[]>, queryClient?: QueryClient): DefinedUseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'DefinedInitialDataOptions<unknown, Error, unknown, (string | { availability: string; page: number; })[]>'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<any, Error, any, (string | { availability: string; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<...>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UndefinedInitialDataOptions<any, Error, any, (string | { availability: string; page: number; })[]>'.
+  Overload 3 of 3, '(options: UseQueryOptions<any, Error, any, (string | { availability: string; page: number; })[]>, queryClient?: QueryClient): UseQueryResult<any, Error>', gave the following error.
+    Object literal may only specify known properties, and 'keepPreviousData' does not exist in type 'UseQueryOptions<any, Error, any, (string | { availability: string; page: number; })[]>'.
+src/app/dashboard/wells/page.tsx(20,30): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/wells/page.tsx(21,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/dashboard/wells/page.tsx(22,31): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/components/dashboard/AiInsightsPanel.tsx(20,60): error TS2353: Object literal may only specify known properties, and 'sort' does not exist in type 'FilterParams'.
+src/components/dashboard/AiInsightsPanel.tsx(55,40): error TS2339: Property 'priority' does not exist on type 'RcmRecommendation'.
+src/components/dashboard/AiInsightsPanel.tsx(56,40): error TS2339: Property 'priority' does not exist on type 'RcmRecommendation'.
+src/components/dashboard/AiInsightsPanel.tsx(57,40): error TS2339: Property 'priority' does not exist on type 'RcmRecommendation'.
+src/components/dashboard/AiInsightsPanel.tsx(58,40): error TS2339: Property 'priority' does not exist on type 'RcmRecommendation'.
+src/components/dashboard/AiInsightsPanel.tsx(63,94): error TS2339: Property 'priority' does not exist on type 'RcmRecommendation'.
+src/components/dashboard/AiInsightsPanel.tsx(64,28): error TS2339: Property 'priority' does not exist on type 'RcmRecommendation'.
+src/components/dashboard/AiInsightsPanel.tsx(67,26): error TS2339: Property 'estimatedSavings' does not exist on type 'RcmRecommendation'.
+src/components/dashboard/AiInsightsPanel.tsx(68,85): error TS2339: Property 'estimatedSavings' does not exist on type 'RcmRecommendation'.
+src/components/dashboard/CertExpiryPanel.tsx(71,29): error TS2339: Property 'certType' does not exist on type 'CertificateSummary'.
+src/components/dashboard/CertExpiryPanel.tsx(71,46): error TS2339: Property 'name' does not exist on type 'CertificateSummary'.
+src/components/dashboard/CertExpiryPanel.tsx(74,44): error TS2339: Property 'issuer' does not exist on type 'CertificateSummary'.
+src/components/dashboard/CertExpiryPanel.tsx(74,63): error TS2339: Property 'issuer' does not exist on type 'CertificateSummary'.
+src/components/dashboard/RecentFailuresPanel.tsx(20,53): error TS2353: Object literal may only specify known properties, and 'sort' does not exist in type 'FilterParams'.
+src/components/dashboard/RecentFailuresPanel.tsx(64,38): error TS2339: Property 'componentName' does not exist on type 'FailureSummary'.
+src/components/dashboard/RecentFailuresPanel.tsx(64,61): error TS2339: Property 'componentName' does not exist on type 'FailureSummary'.

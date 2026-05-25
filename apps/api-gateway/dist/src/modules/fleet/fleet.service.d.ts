@@ -27,6 +27,23 @@ export declare class FleetService {
         avgAvailability: number;
     }>;
     private calculateFleetScore;
+    getGlobalMap(): Promise<Array<{
+        id: number;
+        name: string;
+        status: string;
+        healthScore: number;
+    }>>;
+    getHealthHistory(days?: number): Promise<Array<{
+        date: string;
+        score: number;
+    }>>;
+    getFailurePredictions(): Promise<Array<{
+        rigId: number;
+        rigName: string;
+        probability: number;
+        component: string;
+        daysUntilFailure: number;
+    }>>;
     getRigHealthScores(accessibleRigIds: number[] | null): Promise<RigHealthScore[]>;
     private scoreRig;
 }

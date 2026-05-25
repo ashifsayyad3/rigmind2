@@ -257,7 +257,12 @@ function MaintenancePage() {
         queryKey: [
             'maintenance-stats'
         ],
-        queryFn: __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["maintenanceApi"].getStats
+        queryFn: {
+            "MaintenancePage.useQuery": ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["maintenanceApi"].listDeferred({
+                    page: 1,
+                    limit: 1
+                })
+        }["MaintenancePage.useQuery"]
     });
     const { data: listData, isLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useQuery"])({
         queryKey: [
@@ -265,16 +270,15 @@ function MaintenancePage() {
             page
         ],
         queryFn: {
-            "MaintenancePage.useQuery": ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["maintenanceApi"].getDeferredTasks({
+            "MaintenancePage.useQuery": ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["maintenanceApi"].listDeferred({
                     page,
                     limit: 25
                 })
-        }["MaintenancePage.useQuery"],
-        keepPreviousData: true
+        }["MaintenancePage.useQuery"]
     });
     const closeMutation = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useMutation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMutation"])({
         mutationFn: {
-            "MaintenancePage.useMutation[closeMutation]": (id)=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["maintenanceApi"].closeDeferredTask(id)
+            "MaintenancePage.useMutation[closeMutation]": (id)=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["maintenanceApi"].deleteDeferred(id)
         }["MaintenancePage.useMutation[closeMutation]"],
         onSuccess: {
             "MaintenancePage.useMutation[closeMutation]": ()=>qc.invalidateQueries({
@@ -284,10 +288,13 @@ function MaintenancePage() {
                 })
         }["MaintenancePage.useMutation[closeMutation]"]
     });
-    const tasks = listData?.data?.items ?? [];
-    const total = listData?.data?.total ?? 0;
-    const pages = listData?.data?.pages ?? 1;
-    const stats = statsData?.data;
+    const tasks = listData?.items ?? [];
+    const total = listData?.total ?? 0;
+    const pages = listData?.pages ?? 1;
+    const stats = {
+        totalDeferred: total,
+        byRig: []
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-6 space-y-5",
         children: [
@@ -298,7 +305,7 @@ function MaintenancePage() {
                         children: "Maintenance"
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                        lineNumber: 33,
+                        lineNumber: 32,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -306,13 +313,13 @@ function MaintenancePage() {
                         children: "Deferred tasks & component maintenance history"
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                        lineNumber: 34,
+                        lineNumber: 33,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                lineNumber: 32,
+                lineNumber: 31,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -328,7 +335,7 @@ function MaintenancePage() {
                                         className: "w-4 h-4 text-amber-400"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                        lineNumber: 40,
+                                        lineNumber: 39,
                                         columnNumber: 57
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -336,13 +343,13 @@ function MaintenancePage() {
                                         children: "Total Deferred"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                        lineNumber: 40,
+                                        lineNumber: 39,
                                         columnNumber: 109
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                lineNumber: 40,
+                                lineNumber: 39,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -350,13 +357,13 @@ function MaintenancePage() {
                                 children: stats?.totalDeferred ?? '—'
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                lineNumber: 41,
+                                lineNumber: 40,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                        lineNumber: 39,
+                        lineNumber: 38,
                         columnNumber: 9
                     }, this),
                     (stats?.byRig ?? []).slice(0, 2).map((r)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -370,7 +377,7 @@ function MaintenancePage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                    lineNumber: 45,
+                                    lineNumber: 44,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -378,7 +385,7 @@ function MaintenancePage() {
                                     children: r._count?.id
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                    lineNumber: 46,
+                                    lineNumber: 45,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -386,19 +393,19 @@ function MaintenancePage() {
                                     children: "deferred tasks"
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                    lineNumber: 47,
+                                    lineNumber: 46,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, r.rigId, true, {
                             fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                            lineNumber: 44,
+                            lineNumber: 43,
                             columnNumber: 11
                         }, this))
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                lineNumber: 38,
+                lineNumber: 37,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -415,12 +422,12 @@ function MaintenancePage() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                            lineNumber: 55,
+                            lineNumber: 54,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                        lineNumber: 54,
+                        lineNumber: 53,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
@@ -435,7 +442,7 @@ function MaintenancePage() {
                                             children: "ID"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                            lineNumber: 60,
+                                            lineNumber: 59,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -443,7 +450,7 @@ function MaintenancePage() {
                                             children: "Rig"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                            lineNumber: 61,
+                                            lineNumber: 60,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -451,7 +458,7 @@ function MaintenancePage() {
                                             children: "Issue Type"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                            lineNumber: 62,
+                                            lineNumber: 61,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -459,7 +466,7 @@ function MaintenancePage() {
                                             children: "Issue ID"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                            lineNumber: 63,
+                                            lineNumber: 62,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -467,25 +474,25 @@ function MaintenancePage() {
                                             children: "Deferred"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                            lineNumber: 64,
+                                            lineNumber: 63,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                             className: "px-4 py-3"
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                            lineNumber: 65,
+                                            lineNumber: 64,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                    lineNumber: 59,
+                                    lineNumber: 58,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                lineNumber: 58,
+                                lineNumber: 57,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -501,17 +508,17 @@ function MaintenancePage() {
                                                     className: "h-4 bg-surface-700/50 rounded animate-pulse"
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                    lineNumber: 70,
+                                                    lineNumber: 69,
                                                     columnNumber: 144
                                                 }, this)
                                             }, j, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                lineNumber: 70,
+                                                lineNumber: 69,
                                                 columnNumber: 110
                                             }, this))
                                     }, i, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                        lineNumber: 70,
+                                        lineNumber: 69,
                                         columnNumber: 57
                                     }, this)) : tasks.map((t)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                         className: "hover:bg-surface-700/20 transition-colors",
@@ -524,7 +531,7 @@ function MaintenancePage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                lineNumber: 73,
+                                                lineNumber: 72,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -532,7 +539,7 @@ function MaintenancePage() {
                                                 children: t.rigs?.name ?? '—'
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                lineNumber: 74,
+                                                lineNumber: 73,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -540,7 +547,7 @@ function MaintenancePage() {
                                                 children: t.issueType
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                lineNumber: 75,
+                                                lineNumber: 74,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -551,7 +558,7 @@ function MaintenancePage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                lineNumber: 76,
+                                                lineNumber: 75,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -559,7 +566,7 @@ function MaintenancePage() {
                                                 children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["timeAgo"])(t.createdAt)
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                lineNumber: 77,
+                                                lineNumber: 76,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -573,36 +580,36 @@ function MaintenancePage() {
                                                             className: "w-3.5 h-3.5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                            lineNumber: 84,
+                                                            lineNumber: 83,
                                                             columnNumber: 25
                                                         }, this),
                                                         " Close"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                    lineNumber: 79,
+                                                    lineNumber: 78,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                                lineNumber: 78,
+                                                lineNumber: 77,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, t.id, true, {
                                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                        lineNumber: 72,
+                                        lineNumber: 71,
                                         columnNumber: 19
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                lineNumber: 68,
+                                lineNumber: 67,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                        lineNumber: 57,
+                        lineNumber: 56,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -618,7 +625,7 @@ function MaintenancePage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                lineNumber: 92,
+                                lineNumber: 91,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -631,7 +638,7 @@ function MaintenancePage() {
                                         children: "Prev"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                        lineNumber: 94,
+                                        lineNumber: 93,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -641,31 +648,31 @@ function MaintenancePage() {
                                         children: "Next"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                        lineNumber: 95,
+                                        lineNumber: 94,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                                lineNumber: 93,
+                                lineNumber: 92,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                        lineNumber: 91,
+                        lineNumber: 90,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-                lineNumber: 53,
+                lineNumber: 52,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/apps/web/src/app/dashboard/maintenance/page.tsx",
-        lineNumber: 31,
+        lineNumber: 30,
         columnNumber: 5
     }, this);
 }

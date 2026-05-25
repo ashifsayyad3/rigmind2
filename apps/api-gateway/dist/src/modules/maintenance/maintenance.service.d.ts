@@ -55,6 +55,32 @@ export declare class MaintenanceService {
         comments: string | null;
         attachmentId: number | null;
     }[]>;
+    getOverdueTasks(rigId?: number): Promise<({
+        rig: {
+            id: number;
+            name: string | null;
+        } | null;
+    } & {
+        id: number;
+        equipmentId: number;
+        equipmentType: string;
+        title: string;
+        description: string;
+        componentName: string;
+        defermentDate: Date;
+        plannedCompletionDate: Date | null;
+        createdAt: Date;
+        updatedAt: Date;
+        rigId: number | null;
+        equipmentName: string | null;
+        status: string;
+        createdById: number | null;
+        updatedById: number | null;
+        createdByRTOCId: number | null;
+        updatedByRTOCId: number | null;
+        availability: string;
+        isRemoved: boolean;
+    })[]>;
     closeDeferredTask(id: number, userId: number): Promise<{
         id: number;
         equipmentId: number;

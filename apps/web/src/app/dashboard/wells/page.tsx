@@ -13,13 +13,12 @@ export default function WellsPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['wells', { availability, page }],
-    queryFn: () => wellsApi.getAll({ availability, page, limit: 30 }),
-    keepPreviousData: true,
+    queryFn: () => wellsApi.list({ availability, page, limit: 30 } as any),
   })
 
-  const wells: any[] = data?.data?.items ?? []
-  const total: number = data?.data?.total ?? 0
-  const pages: number = data?.data?.pages ?? 1
+  const wells: any[] = (data as any)?.items ?? []
+  const total: number = (data as any)?.total ?? 0
+  const pages: number = (data as any)?.pages ?? 1
 
   const filtered = search
     ? wells.filter((w) =>

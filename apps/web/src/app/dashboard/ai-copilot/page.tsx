@@ -104,7 +104,7 @@ export default function AiCopilotPage() {
 
   const conversationHistory = messages
     .filter((m) => m.id !== '0')
-    .map((m) => ({ role: m.role, content: m.content }))
+    .map((m) => ({ id: m.id, role: m.role, content: m.content, timestamp: new Date().toISOString() }))
 
   const send = async (question: string) => {
     if (!question.trim() || loading) return
@@ -120,7 +120,7 @@ export default function AiCopilotPage() {
 
     try {
       const res = await copilotApi.ask(question, conversationHistory)
-      const data = res?.data?.data ?? res?.data
+      const data = (res as any) ?? {}
 
       const aiMsg: Message = {
         id: (Date.now() + 1).toString(),

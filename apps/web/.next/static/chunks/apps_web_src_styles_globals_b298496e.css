@@ -1798,6 +1798,11 @@ body {
   background-color: #eab3081a;
 }
 
+.bg-brand-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 155 255 / var(--tw-bg-opacity, 1));
+}
+
 .p-1 {
   padding: .25rem;
 }

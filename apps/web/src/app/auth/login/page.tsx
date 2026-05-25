@@ -25,7 +25,7 @@ export default function LoginPage() {
     setError('')
     try {
       const res = await authApi.login(email, password)
-      const { accessToken, user } = res.data
+      const { token: accessToken, user } = res as any
       localStorage.setItem('rigmind_token', accessToken)
       setUser(user)
       router.push('/dashboard/dashboard')

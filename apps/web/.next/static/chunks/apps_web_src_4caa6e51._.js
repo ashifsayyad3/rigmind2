@@ -292,7 +292,7 @@ function FailureDrawer({ failure, onClose }) {
         }["FailureDrawer.useQuery"],
         enabled: !!failure.id
     });
-    const timeline = data?.data?.timeline ?? [];
+    const timeline = data ?? [];
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
         initial: {
             x: '100%'
@@ -591,15 +591,14 @@ function FailuresPage() {
             }
         ],
         queryFn: {
-            "FailuresPage.useQuery": ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["failuresApi"].getAll({
+            "FailuresPage.useQuery": ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["failuresApi"].list({
                     search,
                     severity,
                     status,
                     page,
                     limit: 25
                 })
-        }["FailuresPage.useQuery"],
-        keepPreviousData: true
+        }["FailuresPage.useQuery"]
     });
     const { data: statsData } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tanstack$2f$react$2d$query$2f$build$2f$modern$2f$useQuery$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useQuery"])({
         queryKey: [
@@ -609,10 +608,10 @@ function FailuresPage() {
             "FailuresPage.useQuery": ()=>__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["failuresApi"].getStats()
         }["FailuresPage.useQuery"]
     });
-    const failures = data?.data?.items ?? [];
-    const total = data?.data?.total ?? 0;
-    const pages = data?.data?.pages ?? 1;
-    const stats = statsData?.data;
+    const failures = data?.items ?? [];
+    const total = data?.total ?? 0;
+    const pages = data?.pages ?? 1;
+    const stats = statsData;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "p-6 space-y-5",
         children: [
@@ -625,7 +624,7 @@ function FailuresPage() {
                             children: "Failure Intelligence"
                         }, void 0, false, {
                             fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                            lineNumber: 147,
+                            lineNumber: 146,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -636,18 +635,18 @@ function FailuresPage() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                            lineNumber: 148,
+                            lineNumber: 147,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                    lineNumber: 146,
+                    lineNumber: 145,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                lineNumber: 145,
+                lineNumber: 144,
                 columnNumber: 7
             }, this),
             stats && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -664,13 +663,13 @@ function FailuresPage() {
                         ]
                     }, s, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                        lineNumber: 158,
+                        lineNumber: 157,
                         columnNumber: 15
                     }, this);
                 })
             }, void 0, false, {
                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                lineNumber: 154,
+                lineNumber: 153,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -683,7 +682,7 @@ function FailuresPage() {
                                 className: "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-500"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                lineNumber: 180,
+                                lineNumber: 179,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -696,13 +695,13 @@ function FailuresPage() {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                lineNumber: 181,
+                                lineNumber: 180,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                        lineNumber: 179,
+                        lineNumber: 178,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -718,7 +717,7 @@ function FailuresPage() {
                                 children: "All Statuses"
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                lineNumber: 193,
+                                lineNumber: 192,
                                 columnNumber: 11
                             }, this),
                             [
@@ -731,19 +730,19 @@ function FailuresPage() {
                                     children: s.replace('_', ' ')
                                 }, s, false, {
                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                    lineNumber: 195,
+                                    lineNumber: 194,
                                     columnNumber: 13
                                 }, this))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                        lineNumber: 188,
+                        lineNumber: 187,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                lineNumber: 178,
+                lineNumber: 177,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -763,7 +762,7 @@ function FailuresPage() {
                                                 children: "Severity"
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                lineNumber: 206,
+                                                lineNumber: 205,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -771,7 +770,7 @@ function FailuresPage() {
                                                 children: "Title / Description"
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                lineNumber: 207,
+                                                lineNumber: 206,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -779,7 +778,7 @@ function FailuresPage() {
                                                 children: "Rig"
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                lineNumber: 208,
+                                                lineNumber: 207,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -787,7 +786,7 @@ function FailuresPage() {
                                                 children: "Component"
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                lineNumber: 209,
+                                                lineNumber: 208,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -795,7 +794,7 @@ function FailuresPage() {
                                                 children: "Status"
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                lineNumber: 210,
+                                                lineNumber: 209,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -803,25 +802,25 @@ function FailuresPage() {
                                                 children: "Date"
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                lineNumber: 211,
+                                                lineNumber: 210,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                                 className: "px-4 py-3"
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                lineNumber: 212,
+                                                lineNumber: 211,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                        lineNumber: 205,
+                                        lineNumber: 204,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                    lineNumber: 204,
+                                    lineNumber: 203,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -837,17 +836,17 @@ function FailuresPage() {
                                                         className: "h-4 bg-surface-700/50 rounded animate-pulse"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                        lineNumber: 221,
+                                                        lineNumber: 220,
                                                         columnNumber: 27
                                                     }, this)
                                                 }, j, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                    lineNumber: 220,
+                                                    lineNumber: 219,
                                                     columnNumber: 25
                                                 }, this))
                                         }, i, false, {
                                             fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                            lineNumber: 218,
+                                            lineNumber: 217,
                                             columnNumber: 21
                                         }, this)) : failures.map((f)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                             onClick: ()=>setSelected(f),
@@ -859,12 +858,12 @@ function FailuresPage() {
                                                         severity: f.severity
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                        lineNumber: 232,
+                                                        lineNumber: 231,
                                                         columnNumber: 49
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                    lineNumber: 232,
+                                                    lineNumber: 231,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -874,12 +873,12 @@ function FailuresPage() {
                                                         children: f.title ?? f.description?.slice(0, 60) ?? '—'
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                        lineNumber: 234,
+                                                        lineNumber: 233,
                                                         columnNumber: 25
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                    lineNumber: 233,
+                                                    lineNumber: 232,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -887,7 +886,7 @@ function FailuresPage() {
                                                     children: f.rigs?.name ?? '—'
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                    lineNumber: 236,
+                                                    lineNumber: 235,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -895,7 +894,7 @@ function FailuresPage() {
                                                     children: f.components?.name ?? '—'
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                    lineNumber: 237,
+                                                    lineNumber: 236,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -904,12 +903,12 @@ function FailuresPage() {
                                                         status: f.status
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                        lineNumber: 238,
+                                                        lineNumber: 237,
                                                         columnNumber: 49
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                    lineNumber: 238,
+                                                    lineNumber: 237,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -917,7 +916,7 @@ function FailuresPage() {
                                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$utils$2f$index$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDate"])(f.dateOfFailure)
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                    lineNumber: 239,
+                                                    lineNumber: 238,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -926,34 +925,34 @@ function FailuresPage() {
                                                         className: "w-4 h-4 text-surface-600"
                                                     }, void 0, false, {
                                                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                        lineNumber: 240,
+                                                        lineNumber: 239,
                                                         columnNumber: 49
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                                    lineNumber: 240,
+                                                    lineNumber: 239,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, f.id, true, {
                                             fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                            lineNumber: 227,
+                                            lineNumber: 226,
                                             columnNumber: 21
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                    lineNumber: 215,
+                                    lineNumber: 214,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                            lineNumber: 203,
+                            lineNumber: 202,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                        lineNumber: 202,
+                        lineNumber: 201,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -969,7 +968,7 @@ function FailuresPage() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                lineNumber: 249,
+                                lineNumber: 248,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -982,7 +981,7 @@ function FailuresPage() {
                                         children: "Prev"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                        lineNumber: 251,
+                                        lineNumber: 250,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -992,25 +991,25 @@ function FailuresPage() {
                                         children: "Next"
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                        lineNumber: 253,
+                                        lineNumber: 252,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                                lineNumber: 250,
+                                lineNumber: 249,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                        lineNumber: 248,
+                        lineNumber: 247,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                lineNumber: 201,
+                lineNumber: 200,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -1030,7 +1029,7 @@ function FailuresPage() {
                             onClick: ()=>setSelected(null)
                         }, void 0, false, {
                             fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                            lineNumber: 263,
+                            lineNumber: 262,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(FailureDrawer, {
@@ -1038,20 +1037,20 @@ function FailuresPage() {
                             onClose: ()=>setSelected(null)
                         }, void 0, false, {
                             fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                            lineNumber: 268,
+                            lineNumber: 267,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true)
             }, void 0, false, {
                 fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-                lineNumber: 260,
+                lineNumber: 259,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/apps/web/src/app/dashboard/failures/page.tsx",
-        lineNumber: 143,
+        lineNumber: 142,
         columnNumber: 5
     }, this);
 }

@@ -35,6 +35,19 @@ export class MaintenanceService {
     });
   }
 
+  async getOverdueTasks(rigId?: number) {
+    return this.prisma.deferredMaintenanceTask.findMany({
+      where: {
+        isRemoved: false,
+        ...(rigId && { rigId }),
+        plannedCompletionDate: { lt: new Date() },
+      },
+      include: { rig: { select: { id: true, name: true } } },
+      orderBy: { plannedCompletionDate: 'asc' },
+      take: 100,
+    });
+  }
+
   async closeDeferredTask(id: number, userId: number) {
     return this.prisma.deferredMaintenanceTask.update({
       where: { id },
