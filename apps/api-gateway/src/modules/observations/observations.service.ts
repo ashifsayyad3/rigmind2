@@ -16,7 +16,9 @@ export class ObservationsService {
     page?: number;
     limit?: number;
   }) {
-    const { rigId: _rigId, status, type, dateFrom, dateTo, search, page = 1, limit = 25 } = filters;
+    const { rigId: _rigId, status, type, dateFrom, dateTo, search } = filters;
+    const page = Number(filters.page) || 1;
+    const limit = Number(filters.limit) || 25;
 
     const where: Prisma.ObservationWhereInput = {
       isRemoved: false,

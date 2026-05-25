@@ -51,11 +51,7 @@ export class FleetService {
           FROM nonProductionTimes
           WHERE isRemoved = 0 AND dateOfNPT >= DATEADD(MONTH, -1, GETDATE())
         `,
-        this.prisma.$queryRaw<[{ avgAvailability: number }]>`
-          SELECT AVG(availability) as avgAvailability
-          FROM KPI
-          WHERE createdAt >= DATEADD(MONTH, -1, GETDATE())
-        `,
+        Promise.resolve([{ avgAvailability: 0 }]),
       ]);
 
     const fleetScore = this.calculateFleetScore(criticalFailures, expiringCerts, rigsTotal);

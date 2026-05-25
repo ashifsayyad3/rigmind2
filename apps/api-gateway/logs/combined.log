@@ -5346,3 +5346,239 @@
 {"context":"HTTP","level":"info","message":"[bc954407] GET /api/v1/failures/stats?days=30 200 — 442ms (user:1)","timestamp":"2026-05-25T13:29:34.355Z"}
 {"context":"HTTP","level":"info","message":"[0474bff2] GET /api/v1/notifications 200 — 455ms (user:1)","timestamp":"2026-05-25T13:29:34.409Z"}
 {"context":"HTTP","level":"info","message":"[0a564a8b] GET /api/v1/rigs?pageSize=16 200 — 538ms (user:1)","timestamp":"2026-05-25T13:29:34.461Z"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application...","timestamp":"2026-05-25T13:30:44.033Z"}
+{"context":"InstanceLoader","level":"info","message":"PrismaModule dependencies initialized","timestamp":"2026-05-25T13:30:44.120Z"}
+{"context":"InstanceLoader","level":"info","message":"PassportModule dependencies initialized","timestamp":"2026-05-25T13:30:44.122Z"}
+{"context":"InstanceLoader","level":"info","message":"ThrottlerModule dependencies initialized","timestamp":"2026-05-25T13:30:44.168Z"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized","timestamp":"2026-05-25T13:30:44.169Z"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized","timestamp":"2026-05-25T13:30:44.170Z"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized","timestamp":"2026-05-25T13:30:44.175Z"}
+{"context":"InstanceLoader","level":"info","message":"NptModule dependencies initialized","timestamp":"2026-05-25T13:30:44.175Z"}
+{"context":"InstanceLoader","level":"info","message":"FleetModule dependencies initialized","timestamp":"2026-05-25T13:30:44.176Z"}
+{"context":"InstanceLoader","level":"info","message":"BopModule dependencies initialized","timestamp":"2026-05-25T13:30:44.178Z"}
+{"context":"InstanceLoader","level":"info","message":"ScheduleModule dependencies initialized","timestamp":"2026-05-25T13:30:44.240Z"}
+{"context":"InstanceLoader","level":"info","message":"EventEmitterModule dependencies initialized","timestamp":"2026-05-25T13:30:44.240Z"}
+{"context":"CopilotService","level":"warn","message":"ANTHROPIC_API_KEY not set — Copilot endpoints will return 503","timestamp":"2026-05-25T13:30:44.242Z"}
+{"context":"InstanceLoader","level":"info","message":"RigsModule dependencies initialized","timestamp":"2026-05-25T13:30:44.245Z"}
+{"context":"InstanceLoader","level":"info","message":"WellsModule dependencies initialized","timestamp":"2026-05-25T13:30:44.246Z"}
+{"context":"InstanceLoader","level":"info","message":"FailuresModule dependencies initialized","timestamp":"2026-05-25T13:30:44.246Z"}
+{"context":"InstanceLoader","level":"info","message":"MaintenanceModule dependencies initialized","timestamp":"2026-05-25T13:30:44.246Z"}
+{"context":"InstanceLoader","level":"info","message":"CertificatesModule dependencies initialized","timestamp":"2026-05-25T13:30:44.246Z"}
+{"context":"InstanceLoader","level":"info","message":"ObservationsModule dependencies initialized","timestamp":"2026-05-25T13:30:44.246Z"}
+{"context":"InstanceLoader","level":"info","message":"RecommendationsModule dependencies initialized","timestamp":"2026-05-25T13:30:44.246Z"}
+{"context":"InstanceLoader","level":"info","message":"NotificationsModule dependencies initialized","timestamp":"2026-05-25T13:30:44.246Z"}
+{"context":"InstanceLoader","level":"info","message":"KpiModule dependencies initialized","timestamp":"2026-05-25T13:30:44.246Z"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized","timestamp":"2026-05-25T13:30:44.247Z"}
+{"context":"InstanceLoader","level":"info","message":"CopilotModule dependencies initialized","timestamp":"2026-05-25T13:30:44.248Z"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized","timestamp":"2026-05-25T13:30:44.248Z"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized","timestamp":"2026-05-25T13:30:44.248Z"}
+{"context":"InstanceLoader","level":"info","message":"RtmModule dependencies initialized","timestamp":"2026-05-25T13:30:44.248Z"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized","timestamp":"2026-05-25T13:30:44.323Z"}
+{"context":"RtmGateway","level":"info","message":"RTM WebSocket Gateway initialized","timestamp":"2026-05-25T13:30:44.498Z"}
+{"context":"WebSocketsController","level":"info","message":"RtmGateway subscribed to the \"rig:subscribe\" message","timestamp":"2026-05-25T13:30:44.500Z"}
+{"context":"WebSocketsController","level":"info","message":"RtmGateway subscribed to the \"rig:unsubscribe\" message","timestamp":"2026-05-25T13:30:44.500Z"}
+{"context":"RoutesResolver","level":"info","message":"HealthController {/api/health} (version: 1):","timestamp":"2026-05-25T13:30:44.502Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/health, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.506Z"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth} (version: 1):","timestamp":"2026-05-25T13:30:44.507Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/login, POST} (version: 1) route","timestamp":"2026-05-25T13:30:44.508Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} (version: 1) route","timestamp":"2026-05-25T13:30:44.509Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/me, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.511Z"}
+{"context":"RoutesResolver","level":"info","message":"RigsController {/api/rigs} (version: 1):","timestamp":"2026-05-25T13:30:44.511Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.512Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.513Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id/health, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.514Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id/current-well, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.514Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id/status-history, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.515Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:44.517Z"}
+{"context":"RoutesResolver","level":"info","message":"WellsController {/api/wells} (version: 1):","timestamp":"2026-05-25T13:30:44.517Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/wells, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.518Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/wells/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.518Z"}
+{"context":"RoutesResolver","level":"info","message":"FailuresController {/api/failures} (version: 1):","timestamp":"2026-05-25T13:30:44.519Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.520Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/stats, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.520Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.521Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id/similar, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.521Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id/timeline, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.522Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures, POST} (version: 1) route","timestamp":"2026-05-25T13:30:44.522Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:44.523Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id, DELETE} (version: 1) route","timestamp":"2026-05-25T13:30:44.524Z"}
+{"context":"RoutesResolver","level":"info","message":"MaintenanceController {/api/maintenance} (version: 1):","timestamp":"2026-05-25T13:30:44.524Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/deferred, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.525Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/overdue, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.525Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/stats, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.525Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/history/component/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.526Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/deferred/:id/close, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:44.526Z"}
+{"context":"RoutesResolver","level":"info","message":"CertificatesController {/api/certificates} (version: 1):","timestamp":"2026-05-25T13:30:44.526Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/certificates, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.528Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/certificates/expiring, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.528Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/certificates/expiry-dashboard, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.529Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/certificates/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.530Z"}
+{"context":"RoutesResolver","level":"info","message":"NptController {/api/npt} (version: 1):","timestamp":"2026-05-25T13:30:44.530Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.532Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/summary, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.532Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/trend, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.533Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/by-category, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.533Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/analytics, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.534Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/moa-delays, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.536Z"}
+{"context":"RoutesResolver","level":"info","message":"ObservationsController {/api/observations} (version: 1):","timestamp":"2026-05-25T13:30:44.536Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.536Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations/stats, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.536Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.537Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations, POST} (version: 1) route","timestamp":"2026-05-25T13:30:44.537Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations/:id, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:44.537Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations/:id, DELETE} (version: 1) route","timestamp":"2026-05-25T13:30:44.538Z"}
+{"context":"RoutesResolver","level":"info","message":"RecommendationsController {/api/recommendations} (version: 1):","timestamp":"2026-05-25T13:30:44.538Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations/reports, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.538Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations/reports/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.539Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.539Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations/stats, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.540Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations/:id/status, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:44.541Z"}
+{"context":"RoutesResolver","level":"info","message":"FleetController {/api/fleet} (version: 1):","timestamp":"2026-05-25T13:30:44.541Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/health, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.542Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/metrics, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.543Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/map, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.543Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/health-history, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.544Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/predictions, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.544Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/health-scores, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.545Z"}
+{"context":"RoutesResolver","level":"info","message":"CopilotController {/api/copilot} (version: 1):","timestamp":"2026-05-25T13:30:44.545Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/copilot/ask, POST} (version: 1) route","timestamp":"2026-05-25T13:30:44.546Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/copilot/report/:rigId, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.546Z"}
+{"context":"RoutesResolver","level":"info","message":"NotificationsController {/api/notifications} (version: 1):","timestamp":"2026-05-25T13:30:44.547Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.547Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications/unread-count, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.548Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications/read-all, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:44.548Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications/mark-all-read, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:44.549Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications/:id/read, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:44.549Z"}
+{"context":"RoutesResolver","level":"info","message":"RtmController {/api/rtm} (version: 1):","timestamp":"2026-05-25T13:30:44.549Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rtm/fleet, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.549Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rtm/rig/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.550Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rtm/rig/:id/sensor/:tag, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.550Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rtm/rig/:id/alarms, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.551Z"}
+{"context":"RoutesResolver","level":"info","message":"BopController {/api/bop} (version: 1):","timestamp":"2026-05-25T13:30:44.552Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/bop, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.553Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/bop/events, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.553Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/bop/changes, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.553Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/bop/active-assignments, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.555Z"}
+{"context":"RoutesResolver","level":"info","message":"KpiController {/api/kpi} (version: 1):","timestamp":"2026-05-25T13:30:44.555Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/kpi/fleet, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.556Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/kpi/rig/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:44.557Z"}
+{"context":"PrismaService","level":"info","message":"✅ Database connected","timestamp":"2026-05-25T13:30:44.920Z"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started","timestamp":"2026-05-25T13:30:44.931Z"}
+{"context":"NestFactory","level":"info","message":"Starting Nest application...","timestamp":"2026-05-25T13:30:58.041Z"}
+{"context":"InstanceLoader","level":"info","message":"PrismaModule dependencies initialized","timestamp":"2026-05-25T13:30:58.073Z"}
+{"context":"InstanceLoader","level":"info","message":"PassportModule dependencies initialized","timestamp":"2026-05-25T13:30:58.074Z"}
+{"context":"InstanceLoader","level":"info","message":"ThrottlerModule dependencies initialized","timestamp":"2026-05-25T13:30:58.097Z"}
+{"context":"InstanceLoader","level":"info","message":"ConfigHostModule dependencies initialized","timestamp":"2026-05-25T13:30:58.098Z"}
+{"context":"InstanceLoader","level":"info","message":"DiscoveryModule dependencies initialized","timestamp":"2026-05-25T13:30:58.099Z"}
+{"context":"InstanceLoader","level":"info","message":"ConfigModule dependencies initialized","timestamp":"2026-05-25T13:30:58.101Z"}
+{"context":"InstanceLoader","level":"info","message":"NptModule dependencies initialized","timestamp":"2026-05-25T13:30:58.101Z"}
+{"context":"InstanceLoader","level":"info","message":"FleetModule dependencies initialized","timestamp":"2026-05-25T13:30:58.101Z"}
+{"context":"InstanceLoader","level":"info","message":"BopModule dependencies initialized","timestamp":"2026-05-25T13:30:58.102Z"}
+{"context":"InstanceLoader","level":"info","message":"ScheduleModule dependencies initialized","timestamp":"2026-05-25T13:30:58.125Z"}
+{"context":"InstanceLoader","level":"info","message":"EventEmitterModule dependencies initialized","timestamp":"2026-05-25T13:30:58.126Z"}
+{"context":"CopilotService","level":"warn","message":"ANTHROPIC_API_KEY not set — Copilot endpoints will return 503","timestamp":"2026-05-25T13:30:58.128Z"}
+{"context":"InstanceLoader","level":"info","message":"RigsModule dependencies initialized","timestamp":"2026-05-25T13:30:58.130Z"}
+{"context":"InstanceLoader","level":"info","message":"WellsModule dependencies initialized","timestamp":"2026-05-25T13:30:58.130Z"}
+{"context":"InstanceLoader","level":"info","message":"FailuresModule dependencies initialized","timestamp":"2026-05-25T13:30:58.130Z"}
+{"context":"InstanceLoader","level":"info","message":"MaintenanceModule dependencies initialized","timestamp":"2026-05-25T13:30:58.131Z"}
+{"context":"InstanceLoader","level":"info","message":"CertificatesModule dependencies initialized","timestamp":"2026-05-25T13:30:58.131Z"}
+{"context":"InstanceLoader","level":"info","message":"ObservationsModule dependencies initialized","timestamp":"2026-05-25T13:30:58.131Z"}
+{"context":"InstanceLoader","level":"info","message":"RecommendationsModule dependencies initialized","timestamp":"2026-05-25T13:30:58.131Z"}
+{"context":"InstanceLoader","level":"info","message":"NotificationsModule dependencies initialized","timestamp":"2026-05-25T13:30:58.131Z"}
+{"context":"InstanceLoader","level":"info","message":"KpiModule dependencies initialized","timestamp":"2026-05-25T13:30:58.131Z"}
+{"context":"InstanceLoader","level":"info","message":"JwtModule dependencies initialized","timestamp":"2026-05-25T13:30:58.131Z"}
+{"context":"InstanceLoader","level":"info","message":"CopilotModule dependencies initialized","timestamp":"2026-05-25T13:30:58.132Z"}
+{"context":"InstanceLoader","level":"info","message":"AuthModule dependencies initialized","timestamp":"2026-05-25T13:30:58.132Z"}
+{"context":"InstanceLoader","level":"info","message":"AppModule dependencies initialized","timestamp":"2026-05-25T13:30:58.132Z"}
+{"context":"InstanceLoader","level":"info","message":"RtmModule dependencies initialized","timestamp":"2026-05-25T13:30:58.133Z"}
+{"context":"InstanceLoader","level":"info","message":"CacheModule dependencies initialized","timestamp":"2026-05-25T13:30:58.170Z"}
+{"context":"RtmGateway","level":"info","message":"RTM WebSocket Gateway initialized","timestamp":"2026-05-25T13:30:58.235Z"}
+{"context":"WebSocketsController","level":"info","message":"RtmGateway subscribed to the \"rig:subscribe\" message","timestamp":"2026-05-25T13:30:58.236Z"}
+{"context":"WebSocketsController","level":"info","message":"RtmGateway subscribed to the \"rig:unsubscribe\" message","timestamp":"2026-05-25T13:30:58.236Z"}
+{"context":"RoutesResolver","level":"info","message":"HealthController {/api/health} (version: 1):","timestamp":"2026-05-25T13:30:58.237Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/health, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.240Z"}
+{"context":"RoutesResolver","level":"info","message":"AuthController {/api/auth} (version: 1):","timestamp":"2026-05-25T13:30:58.240Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/login, POST} (version: 1) route","timestamp":"2026-05-25T13:30:58.241Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/refresh, POST} (version: 1) route","timestamp":"2026-05-25T13:30:58.241Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/auth/me, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.242Z"}
+{"context":"RoutesResolver","level":"info","message":"RigsController {/api/rigs} (version: 1):","timestamp":"2026-05-25T13:30:58.242Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.242Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.243Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id/health, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.243Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id/current-well, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.243Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id/status-history, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.244Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rigs/:id, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:58.245Z"}
+{"context":"RoutesResolver","level":"info","message":"WellsController {/api/wells} (version: 1):","timestamp":"2026-05-25T13:30:58.245Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/wells, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.245Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/wells/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.246Z"}
+{"context":"RoutesResolver","level":"info","message":"FailuresController {/api/failures} (version: 1):","timestamp":"2026-05-25T13:30:58.246Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.246Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/stats, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.246Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.247Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id/similar, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.247Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id/timeline, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.247Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures, POST} (version: 1) route","timestamp":"2026-05-25T13:30:58.248Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:58.248Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/failures/:id, DELETE} (version: 1) route","timestamp":"2026-05-25T13:30:58.248Z"}
+{"context":"RoutesResolver","level":"info","message":"MaintenanceController {/api/maintenance} (version: 1):","timestamp":"2026-05-25T13:30:58.248Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/deferred, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.248Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/overdue, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.248Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/stats, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.249Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/history/component/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.249Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/maintenance/deferred/:id/close, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:58.249Z"}
+{"context":"RoutesResolver","level":"info","message":"CertificatesController {/api/certificates} (version: 1):","timestamp":"2026-05-25T13:30:58.249Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/certificates, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.249Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/certificates/expiring, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.249Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/certificates/expiry-dashboard, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.249Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/certificates/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.250Z"}
+{"context":"RoutesResolver","level":"info","message":"NptController {/api/npt} (version: 1):","timestamp":"2026-05-25T13:30:58.250Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.250Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/summary, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.250Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/trend, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.250Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/by-category, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.250Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/analytics, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.250Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/npt/moa-delays, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.251Z"}
+{"context":"RoutesResolver","level":"info","message":"ObservationsController {/api/observations} (version: 1):","timestamp":"2026-05-25T13:30:58.251Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.251Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations/stats, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.251Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.251Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations, POST} (version: 1) route","timestamp":"2026-05-25T13:30:58.251Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations/:id, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:58.252Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/observations/:id, DELETE} (version: 1) route","timestamp":"2026-05-25T13:30:58.252Z"}
+{"context":"RoutesResolver","level":"info","message":"RecommendationsController {/api/recommendations} (version: 1):","timestamp":"2026-05-25T13:30:58.252Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations/reports, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.252Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations/reports/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.252Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.253Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations/stats, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.253Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/recommendations/:id/status, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:58.253Z"}
+{"context":"RoutesResolver","level":"info","message":"FleetController {/api/fleet} (version: 1):","timestamp":"2026-05-25T13:30:58.253Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/health, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.253Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/metrics, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.253Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/map, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.254Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/health-history, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.254Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/predictions, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.254Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/fleet/health-scores, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.254Z"}
+{"context":"RoutesResolver","level":"info","message":"CopilotController {/api/copilot} (version: 1):","timestamp":"2026-05-25T13:30:58.254Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/copilot/ask, POST} (version: 1) route","timestamp":"2026-05-25T13:30:58.254Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/copilot/report/:rigId, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.254Z"}
+{"context":"RoutesResolver","level":"info","message":"NotificationsController {/api/notifications} (version: 1):","timestamp":"2026-05-25T13:30:58.255Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.255Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications/unread-count, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.255Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications/read-all, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:58.255Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications/mark-all-read, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:58.255Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/notifications/:id/read, PUT} (version: 1) route","timestamp":"2026-05-25T13:30:58.256Z"}
+{"context":"RoutesResolver","level":"info","message":"RtmController {/api/rtm} (version: 1):","timestamp":"2026-05-25T13:30:58.256Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rtm/fleet, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.256Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rtm/rig/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.256Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rtm/rig/:id/sensor/:tag, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.256Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/rtm/rig/:id/alarms, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.256Z"}
+{"context":"RoutesResolver","level":"info","message":"BopController {/api/bop} (version: 1):","timestamp":"2026-05-25T13:30:58.257Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/bop, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.257Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/bop/events, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.257Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/bop/changes, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.257Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/bop/active-assignments, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.257Z"}
+{"context":"RoutesResolver","level":"info","message":"KpiController {/api/kpi} (version: 1):","timestamp":"2026-05-25T13:30:58.257Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/kpi/fleet, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.258Z"}
+{"context":"RouterExplorer","level":"info","message":"Mapped {/api/kpi/rig/:id, GET} (version: 1) route","timestamp":"2026-05-25T13:30:58.258Z"}
+{"context":"PrismaService","level":"info","message":"✅ Database connected","timestamp":"2026-05-25T13:30:58.449Z"}
+{"context":"NestApplication","level":"info","message":"Nest application successfully started","timestamp":"2026-05-25T13:30:58.454Z"}

@@ -29,8 +29,10 @@ export class FailuresService {
     const {
       rigId, severity, status, failureType, equipmentType, isNPT,
       dateFrom, dateTo, search,
-      page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'desc',
+      sortBy = 'createdAt', sortOrder = 'desc',
     } = filters;
+    const page = Number(filters.page) || 1;
+    const limit = Number(filters.limit) || 20;
 
     const where: Prisma.FailureWhereInput = {
       isRemoved: false,

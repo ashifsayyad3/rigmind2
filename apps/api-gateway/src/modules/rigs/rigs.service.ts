@@ -16,7 +16,9 @@ export class RigsService {
     page?: number;
     limit?: number;
   }, accessibleRigIds: number[] | null) {
-    const { status, isRTM, onContract, category, operatorId, page = 1, limit = 50 } = filters;
+    const { status, isRTM, onContract, category, operatorId } = filters;
+    const page = Number(filters.page) || 1;
+    const limit = Number(filters.limit) || 50;
 
     const where: Prisma.RigWhereInput = {
       ...(accessibleRigIds && { id: { in: accessibleRigIds } }),

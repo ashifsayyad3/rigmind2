@@ -20,7 +20,9 @@ let FailuresService = FailuresService_1 = class FailuresService {
         this.logger = new common_1.Logger(FailuresService_1.name);
     }
     async findAll(filters, userId, accessibleRigIds) {
-        const { rigId, severity, status, failureType, equipmentType, isNPT, dateFrom, dateTo, search, page = 1, limit = 20, sortBy = 'createdAt', sortOrder = 'desc', } = filters;
+        const { rigId, severity, status, failureType, equipmentType, isNPT, dateFrom, dateTo, search, sortBy = 'createdAt', sortOrder = 'desc', } = filters;
+        const page = Number(filters.page) || 1;
+        const limit = Number(filters.limit) || 20;
         const where = {
             isRemoved: false,
             ...(accessibleRigIds && { rigId: { in: accessibleRigIds } }),

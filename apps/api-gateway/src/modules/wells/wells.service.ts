@@ -7,7 +7,9 @@ export class WellsService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(filters: { availability?: string; region?: string; field?: string; page?: number; limit?: number }) {
-    const { availability, region, field, page = 1, limit = 25 } = filters;
+    const { availability, region, field } = filters;
+    const page = Number(filters.page) || 1;
+    const limit = Number(filters.limit) || 25;
     const where: Prisma.WellWhereInput = {
       isRemoved: false,
       ...(availability && { availability }),

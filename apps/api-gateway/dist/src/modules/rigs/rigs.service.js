@@ -19,7 +19,9 @@ let RigsService = RigsService_1 = class RigsService {
         this.logger = new common_1.Logger(RigsService_1.name);
     }
     async findAll(filters, accessibleRigIds) {
-        const { status, isRTM, onContract, category, operatorId, page = 1, limit = 50 } = filters;
+        const { status, isRTM, onContract, category, operatorId } = filters;
+        const page = Number(filters.page) || 1;
+        const limit = Number(filters.limit) || 50;
         const where = {
             ...(accessibleRigIds && { id: { in: accessibleRigIds } }),
             ...(status && { status }),

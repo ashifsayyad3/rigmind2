@@ -17,7 +17,9 @@ let WellsService = class WellsService {
         this.prisma = prisma;
     }
     async findAll(filters) {
-        const { availability, region, field, page = 1, limit = 25 } = filters;
+        const { availability, region, field } = filters;
+        const page = Number(filters.page) || 1;
+        const limit = Number(filters.limit) || 25;
         const where = {
             isRemoved: false,
             ...(availability && { availability }),
