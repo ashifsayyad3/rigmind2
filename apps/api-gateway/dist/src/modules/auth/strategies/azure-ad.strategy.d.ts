@@ -12,10 +12,10 @@ export declare class AzureAdStrategy extends AzureAdStrategy_base {
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            name: string | null;
+            enabled: boolean;
             createdById: number | null;
             updatedById: number | null;
-            enabled: boolean;
+            name: string | null;
             title: string | null;
             access: string | null;
             position: number | null;
@@ -23,23 +23,23 @@ export declare class AzureAdStrategy extends AzureAdStrategy_base {
         } | null;
     } & {
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
-        createdById: number | null;
-        updatedById: number | null;
-        enabled: boolean;
         firstName: string | null;
         lastName: string | null;
         email: string | null;
         phoneNumber: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         roleId: number | null;
         canAccessAllRigs: boolean;
         lastActive: Date | null;
+        enabled: boolean;
         company: string | null;
         taggable: boolean;
         notify: boolean;
         deleted: boolean;
         isSurveyor: boolean;
+        createdById: number | null;
+        updatedById: number | null;
     }>;
 }
 export {};

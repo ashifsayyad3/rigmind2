@@ -4,6 +4,9 @@ export declare class WellsController {
     constructor(svc: WellsService);
     findAll(f: any): Promise<{
         items: ({
+            _count: {
+                rigWellChanges: number;
+            };
             rigWellChanges: ({
                 rig: {
                     id: number;
@@ -13,27 +16,24 @@ export declare class WellsController {
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                date: Date;
-                wellId: number | null;
                 rigId: number;
+                wellId: number | null;
+                date: Date;
                 wellSessionId: number | null;
                 operationStartDate: Date | null;
             })[];
-            _count: {
-                rigWellChanges: number;
-            };
         } & {
             id: number;
-            name: string;
-            depth: number | null;
-            region: string | null;
             createdAt: Date;
             updatedAt: Date;
-            field: string | null;
-            availability: string;
-            isRemoved: boolean;
             createdById: number | null;
             updatedById: number | null;
+            name: string;
+            isRemoved: boolean;
+            depth: number | null;
+            availability: string;
+            region: string | null;
+            field: string | null;
         })[];
         total: number;
         page: number;
@@ -43,15 +43,19 @@ export declare class WellsController {
     findOne(id: number): Promise<{
         rigWellChanges: ({
             rig: {
+                manufacturer: string | null;
                 id: number;
-                name: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 createdById: number | null;
                 updatedById: number | null;
-                onContract: boolean | null;
-                offContractDate: Date;
+                name: string | null;
                 status: string | null;
+                isRTM: boolean;
+                onContract: boolean | null;
+                category: string | null;
+                operatorId: number | null;
+                offContractDate: Date;
                 projectedUnLatchDate: Date | null;
                 operationStart: Date | null;
                 bop1Id: number | null;
@@ -60,7 +64,6 @@ export declare class WellsController {
                 interventionStackId: number | null;
                 contractorId: number | null;
                 meetingId: number | null;
-                manufacturer: string | null;
                 model: string | null;
                 visible: boolean;
                 manufacturerId: number | null;
@@ -68,16 +71,13 @@ export declare class WellsController {
                 ezChartIPAddress: string | null;
                 projectedShipyardEndDate: Date | null;
                 actualShipyardEndDate: Date | null;
-                isRTM: boolean;
                 color: string | null;
                 piRigName: string | null;
-                category: string | null;
                 canAccessPressureTest: boolean;
                 canAccessBRV: boolean | null;
                 rtmRigId: string | null;
                 sendStaleNotifications: boolean;
                 mpdId: number | null;
-                operatorId: number | null;
                 dhwId: number | null;
                 annularHealthConstantId: number | null;
                 mpdTypesId: number | null;
@@ -88,9 +88,9 @@ export declare class WellsController {
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            date: Date;
-            wellId: number | null;
             rigId: number;
+            wellId: number | null;
+            date: Date;
             wellSessionId: number | null;
             operationStartDate: Date | null;
         })[];
@@ -100,8 +100,8 @@ export declare class WellsController {
             updatedAt: Date;
             createdById: number;
             updatedById: number | null;
-            wellId: number;
             rigId: number;
+            wellId: number;
             wellSessionStartDate: Date | null;
             hasWellSessionEnded: boolean;
             wellSessionEndDate: Date | null;
@@ -110,15 +110,15 @@ export declare class WellsController {
         }[];
     } & {
         id: number;
-        name: string;
-        depth: number | null;
-        region: string | null;
         createdAt: Date;
         updatedAt: Date;
-        field: string | null;
-        availability: string;
-        isRemoved: boolean;
         createdById: number | null;
         updatedById: number | null;
+        name: string;
+        isRemoved: boolean;
+        depth: number | null;
+        availability: string;
+        region: string | null;
+        field: string | null;
     }>;
 }

@@ -9,10 +9,10 @@ export declare class BopController {
             };
         } & {
             id: number;
-            location: string | null;
-            onDeckDate: Date | null;
             createdAt: Date;
             updatedAt: Date;
+            location: string | null;
+            onDeckDate: Date | null;
             installationDate: Date | null;
             vendorOEM: string | null;
             state: string | null;
@@ -39,8 +39,9 @@ export declare class BopController {
         id: number;
         createdAt: Date;
         updatedAt: Date;
-        bopId: number;
+        projectedUnLatchDate: Date | null;
         equipment: string;
+        bopId: number;
         bopStatus: string | null;
         projectedOnDeckDate: Date | null;
         actualOnDeckDate: Date | null;
@@ -54,7 +55,6 @@ export declare class BopController {
         actualLatchDate: Date | null;
         projectedLatchTestCompleteDate: Date | null;
         actualLatchTestCompleteDate: Date | null;
-        projectedUnLatchDate: Date | null;
         actualUnLatchDate: Date | null;
     })[]>;
     getChanges(rigId?: number): Promise<({
@@ -63,10 +63,10 @@ export declare class BopController {
         } | null;
     } & {
         id: number;
-        location: string | null;
-        onDeckDate: Date | null;
         createdAt: Date;
         updatedAt: Date;
+        location: string | null;
+        onDeckDate: Date | null;
         state: string | null;
         splashDate: Date | null;
         latchTestStartDate: Date | null;
@@ -87,12 +87,12 @@ export declare class BopController {
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        createdById: number;
+        updatedById: number | null;
         name: string;
         rigId: number;
         rtmRigId: string;
         startDate: Date;
         endDate: Date | null;
-        createdById: number;
-        updatedById: number | null;
     })[]>;
 }

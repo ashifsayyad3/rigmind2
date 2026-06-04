@@ -19,19 +19,19 @@ export declare class AuthService {
         role: ({
             rolePermissions: ({
                 permission: {
+                    task: string | null;
                     id: number;
                     createdAt: Date;
                     updatedAt: Date;
                     type: string | null;
-                    task: string | null;
                     can: string | null;
                 };
             } & {
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                createdById: number | null;
                 roleId: number;
+                createdById: number | null;
                 permissionId: number;
             })[];
         } & {
@@ -39,10 +39,10 @@ export declare class AuthService {
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            name: string | null;
+            enabled: boolean;
             createdById: number | null;
             updatedById: number | null;
-            enabled: boolean;
+            name: string | null;
             title: string | null;
             access: string | null;
             position: number | null;
@@ -50,23 +50,23 @@ export declare class AuthService {
         }) | null;
     } & {
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
-        createdById: number | null;
-        updatedById: number | null;
-        enabled: boolean;
         firstName: string | null;
         lastName: string | null;
         email: string | null;
         phoneNumber: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         roleId: number | null;
         canAccessAllRigs: boolean;
         lastActive: Date | null;
+        enabled: boolean;
         company: string | null;
         taggable: boolean;
         notify: boolean;
         deleted: boolean;
         isSurveyor: boolean;
+        createdById: number | null;
+        updatedById: number | null;
     }>;
     login(user: any): Promise<{
         accessToken: string;
@@ -95,19 +95,36 @@ export declare class AuthService {
         };
     }>;
     getProfile(userId: number): Promise<({
+        role: {
+            log: string | null;
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            enabled: boolean;
+            createdById: number | null;
+            updatedById: number | null;
+            name: string | null;
+            title: string | null;
+            access: string | null;
+            position: number | null;
+            canAccessAdminPanel: boolean;
+        } | null;
         userRigs: ({
             rig: {
+                manufacturer: string | null;
                 id: number;
                 createdAt: Date;
                 updatedAt: Date;
-                name: string | null;
-                projectedUnLatchDate: Date | null;
-                rtmRigId: string | null;
                 createdById: number | null;
                 updatedById: number | null;
-                onContract: boolean | null;
-                offContractDate: Date;
+                name: string | null;
                 status: string | null;
+                isRTM: boolean;
+                onContract: boolean | null;
+                category: string | null;
+                operatorId: number | null;
+                offContractDate: Date;
+                projectedUnLatchDate: Date | null;
                 operationStart: Date | null;
                 bop1Id: number | null;
                 bop2Id: number | null;
@@ -115,7 +132,6 @@ export declare class AuthService {
                 interventionStackId: number | null;
                 contractorId: number | null;
                 meetingId: number | null;
-                manufacturer: string | null;
                 model: string | null;
                 visible: boolean;
                 manufacturerId: number | null;
@@ -123,15 +139,13 @@ export declare class AuthService {
                 ezChartIPAddress: string | null;
                 projectedShipyardEndDate: Date | null;
                 actualShipyardEndDate: Date | null;
-                isRTM: boolean;
                 color: string | null;
                 piRigName: string | null;
-                category: string | null;
                 canAccessPressureTest: boolean;
                 canAccessBRV: boolean | null;
+                rtmRigId: string | null;
                 sendStaleNotifications: boolean;
                 mpdId: number | null;
-                operatorId: number | null;
                 dhwId: number | null;
                 annularHealthConstantId: number | null;
                 mpdTypesId: number | null;
@@ -142,42 +156,28 @@ export declare class AuthService {
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            rigId: number;
             userId: number;
+            rigId: number;
         })[];
-        role: {
-            log: string | null;
-            id: number;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string | null;
-            createdById: number | null;
-            updatedById: number | null;
-            enabled: boolean;
-            title: string | null;
-            access: string | null;
-            position: number | null;
-            canAccessAdminPanel: boolean;
-        } | null;
     } & {
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
-        createdById: number | null;
-        updatedById: number | null;
-        enabled: boolean;
         firstName: string | null;
         lastName: string | null;
         email: string | null;
         phoneNumber: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         roleId: number | null;
         canAccessAllRigs: boolean;
         lastActive: Date | null;
+        enabled: boolean;
         company: string | null;
         taggable: boolean;
         notify: boolean;
         deleted: boolean;
         isSurveyor: boolean;
+        createdById: number | null;
+        updatedById: number | null;
     }) | null>;
     validateAzureUser(profile: any): Promise<{
         role: {
@@ -185,10 +185,10 @@ export declare class AuthService {
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            name: string | null;
+            enabled: boolean;
             createdById: number | null;
             updatedById: number | null;
-            enabled: boolean;
+            name: string | null;
             title: string | null;
             access: string | null;
             position: number | null;
@@ -196,22 +196,22 @@ export declare class AuthService {
         } | null;
     } & {
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
-        createdById: number | null;
-        updatedById: number | null;
-        enabled: boolean;
         firstName: string | null;
         lastName: string | null;
         email: string | null;
         phoneNumber: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         roleId: number | null;
         canAccessAllRigs: boolean;
         lastActive: Date | null;
+        enabled: boolean;
         company: string | null;
         taggable: boolean;
         notify: boolean;
         deleted: boolean;
         isSurveyor: boolean;
+        createdById: number | null;
+        updatedById: number | null;
     }>;
 }

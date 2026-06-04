@@ -65,7 +65,7 @@ Next.js 15 (Turbopack) with React 19, NextAuth.js 5 beta (Azure AD SSO), Tailwin
 
 - **AmCharts imports**: use `@amcharts/amcharts4/themes/amchartsdark` and `@amcharts/amcharts4/themes/animated` — NOT `@amcharts/amcharts4-themes/*` (that package doesn't exist).
 - **CSS**: PostCSS config is `apps/web/postcss.config.mjs`. The `@import url(...)` for Google Fonts **must** come before all `@tailwind` directives in `globals.css`.
-- **API client**: all routes in `apps/web/src/lib/api/client.ts` use explicit `/api/v1/` prefixes (NestJS URI versioning requires this; no interceptor rewrites paths). Default Bearer token is set as a constant `DEV_TOKEN` directly on the axios instance.
+- **API client**: all routes in `apps/web/src/lib/api/client.ts` use explicit `/api/v1/` prefixes (NestJS URI versioning requires this; no interceptor rewrites paths). Default Bearer token is set as a constant `DEV_TOKEN` directly on the axios instance. `DEV_TOKEN` is a real Azure AD JWT that expires — if API calls return 401 in the browser, replace it with a fresh token. The `localStorage` key `rigmind-v1` → `state.token` overrides it at runtime.
 - **SSR / hydration**: components using `Date`, `Math.random`, or browser APIs must use `useEffect` + `useState` with empty initial state to avoid hydration mismatches.
 - **Env**: `apps/web/.env.local` holds `NEXT_PUBLIC_API_URL=http://localhost:4000` and NextAuth config.
 
@@ -97,6 +97,10 @@ Schema domains: Rig/Well/Component, Failures/CorrectiveActions, Maintenance (def
 - **MLflow** — experiment tracking for failure-prediction model training
 - **n8n** — ETL workflow automation
 - **Redis** — API response caching (falls back to in-memory when unavailable)
+
+### Code Style
+
+Prettier is configured at the root (`package.json`): no semicolons, single quotes, 2-space indent, trailing commas (ES5), 100-char print width. ESLint extends `@typescript-eslint/recommended`. Run `npm run lint` to verify.
 
 ### Deployment
 

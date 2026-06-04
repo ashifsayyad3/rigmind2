@@ -4,14 +4,14 @@ export declare class NotificationsController {
     constructor(svc: NotificationsService);
     findAll(u: any, unreadOnly?: boolean): Promise<{
         id: number;
-        title: string | null;
-        message: string | null;
-        status: string | null;
-        assignedAs: string | null;
-        userId: number | null;
-        eventId: number | null;
         createdAt: Date;
         updatedAt: Date;
+        title: string | null;
+        userId: number | null;
+        status: string | null;
+        message: string | null;
+        assignedAs: string | null;
+        eventId: number | null;
         completeDate: Date | null;
     }[]>;
     getCount(u: any): Promise<number>;
@@ -19,14 +19,14 @@ export declare class NotificationsController {
     markAllRead(u: any): Promise<import(".prisma/client").Prisma.BatchPayload>;
     markRead(id: number, u: any): Promise<{
         id: number;
-        title: string | null;
-        message: string | null;
-        status: string | null;
-        assignedAs: string | null;
-        userId: number | null;
-        eventId: number | null;
         createdAt: Date;
         updatedAt: Date;
+        title: string | null;
+        userId: number | null;
+        status: string | null;
+        message: string | null;
+        assignedAs: string | null;
+        eventId: number | null;
         completeDate: Date | null;
     }>;
 }

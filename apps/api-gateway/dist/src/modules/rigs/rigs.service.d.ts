@@ -15,12 +15,17 @@ export declare class RigsService {
     }, accessibleRigIds: number[] | null): Promise<{
         items: {
             id: number;
-            onContract: boolean | null;
-            name: string | null;
-            status: string | null;
             createdAt: Date;
             updatedAt: Date;
+            _count: {
+                failures: number;
+                deferredMaintenanceTasks: number;
+                certificates: number;
+            };
+            name: string | null;
+            status: string | null;
             isRTM: boolean;
+            onContract: boolean | null;
             category: string | null;
             operatorId: number | null;
             bops_rigs_bop1IdTobops: {
@@ -29,11 +34,6 @@ export declare class RigsService {
             bops_rigs_bop2IdTobops: {
                 id: number;
             } | null;
-            _count: {
-                certificates: number;
-                deferredMaintenanceTasks: number;
-                failures: number;
-            };
         }[];
         total: number;
         page: number;
@@ -41,48 +41,62 @@ export declare class RigsService {
         pages: number;
     }>;
     findOne(id: number): Promise<{
-        activeBOPAssignments: {
+        userRigs: ({
+            user: {
+                id: number;
+                firstName: string | null;
+                lastName: string | null;
+                email: string | null;
+            };
+        } & {
             id: number;
-            name: string;
             createdAt: Date;
             updatedAt: Date;
-            rtmRigId: string;
+            userId: number;
+            rigId: number;
+        })[];
+        activeBOPAssignments: {
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
             createdById: number;
             updatedById: number | null;
+            name: string;
             rigId: number;
+            rtmRigId: string;
             startDate: Date;
             endDate: Date | null;
         }[];
         rigCertificateComponents: {
+            component: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
             rigId: number;
+            equipment: string | null;
+            fleet: string | null;
             system: string | null;
             subSystem: string | null;
-            equipment: string | null;
-            component: string | null;
-            fleet: string | null;
             included: boolean | null;
             compAbbreviation: string | null;
         }[];
         rigFeatures: ({
             feature: {
+                description: string | null;
                 id: number;
-                name: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                color: string | null;
                 enabled: boolean;
-                icon: string | null;
-                url: string | null;
-                platformId: number;
-                description: string | null;
+                name: string | null;
                 position: number | null;
+                color: string | null;
+                metrics: boolean | null;
+                url: string | null;
+                icon: string | null;
+                platformId: number;
                 isHealthMonitoringRealTimePage: boolean | null;
                 states: boolean | null;
                 sidebar: boolean | null;
-                metrics: boolean | null;
                 isAnalytics: boolean | null;
                 isTestInsights: boolean | null;
                 showOnFeaturesSidebar: boolean | null;
@@ -144,37 +158,28 @@ export declare class RigsService {
             lastStumpDate: Date | null;
             maintenancePercent: number | null;
         } | null;
-        userRigs: ({
-            user: {
-                id: number;
-                firstName: string | null;
-                lastName: string | null;
-                email: string | null;
-            };
-        } & {
-            id: number;
-            createdAt: Date;
-            updatedAt: Date;
-            rigId: number;
-            userId: number;
-        })[];
     } & {
+        manufacturer: string | null;
         id: number;
-        onContract: boolean | null;
-        offContractDate: Date;
-        name: string | null;
-        status: string | null;
-        projectedUnLatchDate: Date | null;
-        operationStart: Date | null;
         createdAt: Date;
         updatedAt: Date;
+        createdById: number | null;
+        updatedById: number | null;
+        name: string | null;
+        status: string | null;
+        isRTM: boolean;
+        onContract: boolean | null;
+        category: string | null;
+        operatorId: number | null;
+        offContractDate: Date;
+        projectedUnLatchDate: Date | null;
+        operationStart: Date | null;
         bop1Id: number | null;
         bop2Id: number | null;
         surfaceEquipmentId: number | null;
         interventionStackId: number | null;
         contractorId: number | null;
         meetingId: number | null;
-        manufacturer: string | null;
         model: string | null;
         visible: boolean;
         manufacturerId: number | null;
@@ -182,41 +187,41 @@ export declare class RigsService {
         ezChartIPAddress: string | null;
         projectedShipyardEndDate: Date | null;
         actualShipyardEndDate: Date | null;
-        isRTM: boolean;
         color: string | null;
         piRigName: string | null;
-        category: string | null;
         canAccessPressureTest: boolean;
         canAccessBRV: boolean | null;
         rtmRigId: string | null;
         sendStaleNotifications: boolean;
         mpdId: number | null;
-        operatorId: number | null;
         dhwId: number | null;
         annularHealthConstantId: number | null;
         mpdTypesId: number | null;
         mpdManufacturersId: number | null;
         hasDiverter: boolean | null;
-        createdById: number | null;
-        updatedById: number | null;
     }>;
     update(id: number, data: Prisma.RigUpdateInput, userId: number): Promise<{
+        manufacturer: string | null;
         id: number;
-        onContract: boolean | null;
-        offContractDate: Date;
-        name: string | null;
-        status: string | null;
-        projectedUnLatchDate: Date | null;
-        operationStart: Date | null;
         createdAt: Date;
         updatedAt: Date;
+        createdById: number | null;
+        updatedById: number | null;
+        name: string | null;
+        status: string | null;
+        isRTM: boolean;
+        onContract: boolean | null;
+        category: string | null;
+        operatorId: number | null;
+        offContractDate: Date;
+        projectedUnLatchDate: Date | null;
+        operationStart: Date | null;
         bop1Id: number | null;
         bop2Id: number | null;
         surfaceEquipmentId: number | null;
         interventionStackId: number | null;
         contractorId: number | null;
         meetingId: number | null;
-        manufacturer: string | null;
         model: string | null;
         visible: boolean;
         manufacturerId: number | null;
@@ -224,23 +229,18 @@ export declare class RigsService {
         ezChartIPAddress: string | null;
         projectedShipyardEndDate: Date | null;
         actualShipyardEndDate: Date | null;
-        isRTM: boolean;
         color: string | null;
         piRigName: string | null;
-        category: string | null;
         canAccessPressureTest: boolean;
         canAccessBRV: boolean | null;
         rtmRigId: string | null;
         sendStaleNotifications: boolean;
         mpdId: number | null;
-        operatorId: number | null;
         dhwId: number | null;
         annularHealthConstantId: number | null;
         mpdTypesId: number | null;
         mpdManufacturersId: number | null;
         hasDiverter: boolean | null;
-        createdById: number | null;
-        updatedById: number | null;
     }>;
     getHealthSnapshot(id: number): Promise<{
         rigId: number;
@@ -255,16 +255,16 @@ export declare class RigsService {
     getCurrentWell(rigId: number): Promise<unknown>;
     getStatusHistory(rigId: number, take?: number): Promise<{
         id: number;
-        status: string | null;
-        projectedUnLatchDate: Date | null;
         createdAt: Date;
         updatedAt: Date;
+        rigId: number | null;
+        status: string | null;
+        projectedUnLatchDate: Date | null;
         projectedShipyardEndDate: Date | null;
         actualShipyardEndDate: Date | null;
-        rigId: number | null;
-        startDate: Date | null;
         wellId: number | null;
         depth: number | null;
+        startDate: Date | null;
         bop1ChangesId: number | null;
         bop2ChangesId: number | null;
     }[]>;

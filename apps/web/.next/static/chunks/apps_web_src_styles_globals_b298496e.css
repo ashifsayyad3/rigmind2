@@ -1593,6 +1593,11 @@ body {
   background-color: #1e3a8a1a;
 }
 
+.bg-brand-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 155 255 / var(--tw-bg-opacity, 1));
+}
+
 .bg-brand-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(0 130 255 / var(--tw-bg-opacity, 1));
@@ -1796,11 +1801,6 @@ body {
 
 .bg-yellow-500\/10 {
   background-color: #eab3081a;
-}
-
-.bg-brand-400 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(51 155 255 / var(--tw-bg-opacity, 1));
 }
 
 .p-1 {
@@ -2150,10 +2150,6 @@ body {
 
 .text-green-500\/40 {
   color: #22c55e66;
-}
-
-.text-green-500\/70 {
-  color: #22c55eb3;
 }
 
 .text-orange-400 {

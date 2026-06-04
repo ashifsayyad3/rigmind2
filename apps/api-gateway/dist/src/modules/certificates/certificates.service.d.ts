@@ -11,18 +11,6 @@ export declare class CertificatesService {
         limit?: number;
     }): Promise<{
         items: ({
-            attachments: {
-                id: number;
-                createdAt: Date;
-                updatedAt: Date;
-                createdById: number | null;
-                updatedById: number | null;
-                expirationDate: Date;
-                certificateId: number;
-                certificateType: string | null;
-                attachmentId: number;
-                isDeleted: boolean;
-            }[];
             rig: {
                 id: number;
                 name: string | null;
@@ -35,18 +23,30 @@ export declare class CertificatesService {
                 bopType: string | null;
                 subType: string | null;
             } | null;
+            attachments: {
+                id: number;
+                createdAt: Date;
+                updatedAt: Date;
+                createdById: number | null;
+                updatedById: number | null;
+                attachmentId: number;
+                expirationDate: Date;
+                certificateId: number;
+                certificateType: string | null;
+                isDeleted: boolean;
+            }[];
         } & {
+            manufacturer: string | null;
             id: number;
+            createdAt: Date;
+            updatedAt: Date;
             rigId: number;
+            installationDate: Date | null;
             equipment: string | null;
             typeCodeId: number | null;
             serialNumber: string | null;
             tag: string | null;
-            manufacturer: string | null;
-            createdAt: Date;
-            updatedAt: Date;
             partNumber: string | null;
-            installationDate: Date | null;
             rigCertificateComponentId: number | null;
         })[];
         total: number;
@@ -69,17 +69,17 @@ export declare class CertificatesService {
                 subType: string | null;
             } | null;
         } & {
+            manufacturer: string | null;
             id: number;
+            createdAt: Date;
+            updatedAt: Date;
             rigId: number;
+            installationDate: Date | null;
             equipment: string | null;
             typeCodeId: number | null;
             serialNumber: string | null;
             tag: string | null;
-            manufacturer: string | null;
-            createdAt: Date;
-            updatedAt: Date;
             partNumber: string | null;
-            installationDate: Date | null;
             rigCertificateComponentId: number | null;
         };
     } & {
@@ -88,34 +88,27 @@ export declare class CertificatesService {
         updatedAt: Date;
         createdById: number | null;
         updatedById: number | null;
+        attachmentId: number;
         expirationDate: Date;
         certificateId: number;
         certificateType: string | null;
-        attachmentId: number;
         isDeleted: boolean;
     })[]>;
     findOne(id: number): Promise<{
-        attachments: {
+        rig: {
+            manufacturer: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
             createdById: number | null;
             updatedById: number | null;
-            expirationDate: Date;
-            certificateId: number;
-            certificateType: string | null;
-            attachmentId: number;
-            isDeleted: boolean;
-        }[];
-        rig: {
-            id: number;
-            manufacturer: string | null;
-            createdAt: Date;
-            updatedAt: Date;
-            onContract: boolean | null;
-            offContractDate: Date;
             name: string | null;
             status: string | null;
+            isRTM: boolean;
+            onContract: boolean | null;
+            category: string | null;
+            operatorId: number | null;
+            offContractDate: Date;
             projectedUnLatchDate: Date | null;
             operationStart: Date | null;
             bop1Id: number | null;
@@ -131,23 +124,18 @@ export declare class CertificatesService {
             ezChartIPAddress: string | null;
             projectedShipyardEndDate: Date | null;
             actualShipyardEndDate: Date | null;
-            isRTM: boolean;
             color: string | null;
             piRigName: string | null;
-            category: string | null;
             canAccessPressureTest: boolean;
             canAccessBRV: boolean | null;
             rtmRigId: string | null;
             sendStaleNotifications: boolean;
             mpdId: number | null;
-            operatorId: number | null;
             dhwId: number | null;
             annularHealthConstantId: number | null;
             mpdTypesId: number | null;
             mpdManufacturersId: number | null;
             hasDiverter: boolean | null;
-            createdById: number | null;
-            updatedById: number | null;
         };
         typeCode: {
             id: number;
@@ -157,18 +145,30 @@ export declare class CertificatesService {
             bopType: string | null;
             subType: string | null;
         } | null;
+        attachments: {
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            createdById: number | null;
+            updatedById: number | null;
+            attachmentId: number;
+            expirationDate: Date;
+            certificateId: number;
+            certificateType: string | null;
+            isDeleted: boolean;
+        }[];
     } & {
+        manufacturer: string | null;
         id: number;
+        createdAt: Date;
+        updatedAt: Date;
         rigId: number;
+        installationDate: Date | null;
         equipment: string | null;
         typeCodeId: number | null;
         serialNumber: string | null;
         tag: string | null;
-        manufacturer: string | null;
-        createdAt: Date;
-        updatedAt: Date;
         partNumber: string | null;
-        installationDate: Date | null;
         rigCertificateComponentId: number | null;
     }>;
     getExpiryDashboard(rigId?: number): Promise<{
